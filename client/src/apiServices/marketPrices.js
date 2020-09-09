@@ -1,20 +1,12 @@
-const baseUrl = 'http://localhost:3020';
-const tokenEP = '/mytokens';
+import fetchRequest from './fetchRequest';
 
-function  getTokens () {
-  return fetchRequest(tokenEP);
-}
+const baseUrl = 'https://api.coingecko.com/api/v3';
+const priceEP = '/coins/';
 
-function fetchRequest (path, options) {
-  return fetch(baseUrl + path, options)
-    .then(res => res.status <= 400 ? res : Promise.reject(res))
-    .then(res => res.status !== 204 ? res.json() : res)
-    .catch(o_O => {
-      console.error(`Error fetching [${options ? options.method : 'GET'}] ${path}`);
-      console.error('Error', o_O);
-    })
+function  getPrice (tokenId) {
+  return fetchRequest(baseUrl + priceEP + tokenId);
 }
 
 export default {
-  getTokens
+  getPrice,
 }

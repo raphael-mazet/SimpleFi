@@ -6,6 +6,7 @@ import TokenTable from '../TokenTable/TokenTable'
 function App() {
   //TODO: create simple table with tokens held, amount, price bought, current price, gain/loss
   const [tokens, setTokens] = useState([]);
+  const [currentPrices, setCurrentPrices] = useState([]);
 
   useEffect(() => {
     userTokens.getTokens()
