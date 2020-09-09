@@ -11,7 +11,6 @@ function extractRows (obj) {
   let amount, price, sold;
   amount = price = sold = 0;
   for (let tx of obj.transactions) {
-    console.log(' ---> tx', tx);
     if (tx.bought) {
       amount += tx.amount;
       price += tx.amount * tx.price;
@@ -21,7 +20,6 @@ function extractRows (obj) {
   }
   row.push(amount - sold);
   row.push(price/amount);
-  console.log(' ---> row', row);
   return row;
 }
 

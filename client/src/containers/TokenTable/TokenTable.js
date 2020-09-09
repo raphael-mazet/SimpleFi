@@ -1,16 +1,16 @@
 import React from 'react';
-import './TokenTable.css'
+import './TokenTable.css';
 import helpers from '../../helpers';
-import TokenCell from '../../component/TokenCell'
+import TokenCell from '../../component/TokenCell';
+import tokenHeaders from '../../data/tokenHeaders';
 
-
-export default function ({tokens, headers}) {
+export default function ({tokens}) {
 
   return (
     <table className="token-table">
       <thead>
         <tr>
-          {headers.map(header => <TokenCell key={header} content={header} header={true}/>)}
+          {tokenHeaders.map(header => <TokenCell key={header} content={header} header={true}/>)}
         </tr>
       </thead>
       <tbody>

@@ -1,7 +1,6 @@
 const mongoose = require('./');
 
 const tokenSchema = new mongoose.Schema(
-  //TODO: update model
   {
     name: String,
     apiId: String,
