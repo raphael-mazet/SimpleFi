@@ -16,11 +16,11 @@ async function getTokens (req, res) {
 //TODO: implement logic on client side to ensure coingecko token_id valid
 async function createToken (req, res) {
   try {
-    const {name, date, price, api_id, amount_bought} = req.body;
+    const {name, apiId, date, bought, price, amount} = req.body;
     const newToken = await Token.create({
       name,
-      api_id,
-      price_bought: [{date, price, amount_bought}]
+      apiId,
+      transactions: [{date, bought, price, amount}]
     });
     res.status(201);
     res.send(newToken);
