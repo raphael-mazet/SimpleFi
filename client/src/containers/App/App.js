@@ -13,9 +13,20 @@ function App() {
       .then(tokens => setTokens(tokens))
   }, [])
 
+  //TODO: is this best way to get prices, or should add directly to each token
+  useEffect(() => {
+    tokens.forEach(token => {
+      const { apiId, name } = token;
+      marketPrices.getPrice(apiId)
+        .then(currentPrice =>
+          setCurrentPrices(currentPrices => [...currentPrices, {apiId, name, currentPrice}]
+            ))
+    })
+  }, [tokens])
+
   return (
     <div>
-      <TokenTable tokens={tokens}/>
+      <TokenTable tokens={tokens} currentPrices={currentPrices}/>
     </div>
   );
 }
