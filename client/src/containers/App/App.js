@@ -13,7 +13,6 @@ function App() {
       .then(tokens => setTokens(tokens))
   }, [])
 
-  //TODO: is this best way to get prices, or should add directly to each token
   useEffect(() => {
     tokens.forEach(token => {
       const { apiId, name } = token;

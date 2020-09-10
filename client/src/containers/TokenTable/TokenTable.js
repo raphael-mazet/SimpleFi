@@ -1,13 +1,11 @@
 import React from 'react';
 import './TokenTable.css';
-import helpers from '../../helpers';
+import { extractHoldings, renderHoldings, renderCurrPrice, renderProfit } from './helpers';
 import TokenCell from '../../component/TokenCell';
 import tokenHeaders from '../../data/tokenHeaders';
 
 export default function ({tokens, currentPrices }) {
 
-  //TODO: add currentPrices to table
-  //TODO: use filter on currentPrices? lift out tr?
   return (
     <table className="token-table">
       <thead>
@@ -17,17 +15,12 @@ export default function ({tokens, currentPrices }) {
       </thead>
       <tbody>
         {tokens
-          .map(token => helpers.extractRows(token))
+          .map(token => extractHoldings(token))
           .map((row, rowIndex) => (
             <tr key={row[0]}>
-              {row.map((cell, cellIndex) => (
-                <TokenCell key={rowIndex-cellIndex} content={cell} header={false}/>
-              ))}
-              {currentPrices
-                .filter(token => token.name === row[0])
-                .map(token => (
-                  <TokenCell content={token.currentPrice} header={false}/>
-                ))}
+              {renderHoldings(row, rowIndex)}
+              {renderCurrPrice(currentPrices, row)}
+              {renderProfit(currentPrices, row)}
             </tr>
           ))}
       </tbody>
