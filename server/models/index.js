@@ -1,8 +1,12 @@
-const mongoose = require('mongoose');
+const { Pool } = require ('pg');
+const password = require ('../../secrets/.config.js')
 
-mongoose.connect('mongodb://localhost:27017/simplefi_db', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
+const pool = new Pool ({
+  user: 'raph',
+  host: 'localhost',
+  database: 'simplefi_db',
+  password: password,
+  port: 5432
 });
 
-module.exports = mongoose;
+module.exports = pool;

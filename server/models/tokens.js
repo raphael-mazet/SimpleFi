@@ -1,21 +1,16 @@
-const mongoose = require('./');
+const pool = require ('.');
+const path = require ('path');
 
-const tokenSchema = new mongoose.Schema(
-  {
-    name: String,
-    apiId: String,
-    transactions: [{
-      date: {
-        type: Date,
-        default: new Date(),
-      },
-      bought: Boolean,
-      price: Number,
-      amount: Number,
-    }]
-  }
-)
+async function getTokens () {
+  try {
+    const tokens = await pool.query('select * from token');
+    return tokens;
 
-const Token = mongoose.model('Token', tokenSchema);
+  } catch (err) {
+    console.error(`Error at ${path.basename(__dirname)}/${path.basename(__filename)} ${err}`);
+  } 
+}
 
-module.exports = Token;
+module.exports = {
+  getTokens,
+}
