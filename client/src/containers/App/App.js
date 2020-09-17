@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { userTokens, marketPrices } from '../../apiServices';
+import { userTokens, currentPrice } from '../../apis';
 import './App.css';
 import TokenTable from '../TokenTable/TokenTable'
+import MetamaskButton from '../../components/MetamaskButton/MetamaskButton'
 
 function App() {
-  //TODO: create simple table with tokens held, amount, price bought, current price, gain/loss
   const [tokens, setTokens] = useState([]);
   const [currentPrices, setCurrentPrices] = useState([]);
 
@@ -16,7 +16,7 @@ function App() {
   useEffect(() => {
     tokens.forEach(token => {
       const { apiId, name } = token;
-      marketPrices.getPrice(apiId)
+      currentPrice.getPrice(apiId)
         .then(currentPrice =>
           setCurrentPrices(currentPrices => [...currentPrices, {apiId, name, currentPrice}]
             ))
@@ -26,6 +26,7 @@ function App() {
   return (
     <div>
       <TokenTable tokens={tokens} currentPrices={currentPrices}/>
+      <MetamaskButton/>
     </div>
   );
 }

@@ -1,7 +1,7 @@
-import marketPrices from './marketPrices';
+import currentPrice from './currentPrice';
 import userTokens from './userTokens';
 
 export {
-  marketPrices,
+  currentPrice,
   userTokens,
 }

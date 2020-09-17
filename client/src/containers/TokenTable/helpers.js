@@ -1,5 +1,5 @@
 import React from 'react';
-import TokenCell from "../../component/TokenCell";
+import TokenCell from "../../components/TokenCell/TokenCell";
 
 /**
  * @func extractHoldings

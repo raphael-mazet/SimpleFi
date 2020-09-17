@@ -1,7 +1,7 @@
 import React from 'react';
 import './TokenTable.css';
 import { extractHoldings, renderHoldings, renderCurrPrice, renderProfit } from './helpers';
-import TokenCell from '../../component/TokenCell';
+import TokenCell from '../../components/TokenCell/TokenCell';
 import tokenHeaders from '../../data/tokenHeaders';
 
 export default function ({tokens, currentPrices }) {
