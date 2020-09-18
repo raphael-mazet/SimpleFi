@@ -1,7 +1,10 @@
-import currentPrice from './currentPrice';
-import userTokens from './userTokens';
+import { currentPrice } from './coinGecko/currentPrice';
+import { getTokens } from './simpleFiDb/tokens';
+import { createContract, getBalance } from './ethereum/ethData'
 
-export {
+export default {
   currentPrice,
-  userTokens,
+  getTokens,
+  createContract,
+  getBalance
 }
