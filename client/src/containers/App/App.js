@@ -8,7 +8,6 @@ import Nav from '../../components/Nav/Nav';
 import MetamaskButton from '../../components/MetamaskButton/MetamaskButton';
 
 function App() {
-  // apis.getTokens.getTokens();
   const [userAccount, setUserAccount] = useState('');
   const [tokens, setTokens] = useState([]);
   const [currentPrices, setCurrentPrices] = useState([]);
@@ -30,15 +29,17 @@ function App() {
       })
   }, [])
 
-  // useEffect(() => {
-  //   tokens.forEach(token => {
-  //     const { price_api, name } = token;
-  //     apis.currentPrice(price_api)
-  //       .then(currentPrice =>
-  //         setCurrentPrices(currentPrices => [...currentPrices, {price_api, name, currentPrice}]
-  //           ))
-  //   })
-  // }, [tokens])
+  useEffect(() => {
+      tokens.forEach(token => {
+        const { price_api, name } = token;
+        if (price_api) {
+          apis.currentPrice(price_api)
+            .then(currentPrice =>
+              setCurrentPrices(currentPrices => [...currentPrices, {price_api, name, currentPrice}]
+                ))
+        }
+      })
+  }, [tokens])
 
   return (
     <div>
