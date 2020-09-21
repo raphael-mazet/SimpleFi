@@ -1,8 +1,9 @@
+//TODO:delete
 import React from 'react';
 import './TokenTable.css';
 import { extractHoldings, renderHoldings, renderCurrPrice, renderProfit } from './helpers';
 import TokenCell from '../../components/TokenCell/TokenCell';
-import tokenHeaders from '../../data/tokenHeaders';
+import tokenHeaders from '../../data/summaryHeaders/tokenHeaders';
 
 export default function ({tokens, currentPrices }) {
 

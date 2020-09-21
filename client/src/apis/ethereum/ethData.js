@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import erc20Contract from '../../data/ethContractTypes';
+import { erc20Contract } from '../../data/ethContractTypes';
 
 // Create provider
 const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -12,7 +12,13 @@ const provider = new ethers.providers.Web3Provider(window.ethereum);
  */
 function createContract (address, type) {
   let abi;
-  if (type === 'erc20') abi = erc20Contract;
+  if (type === 'erc20') {
+    abi = [
+      'function balanceOf(address) view returns (uint)',
+      'function decimals() view returns (uint8)',
+      'function symbol() view returns (string)'
+    ];
+  }
   const newContract = new ethers.Contract(address, abi, provider);
   return newContract;
 }
@@ -23,12 +29,20 @@ function createContract (address, type) {
  * @param {contract} token contract (optional - defaults to Eth)
  * @returns {string} account balance //TODO: check
  */
-async function getBalance (account, contract) {
-  if (!contract) return await provider.getBalance(account);
-  return contract.balanceOf(account);
+function getTokenBalance (account, contract) {
+  if (!contract) {
+    return (
+      provider.getBalance(account)
+        .then(balance => ethers.utils.formatEther(balance))
+      )
+  } else {
+    return (
+      contract.balanceOf(account)
+    )
+  }
 }
 
 export {
   createContract,
-  getBalance,
+  getTokenBalance,
 }

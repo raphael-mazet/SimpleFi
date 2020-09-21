@@ -6,6 +6,6 @@ const erc20Contract = [
   "function symbol() view returns (string)"
 ];
 
-export default {
+export {
   erc20Contract,
 }

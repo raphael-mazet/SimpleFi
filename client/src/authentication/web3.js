@@ -4,6 +4,6 @@ async function metamaskConnect () {
   return account;
 }
 
-export default {
+export {
   metamaskConnect,
 }
