@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import { erc20Contract } from '../../data/ethContractTypes';
 
 // Create provider
+//TODO: potentially add default provider
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
 /**
@@ -12,33 +13,30 @@ const provider = new ethers.providers.Web3Provider(window.ethereum);
  */
 function createContract (address, type) {
   let abi;
-  if (type === 'erc20') {
-    abi = [
-      'function balanceOf(address) view returns (uint)',
-      'function decimals() view returns (uint8)',
-      'function symbol() view returns (string)'
-    ];
-  }
+  switch (type) {
+    case 'erc20': 
+      abi = erc20Contract;
+      break;
+    default: abi = erc20Contract;
+    }
   const newContract = new ethers.Contract(address, abi, provider);
   return newContract;
 }
 
 /**
- * @func getBalance retrieves balance of an an ethereum account's tokens and stakes
+ * @func getBalance retrieves balance of an ethereum account's tokens and stakes
  * @param {account} user account for which balance is requested
  * @param {contract} token contract (optional - defaults to Eth)
- * @returns {string} account balance //TODO: check
+ * @returns {string} account balance
  */
-function getTokenBalance (account, contract) {
+async function getTokenBalance (account, contract) {
   if (!contract) {
-    return (
-      provider.getBalance(account)
-        .then(balance => ethers.utils.formatEther(balance))
-      )
+    const balance = await provider.getBalance(account);
+    return Number(ethers.utils.formatEther(balance));
   } else {
-    return (
-      contract.balanceOf(account)
-    )
+    const decimals = await contract.decimals();
+    const balance = await contract.balanceOf(account);
+    return Number(ethers.utils.formatUnits(balance, decimals));
   }
 }
 

@@ -1,4 +1,5 @@
 
+//TODO: remember to set credentials: include for session cookies
 export default function fetchRequest (path, options) {
   return fetch(path, options)
     .then(res => res.status <= 400 ? res : Promise.reject(res))
