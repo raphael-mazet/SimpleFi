@@ -28,28 +28,25 @@ function createContract (address, type) {
   return newContract;
 }
 
+//TODO: update documentation
 /**
  * @func getBalance retrieves balance of an ethereum account's tokens and stakes
  * @param {account} user account for which balance is requested
  * @param {contract} token contract (optional - defaults to Eth)
  * @returns {string} account balance
  */
-
- //TODO: won't work for yield farming
 async function getUserBalance (account, contract) {
   if (!contract) {
     const balance = await provider.getBalance(account);
     return Number(ethers.utils.formatEther(balance));
   } else {
-    const decimals = await contract.decimals();
+    let decimals;
+    if (contract.decimals) decimals = await contract.decimals();
     const balance = await contract.balanceOf(account);
-    if (decimals) {
-      return Number(ethers.utils.formatUnits(balance, decimals));
-    } else {
-      return Number(ethers.utils.formatUnits(balance, 18));
+    //TODO: check farming contract decimals?
+    return Number(ethers.utils.formatUnits(balance, decimals || 18));
     }
   }
-}
 
 export {
   createContract,

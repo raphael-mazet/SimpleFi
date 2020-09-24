@@ -15,11 +15,26 @@ async function getTokens (req, res) {
 
 async function selectUserFieldTokens (req, res) {
   try {
-    let {seedTokens, cropTokens} = req.body;
-    seedTokens = await Tokens.selectUserFieldTokens(helpers.generateFieldTokenQuery(seedTokens));
-    cropTokens = await Tokens.selectUserFieldTokens(helpers.generateFieldTokenQuery(cropTokens));
-    res.status = 200;
-    res.send({seedTokens, cropTokens})
+    const {seedTokens, cropTokens} = req.body;
+    const seedTokenQuery = helpers.generateFieldTokenQuery(seedTokens)
+    const cropTokenQuery = helpers.generateFieldTokenQuery(cropTokens)
+    const returnedTokens = {};
+
+    if (seedTokenQuery) {
+      const returnedSeed = await Tokens.selectUserFieldTokens(seedTokenQuery);
+      returnedTokens.seedTokens = returnedSeed;
+    }
+    if (cropTokenQuery) {
+      returnedCrop = await Tokens.selectUserFieldTokens(cropTokenQuery);
+      returnedTokens.cropTokens = returnedCrop;
+    }
+    if (Object.keys(returnedTokens).length) {
+      res.status = 200;
+      res.send(returnedTokens);
+    } else {
+      res.sendStatus(204);
+    }
+
   } catch(err) {
     console.error(`Error at ${path.basename(__dirname)}/${path.basename(__filename)} ${err}`);
     res.sendStatus(500);

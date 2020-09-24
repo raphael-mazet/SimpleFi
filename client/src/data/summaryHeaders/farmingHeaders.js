@@ -1,7 +1,8 @@
 const farmingHeaders = [
-  Field,
-  Balance,
-  
+  'Name',
+  'Balance',
+  'Underlying',
+  'Farming'
 ];
 
-  export default farmingHeaders;
+export default farmingHeaders;

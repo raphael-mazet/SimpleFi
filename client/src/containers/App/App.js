@@ -7,8 +7,8 @@ import MyAssets from '../MyAssets/MyAssets';
 
 function App() {
   const [trackedTokens, setTrackedTokens] = useState([]);
-  const [trackedFields, setTrackedFields] = useState([]);
   const [tokensLoaded, setTokensLoaded] = useState(false);
+  const [trackedFields, setTrackedFields] = useState([]);
   const [fieldsLoaded, setFieldsLoaded] = useState(false);
   const [contractsLoaded, setContractsLoaded] = useState(false);
   const [userAccount, setUserAccount] = useState([]);
@@ -75,10 +75,10 @@ function App() {
   useEffect(() => {
     if (trackedTokens.length && userAccount.length) {
       //TODO: only trigger once per active account
+      //TODO: check active account w/ Metamask
       //TODO: auto-trigger if metamask already connected
       trackedTokens.forEach(async token => {
         const { name, contract, price_api } = token;
-        //TODO: check active account w/ Metamask
         const balance = await apis.getUserBalance(userAccount[0], contract);
             if(balance) {
               token.balance = balance;
@@ -100,36 +100,31 @@ function App() {
     }
   }, [contractsLoaded, userAccount])
 
-  //TODO: check user balance in fields
-
   useEffect(() => {
     if (userAccount.length) {
-      trackedFields.forEach(field => {
+      trackedFields.forEach(async field => {
         const { name, contract } = field;
         const balance = await apis.getUserBalance(userAccount[0], contract);
         if (balance) {
           //toRender only
           const seedTokens = (
-            ({seed_token_1, seed_token_2, seed_token_3, seed_token_4})
-            => ({seed_token_1, seed_token_2, seed_token_3, seed_token_4})
+            ({seed_token_1, seed_token_2, seed_token_3, seed_token_4}) =>
+              ({seed_token_1, seed_token_2, seed_token_3, seed_token_4})
           )(field);
 
           const cropTokens = (
-            ({crop_token_1, crop_token_2,})
-            => ({crop_token_1, crop_token_2,})
+            ({crop_token_1, crop_token_2,}) =>
+             ({crop_token_1, crop_token_2,})
           )(field);
-          //TODO: get these tokens thru post
-          postUserFieldTokens({seedTokens, cropTokens})
 
-          setUserFields(...userFields, {
+          //TODO: figure out what to do with fetched field tokens
+          apis.postUserFieldTokens({seedTokens, cropTokens}, name)
+            .then(tokens => console.log('returnedTokens', name, balance, tokens))
 
-          })
-        }
-
+          // setUserFields(...userFields, {
+          }
       })
     }
-
-
   }, [contractsLoaded, userAccount])
 
   return (
