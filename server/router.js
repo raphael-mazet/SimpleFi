@@ -5,6 +5,7 @@ const controllers = require('./controllers');
 //TODO: relate users to tokens
 router.get('/tokens', controllers.getTokens);
 router.get('/fields', controllers.getFields);
+router.post('/userfieldtokens', controllers.selectUserFieldTokens);
 
 // router.post('/mytokens', controllers.createToken);
 

@@ -36,7 +36,7 @@ function createContract (address, type) {
  */
 
  //TODO: won't work for yield farming
-async function getTokenBalance (account, contract) {
+async function getUserBalance (account, contract) {
   if (!contract) {
     const balance = await provider.getBalance(account);
     return Number(ethers.utils.formatEther(balance));
@@ -53,5 +53,5 @@ async function getTokenBalance (account, contract) {
 
 export {
   createContract,
-  getTokenBalance,
+  getUserBalance,
 }

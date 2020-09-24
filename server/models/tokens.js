@@ -11,6 +11,17 @@ async function getTokens () {
   } 
 }
 
+async function selectUserFieldTokens(queryStr) {
+  try {
+    console.log(' ---> queryStr', queryStr);
+    const tokens = await pool.query(`select * from token where ${queryStr}`);
+    return tokens.rows
+  } catch (err) {
+    console.error(`Error at ${path.basename(__dirname)}/${path.basename(__filename)} ${err}`);
+  }
+}
+
 module.exports = {
   getTokens,
+  selectUserFieldTokens
 }

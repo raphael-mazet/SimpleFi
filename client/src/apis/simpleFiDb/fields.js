@@ -7,6 +7,11 @@ function  getFields () {
   return fetchRequest(baseUrl + fieldEP);
 }
 
+function getFieldSummary (idObj) {
+  return fetchRequest
+  //from server
+}
+
 export {
   getFields,
 }

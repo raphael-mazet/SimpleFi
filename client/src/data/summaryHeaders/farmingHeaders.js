@@ -1,3 +1,7 @@
-const farmingHeaders = [];
+const farmingHeaders = [
+  Field,
+  Balance,
+  
+];
 
   export default farmingHeaders;

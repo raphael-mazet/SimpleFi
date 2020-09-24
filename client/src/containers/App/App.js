@@ -10,8 +10,10 @@ function App() {
   const [trackedFields, setTrackedFields] = useState([]);
   const [tokensLoaded, setTokensLoaded] = useState(false);
   const [fieldsLoaded, setFieldsLoaded] = useState(false);
+  const [contractsLoaded, setContractsLoaded] = useState(false);
   const [userAccount, setUserAccount] = useState([]);
   const [userTokens, setUserTokens] = useState([]);
+  const [userFields, setUserFields] = useState([]);
 
   //Get tracked tokens from SimpleFi db
   useEffect(() => {
@@ -31,9 +33,7 @@ function App() {
       })
   }, [])
   
-  //Create token contract interfaces
-  //TODO: can I abstract and call in first useEffect?
-  //TODO: see how how to manage contract abis with userTokens
+  //Create token and field contract interfaces
   useEffect(() => {
     if (tokensLoaded && fieldsLoaded) {
       const tokensWithContracts = [];
@@ -55,8 +55,9 @@ function App() {
       });
       setTrackedFields(fieldsWithContracts);
 
+      setContractsLoaded(true);
     }
-    
+
   }, [tokensLoaded, fieldsLoaded])
 
   async function connectWallet () {
@@ -72,16 +73,16 @@ function App() {
 
   // Create userTokens with token balances
   useEffect(() => {
-    console.log(' ---> using price search!');
     if (trackedTokens.length && userAccount.length) {
       //TODO: only trigger once per active account
       //TODO: auto-trigger if metamask already connected
       trackedTokens.forEach(async token => {
         const { name, contract, price_api } = token;
         //TODO: check active account w/ Metamask
-        const balance = await apis.getTokenBalance(userAccount[0], contract);
+        const balance = await apis.getUserBalance(userAccount[0], contract);
             if(balance) {
               token.balance = balance;
+              // TODO: problem as will only load tokens with price
               if (price_api) {
                 apis.currentPrice(price_api)
                   .then(currentPrice => {
@@ -97,7 +98,39 @@ function App() {
             }
           })
     }
-  }, [trackedTokens, userAccount])
+  }, [contractsLoaded, userAccount])
+
+  //TODO: check user balance in fields
+
+  useEffect(() => {
+    if (userAccount.length) {
+      trackedFields.forEach(field => {
+        const { name, contract } = field;
+        const balance = await apis.getUserBalance(userAccount[0], contract);
+        if (balance) {
+          //toRender only
+          const seedTokens = (
+            ({seed_token_1, seed_token_2, seed_token_3, seed_token_4})
+            => ({seed_token_1, seed_token_2, seed_token_3, seed_token_4})
+          )(field);
+
+          const cropTokens = (
+            ({crop_token_1, crop_token_2,})
+            => ({crop_token_1, crop_token_2,})
+          )(field);
+          //TODO: get these tokens thru post
+          postUserFieldTokens({seedTokens, cropTokens})
+
+          setUserFields(...userFields, {
+
+          })
+        }
+
+      })
+    }
+
+
+  }, [contractsLoaded, userAccount])
 
   return (
     <div>
