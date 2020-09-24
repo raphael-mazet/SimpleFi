@@ -16,9 +16,9 @@ function App() {
   //Get tracked tokens from SimpleFi db
   useEffect(() => {
     apis.getTokens()
-    .then(tokens => {
-      setTrackedTokens(tokens);
-      setTokensLoaded(true); //DONE: added tokens loaded
+      .then(tokens => {
+        setTrackedTokens(tokens);
+        setTokensLoaded(true);
     })
   }, [])
 
@@ -27,25 +27,37 @@ function App() {
     apis.getFields()
       .then(fields => {
         setTrackedFields(fields);
-        setFieldsLoaded(true); //DONE: added tokens loaded
+        setFieldsLoaded(true);
       })
   }, [])
   
-
-
   //Create token contract interfaces
   //TODO: can I abstract and call in first useEffect?
   //TODO: see how how to manage contract abis with userTokens
   useEffect(() => {
-    let tokensWithContracts = [];
-    trackedTokens.forEach(token => {
-      const { address } = token;
-      const contract = apis.createContract(address, 'erc20');
-      token.contract = contract;
-      tokensWithContracts.push(token);
-    });
-    setTrackedTokens(tokensWithContracts);
-  }, [tokensLoaded])
+    if (tokensLoaded && fieldsLoaded) {
+      const tokensWithContracts = [];
+      const fieldsWithContracts = [];
+
+      trackedTokens.forEach(token => {
+        const { address } = token;
+        const contract = apis.createContract(address, 'erc20');
+        token.contract = contract;
+        tokensWithContracts.push(token);
+      });
+      setTrackedTokens(tokensWithContracts);
+
+      trackedFields.forEach(field => {
+        const { address } = field;
+        const contract = apis.createContract(address, 'field');
+        field.contract = contract;
+        fieldsWithContracts.push(field);
+      });
+      setTrackedFields(fieldsWithContracts);
+
+    }
+    
+  }, [tokensLoaded, fieldsLoaded])
 
   async function connectWallet () {
     if (window.ethereum) {
@@ -58,16 +70,17 @@ function App() {
     }
   }
 
-  //Create userTokens with token balances
+  // Create userTokens with token balances
   useEffect(() => {
+    console.log(' ---> using price search!');
     if (trackedTokens.length && userAccount.length) {
       //TODO: only trigger once per active account
+      //TODO: auto-trigger if metamask already connected
       trackedTokens.forEach(async token => {
         const { name, contract, price_api } = token;
         //TODO: check active account w/ Metamask
         const balance = await apis.getTokenBalance(userAccount[0], contract);
             if(balance) {
-              console.log(' ---> name, balance', name, balance);
               token.balance = balance;
               if (price_api) {
                 apis.currentPrice(price_api)

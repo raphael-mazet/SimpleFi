@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { erc20Contract } from '../../data/ethContractTypes';
+import { erc20, stakingField } from '../../data/ethContractTypes';
 
 // Create provider
 //TODO: potentially add default provider
@@ -15,9 +15,14 @@ function createContract (address, type) {
   let abi;
   switch (type) {
     case 'erc20': 
-      abi = erc20Contract;
+      abi = erc20;
       break;
-    default: abi = erc20Contract;
+    
+    case 'field':
+      abi = stakingField;
+      break;
+
+    default: abi = erc20;
     }
   const newContract = new ethers.Contract(address, abi, provider);
   return newContract;
@@ -38,7 +43,11 @@ async function getTokenBalance (account, contract) {
   } else {
     const decimals = await contract.decimals();
     const balance = await contract.balanceOf(account);
-    return Number(ethers.utils.formatUnits(balance, decimals));
+    if (decimals) {
+      return Number(ethers.utils.formatUnits(balance, decimals));
+    } else {
+      return Number(ethers.utils.formatUnits(balance, 18));
+    }
   }
 }
 
