@@ -7,7 +7,9 @@ import MyAssets from '../MyAssets/MyAssets';
 
 function App() {
   const [trackedTokens, setTrackedTokens] = useState([]);
+  const [trackedFields, setTrackedFields] = useState([]);
   const [tokensLoaded, setTokensLoaded] = useState(false);
+  const [fieldsLoaded, setFieldsLoaded] = useState(false);
   const [userAccount, setUserAccount] = useState([]);
   const [userTokens, setUserTokens] = useState([]);
 
@@ -19,9 +21,21 @@ function App() {
       setTokensLoaded(true); //DONE: added tokens loaded
     })
   }, [])
+
+  //TODOs: repetitive? abstract function?
+  useEffect(() => {
+    apis.getFields()
+      .then(fields => {
+        setTrackedFields(fields);
+        setFieldsLoaded(true); //DONE: added tokens loaded
+      })
+  }, [])
   
+
+
   //Create token contract interfaces
   //TODO: can I abstract and call in first useEffect?
+  //TODO: see how how to manage contract abis with userTokens
   useEffect(() => {
     let tokensWithContracts = [];
     trackedTokens.forEach(token => {
