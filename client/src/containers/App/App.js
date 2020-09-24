@@ -9,7 +9,6 @@ function App() {
   const [trackedTokens, setTrackedTokens] = useState([]);
   const [tokensLoaded, setTokensLoaded] = useState(false);
   const [userAccount, setUserAccount] = useState([]);
-  const [contractsCreated, setContractsCreated] = useState(false);
   const [userTokens, setUserTokens] = useState([]);
 
   //Get tracked tokens from SimpleFi db

@@ -29,6 +29,8 @@ function createContract (address, type) {
  * @param {contract} token contract (optional - defaults to Eth)
  * @returns {string} account balance
  */
+
+ //TODO: won't work for yield farming
 async function getTokenBalance (account, contract) {
   if (!contract) {
     const balance = await provider.getBalance(account);

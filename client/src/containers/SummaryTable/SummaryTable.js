@@ -10,11 +10,12 @@ export default function SummaryTable ({headers, userTokens, userAccount}) {
           {headers.map(header => <TokenCell key={header} content={header} header={true}/>)}
         </tr>
       </thead>
-      {/* <tbody>
+      <tbody>
         {userTokens.map((token, rowIndex) => {
+          const tokenValues = [token.name, token.balance, '-', token.currentPrice, '-'];
           return (
             <tr key={`row-${rowIndex}`}>
-              {Object.values(token).map((value, cellIndex) => {
+              {tokenValues.map((value, cellIndex) => {
                 return (
                   <TokenCell key={`cell-${rowIndex}-${cellIndex}`} content={value} header={false}/>
                 )
@@ -22,7 +23,7 @@ export default function SummaryTable ({headers, userTokens, userAccount}) {
             </tr>
           )
         })}
-      /</tbody> */}
+      </tbody>
     </table>
   )
 }

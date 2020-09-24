@@ -1,6 +1,6 @@
 const express = require('express');
 const router = require('./router');
-const pool = require('./models/index');
+const pool = require('./models/pool');
 const cors = require('cors');
 const morgan = require('morgan');
 
