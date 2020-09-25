@@ -4,67 +4,42 @@ import { metamaskConnect } from '../../authentication/web3';
 import './App.css';
 import Nav from '../../components/Nav/Nav';
 import MyAssets from '../MyAssets/MyAssets';
+import { createContracts } from '../../apis/ethereum/ethData';
 
 function App() {
   const [trackedTokens, setTrackedTokens] = useState([]);
-  const [tokensLoaded, setTokensLoaded] = useState(false);
   const [trackedFields, setTrackedFields] = useState([]);
-  const [fieldsLoaded, setFieldsLoaded] = useState(false);
+  const [allTrackedLoaded, setAllTrackedLoaded] = useState(false);
   const [contractsLoaded, setContractsLoaded] = useState(false);
   const [userAccount, setUserAccount] = useState([]);
   const [userTokens, setUserTokens] = useState([]);
   const [userFields, setUserFields] = useState([]);
 
-  //Get tracked tokens from SimpleFi db
+  //Get tracked tokens and fields from SimpleFi db
   useEffect(() => {
-    apis.getTokens()
-      .then(tokens => {
+    const getTokens = apis.getTokens();
+    const getFields = apis.getFields();
+    Promise.all([getTokens, getFields])
+      .then(([tokens, fields]) => {
         setTrackedTokens(tokens);
-        setTokensLoaded(true);
-    })
-  }, [])
-
-  //TODO: repetitive? abstract function? promiseAll?
-  useEffect(() => {
-    apis.getFields()
-      .then(fields => {
         setTrackedFields(fields);
-        setFieldsLoaded(true);
-      })
+        setAllTrackedLoaded(true);
+    })
   }, [])
   
   //Create token and field contract interfaces
   useEffect(() => {
-    if (tokensLoaded && fieldsLoaded) {
-      const tokensWithContracts = [];
-      const fieldsWithContracts = [];
+    setTrackedTokens(trackedTokens => apis.createContracts(trackedTokens, 'erc20'));
+    setTrackedFields(trackedFields => apis.createContracts(trackedFields, 'field'));
+    setContractsLoaded(true);
+  }, [allTrackedLoaded])
 
-      trackedTokens.forEach(token => {
-        const { address } = token;
-        const contract = apis.createContract(address, 'erc20');
-        token.contract = contract;
-        tokensWithContracts.push(token);
-      });
-      setTrackedTokens(tokensWithContracts);
-
-      trackedFields.forEach(field => {
-        const { address } = field;
-        const contract = apis.createContract(address, 'field');
-        field.contract = contract;
-        fieldsWithContracts.push(field);
-      });
-      setTrackedFields(fieldsWithContracts);
-
-      setContractsLoaded(true);
-    }
-
-  }, [tokensLoaded, fieldsLoaded])
-
-  async function connectWallet () {
+ async function connectWallet () {
     //TODO: autorefresh when toggle account from Metamask
     if (window.ethereum) {
       const newAccount = await metamaskConnect();
-      if (newAccount[0] !== userAccount[0]) setUserAccount(newAccount)
+      /*if (newAccount[0] !== userAccount[0]) */setUserAccount(newAccount)
+      setUserTokens([]);
     } else {
       alert('Please install Metamask to use SimpleFi (https://metamask.io/)')
     }
@@ -131,7 +106,7 @@ function App() {
   return (
     <div>
       <Nav connect={connectWallet}/>
-      <MyAssets userAccount= {userAccount} userTokens={userTokens} userFields={userFields}/>
+      <MyAssets userAccount= {userAccount} fieldsLoaded={allTrackedLoaded} userFields={userFields} userTokens={userTokens}/>
     </div>
   );
 }

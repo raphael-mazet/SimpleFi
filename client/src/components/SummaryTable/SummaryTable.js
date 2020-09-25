@@ -3,7 +3,6 @@ import './SummaryTable.css';
 import TokenCell from '../TokenCell/TokenCell'
 
 export default function SummaryTable ({headers, userValues}) {
-
   return (
     <table className="summary-table">
       <thead>

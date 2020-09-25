@@ -2,21 +2,23 @@ import React, { useState, useEffect } from 'react';
 import SummaryTable from '../../components/SummaryTable/SummaryTable'
 import { holdingHeaders, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
 
-export default function MyAssets ({userTokens, userAccount, userFields}) {
+export default function MyAssets ({userTokens, fieldsLoaded, userFields}) {
 
   const [holdingValues, setHoldingValues] = useState([]);
   const [fieldValues, setFieldValues] = useState([]);
 
   useEffect(() => {
-    userTokens.forEach(token => {
-      setHoldingValues(holdingValues => [...holdingValues, [token.name, token.balance, '-', token.currentPrice, '-']]);
+    userTokens.forEach(async token => {
+      console.log(' ---> holdingValues before', holdingValues);
+      console.log(' ---> userTokens', userTokens);
+      await setHoldingValues(holdingValues => [...holdingValues, [token.name, token.balance, '-', token.currentPrice, '-']]);
+      console.log(' ---> holdingValues after', holdingValues);
     })
   }, [userTokens])
 
   useEffect(() => {
     userFields.forEach(field => {
       const { name, balance, seedTokens, cropTokens} = field;
-      console.log(' ---> seedTokens', seedTokens);
       let underlying = '';
       let farming = '';
       seedTokens && seedTokens.forEach(token => underlying += `${token.name}, `);

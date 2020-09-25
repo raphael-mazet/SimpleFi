@@ -5,13 +5,16 @@ import { erc20, stakingField } from '../../data/ethContractTypes';
 //TODO: potentially add default provider
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
+//TODO: re-document
 /**
  * @func createContract creates an instance of a new ethers contract interface
  * @param {address} contract address 
  * @param {type} contract type determines abi
  * @returns {object} new contract interface
  */
-function createContract (address, type) {
+function createContracts (collection, type) {
+  const collectionWithContracts = [];
+  
   let abi;
   switch (type) {
     case 'erc20': 
@@ -24,8 +27,15 @@ function createContract (address, type) {
 
     default: abi = erc20;
     }
-  const newContract = new ethers.Contract(address, abi, provider);
-  return newContract;
+
+  collection.forEach(entry => {
+    const { address } = entry;
+    const newContract = new ethers.Contract(address, abi, provider);
+    entry.contract = newContract;
+    collectionWithContracts.push(entry)
+  })
+
+  return collectionWithContracts;
 }
 
 //TODO: update documentation
@@ -49,6 +59,6 @@ async function getUserBalance (account, contract) {
   }
 
 export {
-  createContract,
+  createContracts,
   getUserBalance,
 }
