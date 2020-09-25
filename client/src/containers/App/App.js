@@ -61,21 +61,19 @@ function App() {
   }, [tokensLoaded, fieldsLoaded])
 
   async function connectWallet () {
+    //TODO: autorefresh when toggle account from Metamask
     if (window.ethereum) {
-      //TODO: persist this without logging button
-      //TODO: probablay second window
       const newAccount = await metamaskConnect();
-      setUserAccount(newAccount)
+      if (newAccount[0] !== userAccount[0]) setUserAccount(newAccount)
     } else {
-      alert('Please install Metamask to use SimpleFi https://metamask.io/')
+      alert('Please install Metamask to use SimpleFi (https://metamask.io/)')
     }
   }
 
   // Create userTokens with token balances
   useEffect(() => {
     if (trackedTokens.length && userAccount.length) {
-      //TODO: only trigger once per active account
-      //TODO: check active account w/ Metamask
+      //TODO: check active account when toggle from Metamask
       //TODO: auto-trigger if metamask already connected
       trackedTokens.forEach(async token => {
         const { name, contract, price_api } = token;
