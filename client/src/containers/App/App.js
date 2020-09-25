@@ -4,7 +4,6 @@ import { metamaskConnect } from '../../authentication/web3';
 import './App.css';
 import Nav from '../../components/Nav/Nav';
 import MyAssets from '../MyAssets/MyAssets';
-import { createContracts } from '../../apis/ethereum/ethData';
 
 function App() {
   const [trackedTokens, setTrackedTokens] = useState([]);
@@ -47,29 +46,22 @@ function App() {
 
   // Create userTokens with token balances
   useEffect(() => {
-    if (trackedTokens.length && userAccount.length) {
-      //TODO: check active account when toggle from Metamask
-      //TODO: auto-trigger if metamask already connected
+    if (userAccount.length) {
+      //TODO: figure out Eth
       trackedTokens.forEach(async token => {
-        const { name, contract, price_api } = token;
+        const { contract } = token;
         const balance = await apis.getUserBalance(userAccount[0], contract);
-            if(balance) {
-              token.balance = balance;
-              // TODO: problem as will only load tokens with price
-              if (price_api) {
-                apis.currentPrice(price_api)
-                  .then(currentPrice => {
-                    setUserTokens(userTokens => [...userTokens, {
-                      name,
-                      contract,
-                      balance,
-                      //TODO: check how I can refresh prices
-                      currentPrice
-                    }])
-                  })
-              }
-            }
-          })
+        if(balance) {
+          const { token_id, protocol_id, name, price_api, address } = token;
+          let currentPrice;
+          if (price_api) {
+            currentPrice = await apis.currentPrice(price_api);
+          }
+          setUserTokens(userTokens => [...userTokens, {
+            token_id, protocol_id, name, price_api, address, contract, balance, currentPrice
+          }])
+        }
+      })
     }
   }, [contractsLoaded, userAccount])
 
