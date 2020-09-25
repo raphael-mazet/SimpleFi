@@ -14,11 +14,9 @@ async function getTokens (req, res) {
 } 
 
 async function getUserFieldTokens (req, res) {
-  console.log(' ---> req.params.tokenIds', req.params.tokenIds);
   try {
     tokenIds = JSON.parse(req.params.tokenIds)
     const {seedTokens, cropTokens} = tokenIds;
-    console.log(' ---> seedTokens', seedTokens);
     const seedTokenQuery = helpers.generateFieldTokenQuery(seedTokens)
     const cropTokenQuery = helpers.generateFieldTokenQuery(cropTokens)
     const returnedTokens = {};

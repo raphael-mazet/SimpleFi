@@ -122,7 +122,7 @@ function App() {
             .then(fieldTokens => {
               const {seedTokens, cropTokens} = fieldTokens;
               setUserFields(userFields => 
-                [...userFields, {field_id, name, protocol_id, address, instructions, risk_level, receipt_token, seedTokens, cropTokens}]
+                [...userFields, {field_id, contract, name, balance, protocol_id, address, instructions, risk_level, receipt_token, seedTokens, cropTokens}]
               )
             })
         }
@@ -133,7 +133,7 @@ function App() {
   return (
     <div>
       <Nav connect={connectWallet}/>
-      <MyAssets userAccount= {userAccount} userTokens={userTokens}/>
+      <MyAssets userAccount= {userAccount} userTokens={userTokens} userFields={userFields}/>
     </div>
   );
 }

@@ -1,8 +1,9 @@
 import React from 'react';
 import './SummaryTable.css';
-import TokenCell from '../../components/TokenCell/TokenCell'
+import TokenCell from '../TokenCell/TokenCell'
 
-export default function SummaryTable ({headers, userTokens, userAccount}) {
+export default function SummaryTable ({headers, userValues}) {
+
   return (
     <table className="summary-table">
       <thead>
@@ -11,15 +12,14 @@ export default function SummaryTable ({headers, userTokens, userAccount}) {
         </tr>
       </thead>
       <tbody>
-        {userTokens.map((token, rowIndex) => {
-          const tokenValues = [token.name, token.balance, '-', token.currentPrice, '-'];
+        {userValues.map((rowValues, rowIndex) => {
           return (
             <tr key={`row-${rowIndex}`}>
-              {tokenValues.map((value, cellIndex) => {
+              {rowValues.map((value, cellIndex) => {
                 return (
                   <TokenCell key={`cell-${rowIndex}-${cellIndex}`} content={value} header={false}/>
                 )
-              } )}
+              })}
             </tr>
           )
         })}
