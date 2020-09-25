@@ -10,17 +10,19 @@ function  getTokens () {
   return fetchRequest(baseUrl + tokensEP);
 }
 
-function postUserFieldTokens (tokenIds, name) {
-  return fetchRequest(baseUrl + fieldTokensEP, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(tokenIds)
-  })
+function getUserFieldTokens (tokenIds, name) {
+  // return fetchRequest(baseUrl + fieldTokensEP, {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json'
+  //   },
+  //   body: JSON.stringify(tokenIds)
+  // })
+  tokenIds = JSON.stringify(tokenIds)
+  return fetchRequest(`${baseUrl}${fieldTokensEP}/${tokenIds}`)
 }
 
 export {
   getTokens,
-  postUserFieldTokens
+  getUserFieldTokens
 }

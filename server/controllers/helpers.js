@@ -1,3 +1,4 @@
+//TODO: pbbly need validator here
 function generateFieldTokenQuery (tokenIds) {
   let queryStr = '';
   for (let prop in tokenIds) {

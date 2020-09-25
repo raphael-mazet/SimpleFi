@@ -1,8 +1,8 @@
-const {getTokens, selectUserFieldTokens } = require('./tokens');
+const {getTokens, getUserFieldTokens } = require('./tokens');
 const { getFields } = require('./fields');
 
 module.exports = {
   getTokens,
-  selectUserFieldTokens,
+  getUserFieldTokens,
   getFields
 }

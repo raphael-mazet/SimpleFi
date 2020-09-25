@@ -13,9 +13,12 @@ async function getTokens (req, res) {
   }
 } 
 
-async function selectUserFieldTokens (req, res) {
+async function getUserFieldTokens (req, res) {
+  console.log(' ---> req.params.tokenIds', req.params.tokenIds);
   try {
-    const {seedTokens, cropTokens} = req.body;
+    tokenIds = JSON.parse(req.params.tokenIds)
+    const {seedTokens, cropTokens} = tokenIds;
+    console.log(' ---> seedTokens', seedTokens);
     const seedTokenQuery = helpers.generateFieldTokenQuery(seedTokens)
     const cropTokenQuery = helpers.generateFieldTokenQuery(cropTokens)
     const returnedTokens = {};
@@ -41,7 +44,8 @@ async function selectUserFieldTokens (req, res) {
   }
 }
 
+
 module.exports = {
   getTokens,
-  selectUserFieldTokens
+  getUserFieldTokens,
 }

@@ -118,8 +118,8 @@ function App() {
           )(field);
 
           //TODO: figure out what to do with fetched field tokens
-          apis.postUserFieldTokens({seedTokens, cropTokens}, name)
-            .then(tokens => console.log('returnedTokens', name, balance, tokens))
+          apis.getUserFieldTokens({seedTokens, cropTokens}, name)
+            .then(tokens => console.log('returnedTokens no', name, balance, tokens))
 
           // setUserFields(...userFields, {
           }
