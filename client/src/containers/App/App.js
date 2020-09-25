@@ -24,7 +24,7 @@ function App() {
     })
   }, [])
 
-  //TODOs: repetitive? abstract function?
+  //TODO: repetitive? abstract function? promiseAll?
   useEffect(() => {
     apis.getFields()
       .then(fields => {
@@ -103,10 +103,11 @@ function App() {
   useEffect(() => {
     if (userAccount.length) {
       trackedFields.forEach(async field => {
-        const { name, contract } = field;
+        const { contract } = field;
         const balance = await apis.getUserBalance(userAccount[0], contract);
         if (balance) {
-          //toRender only
+          const { field_id, name, protocol_id, address, instructions, risk_level, receipt_token } = field;
+          //TODO: yield is a reserved word - fix on db
           const seedTokens = (
             ({seed_token_1, seed_token_2, seed_token_3, seed_token_4}) =>
               ({seed_token_1, seed_token_2, seed_token_3, seed_token_4})
@@ -117,14 +118,16 @@ function App() {
              ({crop_token_1, crop_token_2,})
           )(field);
 
-          //TODO: figure out what to do with fetched field tokens
-          apis.getUserFieldTokens({seedTokens, cropTokens}, name)
-            .then(tokens => console.log('returnedTokens no', name, balance, tokens))
-
-          // setUserFields(...userFields, {
-          }
-      })
-    }
+          apis.getUserFieldTokens({seedTokens, cropTokens})
+            .then(fieldTokens => {
+              const {seedTokens, cropTokens} = fieldTokens;
+              setUserFields(userFields => 
+                [...userFields, {field_id, name, protocol_id, address, instructions, risk_level, receipt_token, seedTokens, cropTokens}]
+              )
+            })
+        }
+      }
+    )}
   }, [contractsLoaded, userAccount])
 
   return (
