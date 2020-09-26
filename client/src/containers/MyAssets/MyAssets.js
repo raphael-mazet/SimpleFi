@@ -2,21 +2,21 @@ import React, { useState, useEffect } from 'react';
 import SummaryTable from '../../components/SummaryTable/SummaryTable'
 import { holdingHeaders, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
 
-export default function MyAssets ({userTokens, fieldsLoaded, userFields}) {
+export default function MyAssets ({userTokens, userFields}) {
 
   const [holdingValues, setHoldingValues] = useState([]);
   const [fieldValues, setFieldValues] = useState([]);
 
   useEffect(() => {
-    userTokens.forEach(async token => {
-      console.log(' ---> holdingValues before', holdingValues);
-      console.log(' ---> userTokens', userTokens);
-      await setHoldingValues(holdingValues => [...holdingValues, [token.name, token.balance, '-', token.currentPrice, '-']]);
-      console.log(' ---> holdingValues after', holdingValues);
+    const tempHoldingValues = [];
+    userTokens.forEach(token => {
+      tempHoldingValues.push([token.name, token.balance, '-', token.currentPrice, '-'])
     })
+    setHoldingValues(tempHoldingValues);
   }, [userTokens])
 
   useEffect(() => {
+    const tempFieldValues = [];
     userFields.forEach(field => {
       const { name, balance, seedTokens, cropTokens} = field;
       let underlying = '';
@@ -24,9 +24,10 @@ export default function MyAssets ({userTokens, fieldsLoaded, userFields}) {
       seedTokens && seedTokens.forEach(token => underlying += `${token.name}, `);
       cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
       underlying = underlying.slice(0, -2);
-      farming += farming.slice(0, -2);
-      setFieldValues(fieldValues => [...fieldValues, [name, balance, underlying, farming]])
+      farming = farming.slice(0, -2);
+      tempFieldValues.push([name, balance, underlying, farming]);
     })
+    setFieldValues(tempFieldValues)
   }, [userFields])
 
   return (

@@ -39,6 +39,7 @@ function App() {
       const newAccount = await metamaskConnect();
       /*if (newAccount[0] !== userAccount[0]) */setUserAccount(newAccount)
       setUserTokens([]);
+      setUserFields([]);
     } else {
       alert('Please install Metamask to use SimpleFi (https://metamask.io/)')
     }
@@ -98,7 +99,7 @@ function App() {
   return (
     <div>
       <Nav connect={connectWallet}/>
-      <MyAssets userAccount= {userAccount} fieldsLoaded={allTrackedLoaded} userFields={userFields} userTokens={userTokens}/>
+      <MyAssets userFields={userFields} userTokens={userTokens}/>
     </div>
   );
 }
