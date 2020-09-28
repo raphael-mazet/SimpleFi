@@ -67,6 +67,7 @@ function renderCurrPrice (currPrices, row) {
   )
 }
 
+//TODO: needs extraction from user tokens before being rendered here
 function renderProfit (currPrices, row) {
   return (
     currPrices.filter(token => token.name === row[0])

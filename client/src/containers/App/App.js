@@ -37,9 +37,12 @@ function App() {
     //TODO: autorefresh when toggle account from Metamask
     if (window.ethereum) {
       const newAccount = await metamaskConnect();
-      /*if (newAccount[0] !== userAccount[0]) */setUserAccount(newAccount)
-      setUserTokens([]);
-      setUserFields([]);
+      if (newAccount[0] !== userAccount[0]) {
+        const resetUserTokens = setUserTokens([]);
+        const resetUserFields = setUserFields([]);
+        Promise.all([resetUserTokens, resetUserFields])
+          .then(resets => setUserAccount(newAccount))
+      }
     } else {
       alert('Please install Metamask to use SimpleFi (https://metamask.io/)')
     }
@@ -47,8 +50,7 @@ function App() {
 
   // Create userTokens with token balances
   useEffect(() => {
-    if (userAccount.length) {
-      //TODO: figure out Eth
+    if (userAccount.length && contractsLoaded) {
       trackedTokens.forEach(async token => {
         const { contract } = token;
         const balance = await apis.getUserBalance(userAccount[0], contract);
@@ -66,6 +68,7 @@ function App() {
     }
   }, [contractsLoaded, userAccount])
 
+  // Set first set of user fields
   useEffect(() => {
     if (userAccount.length) {
       trackedFields.forEach(async field => {
@@ -83,7 +86,6 @@ function App() {
             ({crop_token_1, crop_token_2,}) =>
              ({crop_token_1, crop_token_2,})
           )(field);
-
           apis.getUserFieldTokens({seedTokens, cropTokens})
             .then(fieldTokens => {
               const {seedTokens, cropTokens} = fieldTokens;
@@ -92,9 +94,38 @@ function App() {
               )
             })
         }
-      }
-    )}
+      })
+      //ASK: set userFields loaded flag to avoid re-renders in following effect?
+    }
   }, [contractsLoaded, userAccount])
+
+  // extract underlying tokens from user fields
+  useEffect(() => {
+    //TODO: what if usertokens not set yet?
+    const updatedUserTokens = [...userTokens];
+    const lockedUserTokens = [];
+    userFields.forEach(async field => {
+      //FIXME: for testing purposes only: fix to make more generic
+      if(field.name === "MTA-wETH 50/50") {
+        const rewound = await apis.rewinder(field, trackedTokens);
+        //@dev: shape: {token_id, userTokenBalance, field}
+        lockedUserTokens.push(...rewound)
+      }
+      lockedUserTokens.forEach(token => {
+        const existingUserToken = updatedUserTokens.find(userToken => userToken.token_id === token.token_id);
+        if (existingUserToken && existingUserToken.lockedBalance) existingUserToken.lockedBalance.push({balance: token.userTokenBalance, field})
+        else if (existingUserToken) existingUserToken.lockedBalance = [{balance: token.userTokenBalance, field}];
+        else {
+          const newUserToken = trackedTokens.find(trackedToken => trackedToken.token_id === token.token_id)
+          //TODO: if rewound token is not a "base" token, must be rewound again with corresponding field (recursive???)
+          newUserToken.lockedBalance = [{balance: token.userTokenBalance, field}];
+          updatedUserTokens.push(newUserToken);
+        }
+      })
+      setUserTokens(userTokens => [...userTokens, ...updatedUserTokens]);
+    })
+    //FIXME: change trigger to a userField loaded flag to avoid duplicate renders
+  }, [userFields])
 
   return (
     <div>

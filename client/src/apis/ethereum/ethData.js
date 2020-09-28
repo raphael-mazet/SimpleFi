@@ -8,8 +8,8 @@ const provider = new ethers.providers.Web3Provider(window.ethereum);
 //TODO: re-document
 /**
  * @func createContract creates an instance of a new ethers contract interface
- * @param {address} contract address 
- * @param {type} contract type determines abi
+ * @param {collection} array of tracked tokens or fields with same type 
+ * @param {type} string contract type determines abi used for contract
  * @returns {object} new contract interface
  */
 function createContracts (collection, type) {
@@ -28,22 +28,22 @@ function createContracts (collection, type) {
     default: abi = erc20;
     }
 
-  collection.forEach(entry => {
-    const { address } = entry;
+  collection.forEach(element => {
+    const { address } = element;
     const newContract = new ethers.Contract(address, abi, provider);
-    entry.contract = newContract;
-    collectionWithContracts.push(entry)
+    element.contract = newContract;
+    collectionWithContracts.push(element);
   })
 
   return collectionWithContracts;
 }
 
-//TODO: update documentation
 /**
- * @func getBalance retrieves balance of an ethereum account's tokens and stakes
- * @param {account} user account for which balance is requested
- * @param {contract} token contract (optional - defaults to Eth)
+ * @func getUserBalance retrieves balance of an ethereum account's tokens and stakes
+ * @param {account} string user account address for which balance is requested
+ * @param {contract} string token contract (optional - defaults to Eth)
  * @returns {string} account balance
+ * @dev not all contracts specify decimals with which to parse balance, so defaults to 18
  */
 async function getUserBalance (account, contract) {
   if (!contract) {
@@ -58,7 +58,42 @@ async function getUserBalance (account, contract) {
     }
   }
 
+
+/**
+ * @func rewinder extracts the underlying tokens from a given field
+ * @param {field} object contract in which a user has invested to farm a given yield
+ * @param {trackedTokens} array passed from App as helper needs access to contract interfaces
+ * @returns {array} containing token id, token balance and related field (to inform user of where tokens are locked)
+ */
+async function rewinder (field, trackedTokens) {
+  //NOTE: simple case where seedTokens are for sure base tokens (will need update)
+  //TODO: check if totalSupply() will work for contracts other than uniswap
+  //TODO: check if better to set this at setUserField useEffect level
+  const totalFieldSupply = await field.contract.totalSupply();
+  const userTokenBalances = [];
+  const fieldHoldingPromises = [];
+  const tokenIds = [];
+
+  field.seedTokens.forEach(token => {
+    const { token_id } = token;
+    const tokenContract = trackedTokens.find(el => el.token_id === token_id).contract;
+    const fieldSeedHolding = tokenContract.balanceOf(field.address);
+    fieldHoldingPromises.push(fieldSeedHolding);
+    tokenIds.push(token_id);
+  })
+  
+  //ASK: is this horrendous code? Only solution I found to nested promises
+  await Promise.all(fieldHoldingPromises)
+    .then(fieldHoldings => fieldHoldings.forEach((fieldHolding, i) => {
+      const userTokenBalance = field.balance * fieldHolding / totalFieldSupply;
+      userTokenBalances.push({token_id:tokenIds[i], userTokenBalance, field});
+    }))
+  return userTokenBalances;
+}
+
 export {
   createContracts,
   getUserBalance,
+  rewinder
 }
+

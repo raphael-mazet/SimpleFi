@@ -8,6 +8,7 @@ const erc20 = [
 ];
 
 //TODO: add more functions and cross-check field standards or add to DB
+//TODO: will probably have to add each ABI to DB
 //note: this checked only for mStable: EARN Pool 5
 const stakingField = [
   "function balanceOf(address) view returns (uint)",
