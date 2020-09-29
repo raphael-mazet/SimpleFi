@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Switch, Route } from 'react-router-dom';
 import apis from '../../apis';
 import { metamaskConnect } from '../../authentication/web3';
 import './App.css';
 import Nav from '../../components/Nav/Nav';
+import Welcome from '../../components/Welcome/Welcome';
 import MyAssets from '../MyAssets/MyAssets';
 
 function App() {
@@ -14,6 +16,7 @@ function App() {
   const [userTokens, setUserTokens] = useState([]);
   const [userFields, setUserFields] = useState([]);
   const [rewoundFlag, setRewoundFlag] = useState(false);
+  const [splash, setSplash] = useState(false)
 
   //Get tracked tokens and fields from SimpleFi db
   useEffect(() => {
@@ -127,8 +130,11 @@ function App() {
 
   return (
     <div>
-      <Nav connect={connectWallet}/>
-      <MyAssets userTokens={userTokens} userFields={userFields} apis={apis}/>
+      <Nav connect={connectWallet} splash={splash}/>
+      <Switch>
+        <Route path='/' exact render={() => <Welcome connect={connectWallet} setSplash={setSplash}/>}/>
+        <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/>
+      </Switch>
     </div>
   );
 }

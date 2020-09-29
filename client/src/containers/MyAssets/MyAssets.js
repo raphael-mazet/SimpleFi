@@ -4,10 +4,12 @@ import SummaryTable from '../../components/SummaryTable/SummaryTable'
 import { holdingHeaders, holdingCurrencyCells, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
 import { currentPrice } from '../../apis/coinGecko/currentPrice';
 
-export default function MyAssets ({userTokens, userFields, apis}) {
+export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
   const [holdingValues, setHoldingValues] = useState([]);
   const [fieldValues, setFieldValues] = useState([]);
   const [priceApis, setPriceApis] = useState([]);
+
+  useEffect(() => setSplash(true), []);
 
   useEffect(() => {
     const tempHoldingValues = [];
