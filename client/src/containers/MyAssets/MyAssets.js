@@ -2,33 +2,63 @@ import React, { useState, useEffect } from 'react';
 import './MyAssets.css';
 import SummaryTable from '../../components/SummaryTable/SummaryTable'
 import { holdingHeaders, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
+import { currentPrice } from '../../apis/coinGecko/currentPrice';
 
-export default function MyAssets ({userTokens, userFields}) {
+export default function MyAssets ({userTokens, userFields, apis}) {
 
   const [holdingValues, setHoldingValues] = useState([]);
   const [fieldValues, setFieldValues] = useState([]);
+  const [priceApis, setPriceApis] = useState([]);
 
   useEffect(() => {
     const tempHoldingValues = [];
+    const tempPriceApis =[];
+    //TODO:only display if isBase
     userTokens.forEach(token => {
-      let lockedBalance = 0;
-      let combinedBalance = 0;
-      let lockedPercent = 0;
-      const formatter = new Intl.NumberFormat("en-US", {style: 'percent'});
-      if (token.lockedBalance) {
-        lockedBalance = token.lockedBalance.reduce(((acc, curr) => acc + curr.balance), 0);
+      if (token.isBase) {
+        let lockedBalance = 0;
+        let combinedBalance = 0;
+        let lockedPercent = 0;
+        const formatter = new Intl.NumberFormat("en-US", {style: 'percent'});
+        if (token.lockedBalance) {
+          lockedBalance = token.lockedBalance.reduce(((acc, curr) => acc + curr.balance), 0);
+        }
+        if (token.balance) {
+          combinedBalance = token.balance + lockedBalance;
+          lockedPercent = formatter.format(lockedBalance / combinedBalance);
+        } else {
+          combinedBalance = lockedBalance;
+          lockedPercent = formatter.format(1);
+        }
+        console.log(' ---> lockedPercent', lockedPercent);
+        console.log(' ---> typeof lockedPercent', typeof lockedPercent);
+        console.log(' ---> Number(lockedPercent)', Number(lockedPercent));
+        tempHoldingValues.push([token.name, combinedBalance.toFixed(2), lockedPercent, 'Loading', token.currentPrice]);
+        tempPriceApis.push(token.price_api);
       }
-      if (token.balance) {
-        combinedBalance = token.balance + lockedBalance;
-        lockedPercent = formatter.format(lockedBalance / combinedBalance);
-      } else {
-        combinedBalance = lockedBalance;
-        lockedPercent = formatter.format(1);
-      }
-      tempHoldingValues.push([token.name, combinedBalance.toFixed(2), lockedPercent, '-', token.currentPrice, '-'])
     })
     setHoldingValues(tempHoldingValues);
+    setPriceApis(tempPriceApis);
   }, [userTokens])
+
+  useEffect(() => {
+    Promise.all(priceApis.map(async priceApi => {
+      if (priceApi){
+        const currentPrice = await apis.currentPrice(priceApi);
+        return currentPrice;
+      }
+    }))
+      .then(prices => {
+        const updatedHoldings = [];
+        prices.forEach((price, i) => {
+          const newValues = [...holdingValues[i]]
+          newValues[3] = (price * newValues[1]).toFixed(2); //set value
+          newValues[4] = price.toFixed(2); //set curr. price
+          updatedHoldings.push(newValues);
+        })
+        setHoldingValues(updatedHoldings)
+      })
+  }, [priceApis])
 
   useEffect(() => {
     const tempFieldValues = [];

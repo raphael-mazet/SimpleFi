@@ -2,8 +2,8 @@ const holdingHeaders = [
   'Token',
   'Amount',
   'Locked',
-  'Buy price (avg)',
-  'Curr. price',
-  'Profit']
+  'Value',
+  'Curr. price'
+]
 
   export default holdingHeaders;

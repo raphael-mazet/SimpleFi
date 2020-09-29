@@ -57,12 +57,12 @@ function App() {
         const { contract } = token;
         const balance = await apis.getUserBalance(userAccount[0], contract);
         if(balance) {
-          const { token_id, protocol_id, name, price_api, address } = token;
+          const { token_id, protocol_id, name, price_api, address, isBase } = token;
           let currentPrice;
           if (price_api) {
             currentPrice = await apis.currentPrice(price_api);
           }
-          return { token_id, protocol_id, name, price_api, address, contract, balance, currentPrice }
+          return { token_id, protocol_id, name, price_api, address, isBase, contract, balance, currentPrice }
         }
       }))
         .then(tokensWithBalances => {
@@ -136,7 +136,7 @@ function App() {
   return (
     <div>
       <Nav connect={connectWallet}/>
-      <MyAssets userFields={userFields} userTokens={userTokens}/>
+      <MyAssets userTokens={userTokens} userFields={userFields} apis={apis}/>
     </div>
   );
 }
