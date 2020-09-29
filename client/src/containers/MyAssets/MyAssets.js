@@ -10,7 +10,23 @@ export default function MyAssets ({userTokens, userFields}) {
   useEffect(() => {
     const tempHoldingValues = [];
     userTokens.forEach(token => {
-      tempHoldingValues.push([token.name, token.balance, '-', token.currentPrice, '-'])
+      console.log(' ---> token', token);
+      //FIXME: stop duplicate render
+      let lockedBalance = 0;
+      let combinedBalance = 0;
+      let lockedPercent = 0;
+      const formatter = new Intl.NumberFormat("en-US", {style: 'percent'});
+      if (token.lockedBalance) {
+        lockedBalance = token.lockedBalance.reduce(((acc, curr) => acc + curr.balance), 0);
+      }
+      if (token.balance) {
+        combinedBalance = token.balance + lockedBalance;
+        lockedPercent = formatter.format(lockedBalance / combinedBalance);
+      } else {
+        combinedBalance = lockedBalance;
+        lockedPercent = formatter.format(1);
+      }
+      tempHoldingValues.push([token.name, combinedBalance.toFixed(2), lockedPercent, '-', token.currentPrice, '-'])
     })
     setHoldingValues(tempHoldingValues);
   }, [userTokens])
