@@ -1,0 +1,18 @@
+.summary-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #ebecf0;
+  border-radius: 10px;
+  position: relative;
+  margin: 20px 50px;
+  padding: 0px 20px 20px 20px;
+}
+
+.summary-container h2 {
+  color: #172B4D
+}
+
+.summary-table-row {
+  height: 45px;
+}
+

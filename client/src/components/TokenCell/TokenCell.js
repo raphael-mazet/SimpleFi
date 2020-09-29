@@ -8,7 +8,7 @@ export default function TokenCell ( {header, content} ) {
       {content}
     </th>
   ) : (
-    <td className="cell">
+    <td className="cell cell-value">
       {content}
     </td>
   )

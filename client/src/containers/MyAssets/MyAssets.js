@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './MyAssets.css';
 import SummaryTable from '../../components/SummaryTable/SummaryTable'
 import { holdingHeaders, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
 
@@ -10,8 +11,6 @@ export default function MyAssets ({userTokens, userFields}) {
   useEffect(() => {
     const tempHoldingValues = [];
     userTokens.forEach(token => {
-      console.log(' ---> token', token);
-      //FIXME: stop duplicate render
       let lockedBalance = 0;
       let combinedBalance = 0;
       let lockedPercent = 0;
@@ -48,12 +47,14 @@ export default function MyAssets ({userTokens, userFields}) {
 
   return (
     <div className="myassets-summary">
-      <div className="summary-holding">
+      <div className="summary-container summary-holding">
         <h2>Holding</h2>
         <SummaryTable headers={holdingHeaders} userValues={holdingValues}/>
       </div>
-      <div className="summary-farming">
-        <h2>Farming</h2>
+      <div className="summary-container summary-farming">
+        <div className="container-header">
+          <h2>Farming</h2>
+        </div>
         <SummaryTable headers={farmingHeaders} userValues={fieldValues}/>
       </div>
       {/* <div className="summary-earning">

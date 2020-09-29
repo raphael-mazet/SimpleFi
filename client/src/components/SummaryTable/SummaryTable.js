@@ -6,19 +6,19 @@ export default function SummaryTable ({headers, userValues}) {
   return (
     <table className="summary-table">
       <thead>
-        <tr>
-          {headers.map(header => <TokenCell key={header} content={header} header={true}/>)}
-        </tr>
+          <tr>
+            {headers.map(header => <TokenCell key={header} content={header} header={true}/>)}
+          </tr>
       </thead>
       <tbody>
         {userValues.map((rowValues, rowIndex) => {
           return (
-            <tr key={`row-${rowIndex}`}>
+            <tr key={`row-${rowIndex}`} className="summary-table-row">
               {rowValues.map((value, cellIndex) => {
                 return (
                   <TokenCell key={`cell-${rowIndex}-${cellIndex}`} content={value} header={false}/>
-                )
-              })}
+                  )
+                })}
             </tr>
           )
         })}

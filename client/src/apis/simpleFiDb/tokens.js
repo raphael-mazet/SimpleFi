@@ -10,16 +10,9 @@ function  getTokens () {
   return fetchRequest(baseUrl + tokensEP);
 }
 
-function getUserFieldTokens (tokenIds, name) {
-  // return fetchRequest(baseUrl + fieldTokensEP, {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json'
-  //   },
-  //   body: JSON.stringify(tokenIds)
-  // })
+async function getUserFieldTokens (tokenIds) {
   tokenIds = JSON.stringify(tokenIds)
-  return fetchRequest(`${baseUrl}${fieldTokensEP}/${tokenIds}`)
+  return await fetchRequest(`${baseUrl}${fieldTokensEP}/${tokenIds}`)
 }
 
 export {

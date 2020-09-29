@@ -1,0 +1,27 @@
+nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-title {
+  color: white;
+  font-size: 25px;
+  font-weight: 700;
+  margin: 50px 50px;
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.nav-buttons button {
+  background-color: rgb(87, 195, 225);
+  color: white;
+  font-weight: 500;
+  margin: 45px 50px 50px 50px;;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.5);
+  cursor: pointer;
+}
