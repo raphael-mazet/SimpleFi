@@ -13,9 +13,9 @@ export default function MyAssets ({userTokens, userFields, apis}) {
   useEffect(() => {
     const tempHoldingValues = [];
     const tempPriceApis =[];
-    //TODO:only display if isBase
     userTokens.forEach(token => {
       if (token.isBase) {
+        //TODO: modularise
         let lockedBalance = 0;
         let combinedBalance = 0;
         let lockedPercent = 0;
@@ -30,9 +30,6 @@ export default function MyAssets ({userTokens, userFields, apis}) {
           combinedBalance = lockedBalance;
           lockedPercent = formatter.format(1);
         }
-        console.log(' ---> lockedPercent', lockedPercent);
-        console.log(' ---> typeof lockedPercent', typeof lockedPercent);
-        console.log(' ---> Number(lockedPercent)', Number(lockedPercent));
         tempHoldingValues.push([token.name, combinedBalance.toFixed(2), lockedPercent, 'Loading', token.currentPrice]);
         tempPriceApis.push(token.price_api);
       }

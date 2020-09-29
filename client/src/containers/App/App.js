@@ -58,11 +58,7 @@ function App() {
         const balance = await apis.getUserBalance(userAccount[0], contract);
         if(balance) {
           const { token_id, protocol_id, name, price_api, address, isBase } = token;
-          let currentPrice;
-          if (price_api) {
-            currentPrice = await apis.currentPrice(price_api);
-          }
-          return { token_id, protocol_id, name, price_api, address, isBase, contract, balance, currentPrice }
+          return { token_id, protocol_id, name, price_api, address, isBase, contract, balance }
         }
       }))
         .then(tokensWithBalances => {

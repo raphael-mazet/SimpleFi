@@ -5,8 +5,8 @@ import './Nav.css';
 export default function Nav ({connect}) {
   return (
     <nav>
-      <div class="nav-title">SimpleFi</div>
-      <div class="nav-buttons">
+      <div className="nav-title">SimpleFi</div>
+      <div className="nav-buttons">
         <button onClick={connect}>Connect wallet</button>
       </div>
     </nav>
