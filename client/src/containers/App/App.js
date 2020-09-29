@@ -99,17 +99,14 @@ function App() {
     if (userFields.length && userTokens.length && !rewoundFlag){
       //TODO: what if usertokens not set yet?
       const updatedUserTokens = [...userTokens];
-      console.log(' ---> updatedUserTokens', updatedUserTokens);
       const lockedUserTokens = [];
       userFields.forEach(async field => {
         setRewoundFlag(true);
         //FIXME: for testing purposes only: fix to make more generic
         if(field.name === "MTA-wETH 50/50") {
           const rewound = await apis.rewinder(field, trackedTokens);
-          console.log(' ---> rewound', rewound);
           //@dev: shape: {token_id, userTokenBalance, field}
           lockedUserTokens.push(...rewound)
-          console.log(' ---> lockedUserTokens', lockedUserTokens);
         }
         lockedUserTokens.forEach(token => {
           const existingUserToken = updatedUserTokens.find(userToken => userToken.token_id === token.token_id);
@@ -122,7 +119,6 @@ function App() {
             updatedUserTokens.push(newUserToken);
           }
         })
-        console.log(' ---> updatedUserTokens', updatedUserTokens);
         setUserTokens(userTokens => [...updatedUserTokens]);
       })
       //FIXME: change trigger to a userField loaded flag to avoid duplicate renders

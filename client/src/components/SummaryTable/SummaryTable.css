@@ -12,3 +12,11 @@
   cursor: pointer;
 }
 
+tr {
+  transition: 0.4s;
+}
+
+tr:hover {
+  box-shadow: 0 1px 6px 4px rgba(166,60,146,.1);
+  /* background-color: hotpink; */
+}

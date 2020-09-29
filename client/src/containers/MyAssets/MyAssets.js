@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './MyAssets.css';
 import SummaryTable from '../../components/SummaryTable/SummaryTable'
-import { holdingHeaders, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
+import { holdingHeaders, holdingCurrencyCells, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
 import { currentPrice } from '../../apis/coinGecko/currentPrice';
 
 export default function MyAssets ({userTokens, userFields, apis}) {
-
   const [holdingValues, setHoldingValues] = useState([]);
   const [fieldValues, setFieldValues] = useState([]);
   const [priceApis, setPriceApis] = useState([]);
@@ -76,13 +75,13 @@ export default function MyAssets ({userTokens, userFields, apis}) {
     <div className="myassets-summary">
       <div className="summary-container summary-holding">
         <h2>Holding</h2>
-        <SummaryTable headers={holdingHeaders} userValues={holdingValues}/>
+        <SummaryTable headers={holdingHeaders} userValues={holdingValues} tableName={'holding'} currencyCells={holdingCurrencyCells}/>
       </div>
       <div className="summary-container summary-farming">
         <div className="container-header">
           <h2>Farming</h2>
         </div>
-        <SummaryTable headers={farmingHeaders} userValues={fieldValues}/>
+        <SummaryTable headers={farmingHeaders} userValues={fieldValues} tableName={'farming'} currencyCells={[]}/>
       </div>
       {/* <div className="summary-earning">
         <h2>Earning</h2>

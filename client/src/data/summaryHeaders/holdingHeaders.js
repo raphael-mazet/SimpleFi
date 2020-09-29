@@ -5,5 +5,10 @@ const holdingHeaders = [
   'Value',
   'Curr. price'
 ]
+//TODO: figure out rendering $ sign
+const holdingCurrencyCells = [false, false, false, true, true]
 
-  export default holdingHeaders;
+  export {
+    holdingHeaders,
+    holdingCurrencyCells
+  } 
