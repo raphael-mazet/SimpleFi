@@ -1,4 +1,4 @@
-//TODO: probably need to use an input validator here for security
+//TODO: probably need to use an input validator here for security if pure SQL
 function generateFieldTokenQuery (tokenIds) {
   let queryStr = '';
   for (let prop in tokenIds) {
