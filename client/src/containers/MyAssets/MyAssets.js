@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './MyAssets.css';
-import SummaryTable from '../../components/SummaryTable/SummaryTable'
+import SummaryTable from '../../components/SummaryTable/SummaryTable';
 import { holdingHeaders, holdingCurrencyCells, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
-import { currentPrice } from '../../apis/coinGecko/currentPrice';
+import { Switch, Route, Link } from 'react-router-dom';
+import HoldingChart from '../../components/HoldingChart/HoldingChart'
 
 export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
   const [holdingValues, setHoldingValues] = useState([]);
@@ -68,7 +69,7 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
       cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
       underlying = underlying.slice(0, -2);
       farming = farming.slice(0, -2);
-      tempFieldValues.push([name, balance, underlying, farming]);
+      tempFieldValues.push([name, balance.toFixed(2), underlying, farming]);
     })
     setFieldValues(tempFieldValues)
   }, [userFields])

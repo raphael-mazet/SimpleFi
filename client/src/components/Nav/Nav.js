@@ -5,16 +5,15 @@ export default function Nav ({connect, splash}) {
   return (
     <nav>
       <div className="nav-title">{splash ? 'SimpleFi' : ""}</div>
-      {/* <ul>
-        <li>Dashboard</li>
-        <li>About</li>
-      </ul> */}
-      {splash && (
-        <div className="nav-buttons">
-          <button onClick={connect}>Connect wallet</button>
+      <div className="nav-items">
+        <div className="nav-links">
+          <div className="menu-items">About</div>
+          <div className="menu-items">What is DeFi</div>
         </div>
-      )
-    }
+          <div className={`nav-button${!splash ? '-transp' : ''}`}>
+            <button onClick={connect}>Connect wallet</button>
+          </div>
+      </div>
     </nav>
   )
 }

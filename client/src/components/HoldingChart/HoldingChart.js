@@ -8,6 +8,7 @@ export default function HoldingChart () {
     backgroundColor: {
       fill:'transparent',
     },
+    pieSliceText: 'label',
     slices: [
       {color: "#57C3E1"},
       {color: "#DCCDE8"},
@@ -15,8 +16,8 @@ export default function HoldingChart () {
       {color: "#F9B5AC"}
     ],
     legend: {
-      position: "right",
-      alignment: "left",
+      position: "none",
+      alignment: "center",
       textStyle: {
         color: "233238",
         fontSize: 14
@@ -38,7 +39,7 @@ export default function HoldingChart () {
     <div className="App">
       <Chart
         chartType="PieChart"
-        data={[["Age", "Weight"], ["a", 12], ["b", 5.5]]}
+        data={[["isLocked", "Amount"], ["Protocol A", 12], ["Protocol B", 5.5]]}
         options={pieOptions}
         graph_id="PieChart"
         width={"100%"}

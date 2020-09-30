@@ -23,8 +23,9 @@
 
 .welcome-splash h1 {
   margin-top: 50px;
-  font-size: 3em;
+  font-size: 3.5em;
   font-weight: 700;
+  font-family: 'Baloo 2', cursive;
 }
 
 .welcome-splash h2 {

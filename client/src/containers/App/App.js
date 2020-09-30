@@ -6,7 +6,8 @@ import './App.css';
 import Nav from '../../components/Nav/Nav';
 import Welcome from '../../components/Welcome/Welcome';
 import MyAssets from '../MyAssets/MyAssets';
-import HoldingChart from '../../components/HoldingChart/HoldingChart';
+import HoldingDetails from '../../components/HoldingDetails/HoldingDetails';
+import Footer from '../../components/Footer/Footer';
 
 function App() {
   const [trackedTokens, setTrackedTokens] = useState([]);
@@ -135,7 +136,8 @@ function App() {
       <Switch>
         <Route path='/' exact render={() => <Welcome connect={connectWallet} setSplash={setSplash}/>}/>
         <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/>
-        <Route path='/chart' exact render={() => <HoldingChart userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/>
+        <Route path='/dashboard/:tokenName' render={() => <HoldingDetails userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/>
+        {/* <Route path='/chart' exact render={() => <HoldingChart userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
       </Switch>
     </div>
   );

@@ -13,13 +13,13 @@ export default function SummaryTable ({headers, userValues, tableName, currencyC
       <tbody>
         {userValues.map((rowValues, rowIndex) => {
           return (
-            <tr key={`${tableName}-row-${rowIndex}`} className="summary-table-row">
-              {rowValues.map((value, cellIndex) => {
-                return (
-                  <TokenCell key={`${tableName}-cell-${rowIndex}-${cellIndex}`} content={value} header={false} index={cellIndex} currencyCells={currencyCells}/>
-                  )
-                })}
-            </tr>
+              <tr key={`${tableName}-row-${rowIndex}`} className="summary-table-row">
+                {rowValues.map((value, cellIndex) => {
+                  return (
+                    <TokenCell key={`${tableName}-cell-${rowIndex}-${cellIndex}`} content={value} header={false} index={cellIndex} currencyCells={currencyCells}/>
+                    )
+                  })}
+              </tr>
           )
         })}
       </tbody>

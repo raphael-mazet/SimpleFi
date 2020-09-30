@@ -5,23 +5,43 @@ nav {
 
 .nav-title {
   color: white;
-  font-size: 25px;
+  font-size: 30px;
   font-weight: 700;
-  margin: 50px 50px;
+  margin: 45px 50px;
+  font-family: 'Baloo 2', cursive;;
 }
 
-.nav-buttons {
+.nav-items {
   display: flex;
-  justify-content: center;
 }
 
-.nav-buttons button {
+.nav-links {
+  display: flex;  
+} 
+
+.menu-items {
+  display: flex;
+  justify-content: flex-end;
+  color: white;
+  margin: 55px 30px 30px 10px;
+}
+
+.nav-button button {
   background-color: rgb(87, 195, 225);
   color: white;
   font-weight: 500;
-  margin: 45px 50px 50px 50px;;
+  margin: 45px 50px 50px 50px;
   padding: 10px;
   border-radius: 8px;
   box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.5);
   cursor: pointer;
+}
+
+.nav-button-transp button {
+  background-color: rgb(137, 96, 159);
+  color: rgb(137, 96, 159);
+  font-weight: 500;
+  margin: 45px 50px 50px 50px;
+  padding: 10px;
+  border-radius: 8px;
 }

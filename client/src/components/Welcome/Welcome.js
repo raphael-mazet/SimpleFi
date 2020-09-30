@@ -2,12 +2,15 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import simpleFiSplash from '../../assets/images/simpleFi-splash3.svg';
 import './Welcome.css';
+import Footer from '../Footer/Footer';
 
 export default function Welcome ({connect, setSplash}) {
 
   useEffect(() => setSplash(false), [])
+  const br = '\n';
 
   return (
+    <>
     <div className='welcome'>
       <div className='welcome-splash'>
         <div className="splash-text">
@@ -24,5 +27,7 @@ export default function Welcome ({connect, setSplash}) {
         <img src={simpleFiSplash} alt="Welcome to SimpleFi" className="welcome-media-image"/>
       </div>
     </div>
+    <Footer/>
+    </>
   )
 }
