@@ -5,8 +5,8 @@
 /.vscode
 
 # production
-/secrets
-secrets/.config.js
+/config
+config/.config.js
 solo-project-proposal/
 
 # misc

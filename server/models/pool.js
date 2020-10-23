@@ -1,5 +1,5 @@
 const { Pool } = require ('pg');
-const password = require ('../../secrets/.config.js')
+const password = require ('../../config/.config.js')
 
 const pool = new Pool ({
   user: 'raph',
