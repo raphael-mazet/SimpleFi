@@ -11,7 +11,7 @@ export default function Nav ({connect, splash}) {
           <div className="menu-items">What is DeFi</div>
         </div>
           <div className={`nav-button${!splash ? '-transp' : ''}`}>
-            <button onClick={connect}>Connect wallet</button>
+            <button onClick={connect}>Change wallet</button>
           </div>
       </div>
     </nav>

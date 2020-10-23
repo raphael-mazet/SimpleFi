@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
 import apis from '../../apis';
 import { metamaskConnect } from '../../authentication/web3';
 import './App.css';
 import Nav from '../../components/Nav/Nav';
 import Welcome from '../../components/Welcome/Welcome';
 import MyAssets from '../MyAssets/MyAssets';
-import HoldingDetails from '../../components/HoldingDetails/HoldingDetails';
-import Footer from '../../components/Footer/Footer';
 
 function App() {
   const [trackedTokens, setTrackedTokens] = useState([]);
@@ -19,6 +17,7 @@ function App() {
   const [userFields, setUserFields] = useState([]);
   const [rewoundFlag, setRewoundFlag] = useState(false);
   const [splash, setSplash] = useState(false)
+  const history = useHistory();
 
   //Get tracked tokens and fields from SimpleFi db
   useEffect(() => {
@@ -43,12 +42,13 @@ function App() {
     //TODO: autorefresh when toggle account from Metamask
     if (window.ethereum) {
       const newAccount = await metamaskConnect();
-      if(!userAccount[0]) setUserAccount(newAccount);
+      if(!userAccount[0]) {setUserAccount(newAccount);
+      history.push('/dashboard');}
       else if (newAccount[0] !== userAccount[0]) {
         const resetUserTokens = setUserTokens([]);
         const resetUserFields = setUserFields([]);
         Promise.all([resetUserTokens, resetUserFields])
-          .then(resets => setUserAccount(newAccount))
+          .then(resets => {setUserAccount(newAccount);})
       }
     } else {
       alert('Please install Metamask to use SimpleFi (https://metamask.io/)')
@@ -102,12 +102,11 @@ function App() {
   // extract underlying tokens from user fields
   useEffect(() => {
     if (userFields.length && userTokens.length && !rewoundFlag){
-      //TODO: what if usertokens not set yet?
       const updatedUserTokens = [...userTokens];
       const lockedUserTokens = [];
       userFields.forEach(async field => {
         setRewoundFlag(true);
-        //FIXME: for testing purposes only: fix to make more generic
+        //FIXME: this field is hardcoded for testing purposes and due to differences in contract ABIs - fix to make more generic
         if(field.name === "MTA-wETH 50/50") {
           const rewound = await apis.rewinder(field, trackedTokens);
           //@dev: shape: {token_id, userTokenBalance, field}
@@ -119,14 +118,13 @@ function App() {
           else if (existingUserToken) existingUserToken.lockedBalance = [{balance: token.userTokenBalance, field}];
           else {
             const newUserToken = trackedTokens.find(trackedToken => trackedToken.token_id === token.token_id)
-            //TODO: if rewound token is not a "base" token, must be rewound again with corresponding field (recursive???)
+            //TODO: if rewound token is not a "base" token, must be rewound again with corresponding field (recursive calls)
             newUserToken.lockedBalance = [{balance: token.userTokenBalance, field}];
             updatedUserTokens.push(newUserToken);
           }
         })
         setUserTokens(userTokens => [...updatedUserTokens]);
       })
-      //FIXME: change trigger to a userField loaded flag to avoid duplicate renders
     }
   }, [userFields, userTokens])
 
@@ -136,7 +134,8 @@ function App() {
       <Switch>
         <Route path='/' exact render={() => <Welcome connect={connectWallet} setSplash={setSplash}/>}/>
         <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/>
-        <Route path='/dashboard/:tokenName' render={() => <HoldingDetails userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/>
+        //TODO: add new holding details routes
+        {/* <Route path='/dashboard/:tokenName' render={() => <HoldingDetails userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
         {/* <Route path='/chart' exact render={() => <HoldingChart userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
       </Switch>
     </div>

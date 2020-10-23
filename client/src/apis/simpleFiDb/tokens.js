@@ -1,7 +1,6 @@
 import fetchRequest from '../fetchRequest';
 
 const baseUrl = 'http://localhost:3020';
-//FIXME: put this in secure folder
 const tokensEP = '/tokens';
 const fieldTokensEP = '/userfieldtokens'
 

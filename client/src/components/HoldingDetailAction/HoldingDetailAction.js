@@ -1,5 +1,6 @@
 import React from 'react';
 
+//NOTE: this component is not hooked up to anything yet, will be used for a detailed holding view
 export default function HoldingDetailAction ({available, protocol, amount}) {
   
   const actionText = available ? 'available:' : `Locked in ${protocol}:`;

@@ -5,12 +5,12 @@ import { erc20, stakingField } from '../../data/ethContractTypes';
 //TODO: potentially add default provider
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 
-//TODO: re-document
+//TODO: beware, documentation may not be entirely up to date
 /**
  * @func createContract creates an instance of a new ethers contract interface
  * @param {collection} array of tracked tokens or fields with same type 
  * @param {type} string contract type determines abi used for contract
- * @returns {object} new contract interface
+ * @returns {object} new contract interfaces
  */
 function createContracts (collection, type) {
   const collectionWithContracts = [];
@@ -82,7 +82,6 @@ async function rewinder (field, trackedTokens) {
     tokenIds.push(token_id);
   })
   
-  //ASK: is this horrendous code? Only solution I found to nested promises
   await Promise.all(fieldHoldingPromises)
     .then(fieldHoldings => fieldHoldings.forEach((fieldHolding, i) => {
       const userTokenBalance = field.balance * fieldHolding / totalFieldSupply;

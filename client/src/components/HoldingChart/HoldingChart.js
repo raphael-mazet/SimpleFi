@@ -1,6 +1,7 @@
 import React from 'react';
 import Chart from "react-google-charts";
 
+//NOTE: this component is not yet hooked up to anything - will be used for token details
 export default function HoldingChart () {
 
   const pieOptions = {

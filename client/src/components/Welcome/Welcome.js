@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import simpleFiSplash from '../../assets/images/simpleFi-splash3.svg';
 import './Welcome.css';
 import Footer from '../Footer/Footer';
@@ -7,7 +6,6 @@ import Footer from '../Footer/Footer';
 export default function Welcome ({connect, setSplash}) {
 
   useEffect(() => setSplash(false), [])
-  const br = '\n';
 
   return (
     <>
@@ -18,9 +16,7 @@ export default function Welcome ({connect, setSplash}) {
           <h2>Decentralised finance investing made easy!</h2>
         </div>
         <div className="splash-connect">
-          <Link exact to='/dashboard'>
             <button className='welcome-button' onClick={connect}>Connect wallet</button>
-          </Link>
         </div>
       </div>
       <div className="welcome-media">

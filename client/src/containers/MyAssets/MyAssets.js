@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './MyAssets.css';
 import SummaryTable from '../../components/SummaryTable/SummaryTable';
 import { holdingHeaders, holdingCurrencyCells, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
-import { Switch, Route, Link } from 'react-router-dom';
-import HoldingChart from '../../components/HoldingChart/HoldingChart'
 
 export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
   const [holdingValues, setHoldingValues] = useState([]);
@@ -86,6 +84,7 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
         </div>
         <SummaryTable headers={farmingHeaders} userValues={fieldValues} tableName={'farming'} currencyCells={[]}/>
       </div>
+      {/*TODO: add tokens earning table*/}
       {/* <div className="summary-earning">
         <h2>Earning</h2>
         <SummaryTable headers={earningHeaders}/>
