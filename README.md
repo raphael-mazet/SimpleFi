@@ -1,7 +1,7 @@
 # SimpleFi
 
 <p align="center">
-  <img src="./images/logo/simplefi-logo-transp.png" />
+  <img src="./images/logo/simplefi-logo-transp.png" width=250/>
 </p>
 
 SimpleFi makes it easy to manage your decentralised finance investment portfolio.
@@ -10,8 +10,8 @@ SimpleFi makes it easy to manage your decentralised finance investment portfolio
 ## Screenshots
 
 <p align="center">
-  <img src="./images/screenshots/simplefi-splash" />
-  <img src="./images/screenshots/simplefi-dash" />
+  <img src="./images/screenshots/simplefi-splash.png" width=400/>
+  <img src="./images/screenshots/simplefi-dash.png" width=400/>
 </p>
 
 
@@ -41,15 +41,15 @@ npm start
 
 ## Built with
 
-* [React](https://reactjs.org/) - JavaScript library for building user interfaces
-* [React Router](https://reactrouter.com/) - Routing and *navigation* for *React* apps
-* [PostgreSQL](https://www.postgresql.org/) - Open source relational database
-* [ethers.js](https://docs.ethers.io/v5/) - Lightweight javascript library to interact with the Ethereum blockchain
+* [React](https://reactjs.org/) - javaScript library for building user interfaces
+* [React Router](https://reactrouter.com/) - routing and navigation for React apps
+* [PostgreSQL](https://www.postgresql.org/) - open source relational database
+* [ethers.js](https://docs.ethers.io/v5/) - lightweight javaScript library to interact with the Ethereum blockchain
 
 
 ## Contributing
 
-Improvements and remixes are welcome. Feel free to fork the repo.
+Improvements and remixes are welcome.
 
 
 ## Author
