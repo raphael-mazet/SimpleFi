@@ -1,7 +1,7 @@
 # SimpleFi
 
 <p align="center">
-  <img src="./images/logo/simplefi-logo-transp" />
+  <img src="./images/logo/simplefi-logo-transp.png" />
 </p>
 
 SimpleFi makes it easy to manage your decentralised finance investment portfolio.
