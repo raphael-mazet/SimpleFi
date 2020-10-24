@@ -2,7 +2,7 @@
 Decentralised finance portfolio tracker
 
 <p align="center">
-  <img src="" />
+  <img src="./images/logo/simplefi-logo-transp" />
 </p>
 
 
@@ -11,7 +11,8 @@ SimpleFi makes it easy to manage your decentralised finance investment portfolio
 ## Screenshots
 
 <p align="center">
-  <img src="" />
+  <img src="./images/screenshots/simplefi-splash" />
+  <img src="./images/screenshots/simplefi-dash" />
 </p>
 
 
