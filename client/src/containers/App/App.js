@@ -79,20 +79,19 @@ function App() {
         const { contract } = field;
         const balance = await apis.getUserBalance(userAccount[0], contract);
         if (balance) {
-          const { field_id, name, protocol_id, address, instructions, risk_level, receipt_token } = field;
+          const { fieldId, name, protocolId, address, instructions, riskLevel, receiptToken } = field;
 
           const seedTokens = (
-            ({seed_token_1, seed_token_2, seed_token_3, seed_token_4}) =>
-              ({seed_token_1, seed_token_2, seed_token_3, seed_token_4})
+            ({seedToken1, seedToken2, seedToken3, seedToken4}) =>
+              ({seedToken1, seedToken2, seedToken3, seedToken4})
           )(field);
 
           const cropTokens = (
-            ({crop_token_1, crop_token_2,}) =>
-             ({crop_token_1, crop_token_2,})
+            ({cropToken1, cropToken2,}) =>
+             ({cropToken1, cropToken2,})
           )(field);
           const fieldTokens = await apis.getUserFieldTokens({seedTokens, cropTokens});
-          console.log('fieldTokens', fieldTokens)
-          return  {field_id, contract, name, balance, protocol_id, address, instructions, risk_level, receipt_token, seedTokens: fieldTokens.seedTokens, cropTokens: fieldTokens.cropTokens};
+          return  {fieldId, contract, name, balance, protocolId, address, instructions, riskLevel, receiptToken, seedTokens: fieldTokens.seedTokens, cropTokens: fieldTokens.cropTokens};
         }
       })).then((userFieldsWithTokens) => {
         const filteredFields = userFieldsWithTokens.filter(field => field);
