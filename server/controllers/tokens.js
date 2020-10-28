@@ -31,7 +31,6 @@ async function getUserFieldTokens (req, res) {
     }
     if (Object.keys(returnedTokens).length) {
       res.status = 200;
-      console.log(' ---> returnedTokens', returnedTokens);
       res.send(returnedTokens);
     } else {
       res.sendStatus(204);
