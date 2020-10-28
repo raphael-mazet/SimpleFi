@@ -62,7 +62,6 @@ function App() {
         const { contract } = token;
         const balance = await apis.getUserBalance(userAccount[0], contract);
         if(balance) {
-          console.log('token in setUserTokens after loaded -->', token)
           const { tokenId, protocolId, name, priceApi, address, isBase } = token;
           return { tokenId, protocolId, name, priceApi, address, isBase, contract, balance }
         }
@@ -105,16 +104,14 @@ function App() {
   useEffect(() => {
     if (userFields.length && userTokens.length && !rewoundFlag){
       const updatedUserTokens = [...userTokens];
-      console.log(' ---> updatedUserTokens', updatedUserTokens);
       const lockedUserTokens = [];
       userFields.forEach(async field => {
         setRewoundFlag(true);
         //FIXME: this field is hardcoded for testing purposes and due to differences in contract ABIs - fix to make more generic
         if(field.name === "MTA-wETH 50/50") {
           const rewound = await apis.rewinder(field, trackedTokens);
-          //@dev: shape: {token_id, userTokenBalance, field}
+          //@dev: shape: {tokenId, userTokenBalance, field}
           lockedUserTokens.push(...rewound)
-          console.log(' ---> lockedUserTokens', lockedUserTokens);
         }
         lockedUserTokens.forEach(token => {
           const existingUserToken = updatedUserTokens.find(userToken => userToken.tokenId === token.tokenId);

@@ -87,7 +87,6 @@ async function rewinder (field, trackedTokens) {
     .then(fieldHoldings => fieldHoldings.forEach((fieldHolding, i) => {
       const userTokenBalance = field.balance * fieldHolding / totalFieldSupply;
       userTokenBalances.push({tokenId: tokenIds[i], userTokenBalance, field});
-      console.log(' ---> userTokenBalances', userTokenBalances);
     }))
   return userTokenBalances;
 }

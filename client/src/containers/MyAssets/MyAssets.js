@@ -9,7 +9,6 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
   const [priceApis, setPriceApis] = useState([]);
 
   useEffect(() => setSplash(true), []);
-  console.log(' ---> userTokens in MyAssets', userTokens);
 
   useEffect(() => {
     const tempHoldingValues = [];
