@@ -1,5 +1,5 @@
 const Tokens = require ('../models/tokens');
-const path = require('path')
+const path = require('path');
 const helpers = require('./helpers');
 
 async function getTokens (req, res) {

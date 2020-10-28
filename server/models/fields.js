@@ -1,7 +1,5 @@
-const { PrismaClient } = require("@prisma/client");
+const prisma = require('./db');
 const path = require ('path');
-
-const prisma = new PrismaClient();
 
 async function getFields() {
   try {
@@ -9,6 +7,9 @@ async function getFields() {
     return fields;
   } catch (err) {
     console.error(`Error at ${path.basename(__dirname)}/${path.basename(__filename)} ${err}`);
+  }
+  finally {
+    (async () => {await prisma.$disconnect()})();
   }
 }
 

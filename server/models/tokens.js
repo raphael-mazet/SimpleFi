@@ -1,6 +1,5 @@
-const { PrismaClient } = require("@prisma/client");
-
-const prisma = new PrismaClient();
+const prisma = require('./db');
+const path = require ('path');
 
 async function getTokens() {
   try {
@@ -8,6 +7,9 @@ async function getTokens() {
     return tokens;
   } catch(err) {
     console.error(`Error at ${path.basename(__dirname)}/${path.basename(__filename)} ${err}`);
+  } 
+  finally {
+    (async () => {await prisma.$disconnect()})();
   }
 }
 
@@ -23,6 +25,9 @@ async function selectUserFieldTokens(queryStr) {
     return tokens;
   } catch (err) {
     console.error(`Error at ${path.basename(__dirname)}/${path.basename(__filename)} ${err}`);
+  } 
+  finally {
+    (async () => {await prisma.$disconnect()})();
   }
 }
 
