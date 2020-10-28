@@ -105,6 +105,7 @@ function App() {
   useEffect(() => {
     if (userFields.length && userTokens.length && !rewoundFlag){
       const updatedUserTokens = [...userTokens];
+      console.log(' ---> updatedUserTokens', updatedUserTokens);
       const lockedUserTokens = [];
       userFields.forEach(async field => {
         setRewoundFlag(true);
@@ -113,13 +114,14 @@ function App() {
           const rewound = await apis.rewinder(field, trackedTokens);
           //@dev: shape: {token_id, userTokenBalance, field}
           lockedUserTokens.push(...rewound)
+          console.log(' ---> lockedUserTokens', lockedUserTokens);
         }
         lockedUserTokens.forEach(token => {
-          const existingUserToken = updatedUserTokens.find(userToken => userToken.token_id === token.token_id);
+          const existingUserToken = updatedUserTokens.find(userToken => userToken.tokenId === token.tokenId);
           if (existingUserToken && existingUserToken.lockedBalance) existingUserToken.lockedBalance.push({balance: token.userTokenBalance, field})
           else if (existingUserToken) existingUserToken.lockedBalance = [{balance: token.userTokenBalance, field}];
           else {
-            const newUserToken = trackedTokens.find(trackedToken => trackedToken.tokenId === token.token_id)
+            const newUserToken = trackedTokens.find(trackedToken => trackedToken.tokenId === token.tokenId)
             //TODO: if rewound token is not a "base" token, must be rewound again with corresponding field (recursive calls)
             newUserToken.lockedBalance = [{balance: token.userTokenBalance, field}];
             updatedUserTokens.push(newUserToken);
