@@ -4,6 +4,9 @@
 # testing
 /testing
 
+# environment
+
+
 # misc
 .DS_Store
 .env
