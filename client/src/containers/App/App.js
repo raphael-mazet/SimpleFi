@@ -62,8 +62,9 @@ function App() {
         const { contract } = token;
         const balance = await apis.getUserBalance(userAccount[0], contract);
         if(balance) {
-          const { token_id, protocol_id, name, price_api, address, isBase } = token;
-          return { token_id, protocol_id, name, price_api, address, isBase, contract, balance }
+          console.log('token in setUserTokens after loaded -->', token)
+          const { tokenId, protocolId, name, priceApi, address, isBase } = token;
+          return { tokenId, protocolId, name, priceApi, address, isBase, contract, balance }
         }
       }))
         .then(tokensWithBalances => {
@@ -91,6 +92,7 @@ function App() {
              ({crop_token_1, crop_token_2,})
           )(field);
           const fieldTokens = await apis.getUserFieldTokens({seedTokens, cropTokens});
+          console.log('fieldTokens', fieldTokens)
           return  {field_id, contract, name, balance, protocol_id, address, instructions, risk_level, receipt_token, seedTokens: fieldTokens.seedTokens, cropTokens: fieldTokens.cropTokens};
         }
       })).then((userFieldsWithTokens) => {
@@ -117,7 +119,7 @@ function App() {
           if (existingUserToken && existingUserToken.lockedBalance) existingUserToken.lockedBalance.push({balance: token.userTokenBalance, field})
           else if (existingUserToken) existingUserToken.lockedBalance = [{balance: token.userTokenBalance, field}];
           else {
-            const newUserToken = trackedTokens.find(trackedToken => trackedToken.token_id === token.token_id)
+            const newUserToken = trackedTokens.find(trackedToken => trackedToken.tokenId === token.token_id)
             //TODO: if rewound token is not a "base" token, must be rewound again with corresponding field (recursive calls)
             newUserToken.lockedBalance = [{balance: token.userTokenBalance, field}];
             updatedUserTokens.push(newUserToken);

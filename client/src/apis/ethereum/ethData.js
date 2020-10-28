@@ -66,6 +66,8 @@ async function getUserBalance (account, contract) {
  * @returns {array} containing token id, token balance and related field (to inform user of where tokens are locked)
  */
 async function rewinder (field, trackedTokens) {
+  console.log(' ---> trackedTokens', trackedTokens);
+  console.log(' ---> field', field);
   //NOTE: simple case where seedTokens are for sure base tokens (will need update)
   //TODO: check if totalSupply() will work for contracts other than uniswap
   //TODO: check if better to set this at setUserField useEffect level
@@ -75,8 +77,9 @@ async function rewinder (field, trackedTokens) {
   const tokenIds = [];
 
   field.seedTokens.forEach(token => {
+    console.log(' ---> token', token);
     const { token_id } = token;
-    const tokenContract = trackedTokens.find(el => el.token_id === token_id).contract;
+    const tokenContract = trackedTokens.find(el => el.tokenId === token_id).contract;
     const fieldSeedHolding = tokenContract.balanceOf(field.address);
     fieldHoldingPromises.push(fieldSeedHolding);
     tokenIds.push(token_id);
