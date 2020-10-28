@@ -10,10 +10,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^2.10.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongoose": "^5.10.3",
     "morgan": "^1.10.0",
     "pg": "^8.3.3"
+  },
+  "devDependencies": {
+    "@prisma/cli": "^2.10.0"
   }
 }
