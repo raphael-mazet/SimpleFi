@@ -75,17 +75,17 @@ async function rewinder (field, trackedTokens) {
   const tokenIds = [];
 
   field.seedTokens.forEach(token => {
-    const { token_id } = token;
-    const tokenContract = trackedTokens.find(el => el.token_id === token_id).contract;
+    const { tokenId } = token;
+    const tokenContract = trackedTokens.find(el => el.tokenId === tokenId).contract;
     const fieldSeedHolding = tokenContract.balanceOf(field.address);
     fieldHoldingPromises.push(fieldSeedHolding);
-    tokenIds.push(token_id);
+    tokenIds.push(tokenId);
   })
   
   await Promise.all(fieldHoldingPromises)
     .then(fieldHoldings => fieldHoldings.forEach((fieldHolding, i) => {
       const userTokenBalance = field.balance * fieldHolding / totalFieldSupply;
-      userTokenBalances.push({token_id:tokenIds[i], userTokenBalance, field});
+      userTokenBalances.push({tokenId: tokenIds[i], userTokenBalance, field});
     }))
   return userTokenBalances;
 }

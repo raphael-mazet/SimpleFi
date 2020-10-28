@@ -1,0 +1,124 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Farmer {
+  farmerId     String        @id @map("farmer_id")
+  account      String
+  transactions Transaction[]
+
+  @@map("farmer")
+}
+
+model Field {
+  fieldId                          String    @id @map("field_id")
+  name                             String?
+  protocolId                       String?   @map("protocol_id")
+  address                          String?
+  yieldType                        Json?     @map("yield_type")
+  instructions                     Json?
+  riskLevel                        Int?      @map("risk_level")
+  seedToken1                       String?   @map("seed_token_1")
+  seedToken2                       String?   @map("seed_token_2")
+  seedToken3                       String?   @map("seed_token_3")
+  seedToken4                       String?   @map("seed_token_4")
+  cropToken1                       String?   @map("crop_token_1")
+  cropToken2                       String?   @map("crop_token_2")
+  receiptToken                     String?   @map("receipt_token")
+  token_field_crop_token_1Totoken  Token?    @relation("field_crop_token_1Totoken", fields: [cropToken1], references: [tokenId])
+  token_field_crop_token_2Totoken  Token?    @relation("field_crop_token_2Totoken", fields: [cropToken2], references: [tokenId])
+  protocol                         Protocol? @relation(fields: [protocolId], references: [protocolId])
+  token_field_receipt_tokenTotoken Token?    @relation("field_receipt_tokenTotoken", fields: [receiptToken], references: [tokenId])
+  token_field_seed_token_1Totoken  Token?    @relation("field_seed_token_1Totoken", fields: [seedToken1], references: [tokenId])
+  token_field_seed_token_2Totoken  Token?    @relation("field_seed_token_2Totoken", fields: [seedToken2], references: [tokenId])
+  token_field_seed_token_3Totoken  Token?    @relation("field_seed_token_3Totoken", fields: [seedToken3], references: [tokenId])
+  token_field_seed_token_4Totoken  Token?    @relation("field_seed_token_4Totoken", fields: [seedToken4], references: [tokenId])
+
+  @@map("field")
+}
+
+model Protocol {
+  protocolId                             String  @id @map("protocol_id")
+  name                                   String?
+  governanceToken                        String? @map("governance_token")
+  links                                  Json?
+  token_protocol_governance_tokenTotoken Token?  @relation("protocol_governance_tokenTotoken", fields: [governanceToken], references: [tokenId])
+  fields                                 Field[]
+  token_protocolTotoken_protocol_id      Token[] @relation("protocolTotoken_protocol_id")
+
+  @@map("protocol")
+}
+
+model Token {
+  tokenId                                       String        @id @map("token_id")
+  protocolId                                    String?       @map("protocol_id")
+  name                                          String?
+  priceApi                                      String?       @map("price_api")
+  address                                       String?
+  isBase                                        Boolean
+  protocol_protocolTotoken_protocol_id          Protocol?     @relation("protocolTotoken_protocol_id", fields: [protocolId], references: [protocolId])
+  field_field_crop_token_1Totoken               Field[]       @relation("field_crop_token_1Totoken")
+  field_field_crop_token_2Totoken               Field[]       @relation("field_crop_token_2Totoken")
+  field_field_receipt_tokenTotoken              Field[]       @relation("field_receipt_tokenTotoken")
+  field_field_seed_token_1Totoken               Field[]       @relation("field_seed_token_1Totoken")
+  field_field_seed_token_2Totoken               Field[]       @relation("field_seed_token_2Totoken")
+  field_field_seed_token_3Totoken               Field[]       @relation("field_seed_token_3Totoken")
+  field_field_seed_token_4Totoken               Field[]       @relation("field_seed_token_4Totoken")
+  protocol_protocol_governance_tokenTotoken     Protocol[]    @relation("protocol_governance_tokenTotoken")
+  transaction_tokenTotransaction_input_token_1  Transaction[] @relation("tokenTotransaction_input_token_1")
+  transaction_tokenTotransaction_input_token_2  Transaction[] @relation("tokenTotransaction_input_token_2")
+  transaction_tokenTotransaction_input_token_3  Transaction[] @relation("tokenTotransaction_input_token_3")
+  transaction_tokenTotransaction_input_token_4  Transaction[] @relation("tokenTotransaction_input_token_4")
+  transaction_tokenTotransaction_output_token_1 Transaction[] @relation("tokenTotransaction_output_token_1")
+  transaction_tokenTotransaction_output_token_2 Transaction[] @relation("tokenTotransaction_output_token_2")
+
+  @@map("token")
+}
+
+model Transaction {
+  transactionId                           String                 @id @map("transaction_id")
+  hash                                    String?
+  type                                    transaction_type?
+  farmerId                                String?                @map("farmer_id")
+  inputType                               transaction_in_output? @map("input_type")
+  outputType                              transaction_in_output? @map("output_type")
+  inputToken1                             String?                @map("input_token_1")
+  inputToken2                             String?                @map("input_token_2")
+  inputToken3                             String?                @map("input_token_3")
+  inputToken4                             String?                @map("input_token_4")
+  inputAmounts                            Int[]                  @map("input_amounts")
+  outputToken1                            String?                @map("output_token_1")
+  outputToken2                            String?                @map("output_token_2")
+  outputAmounts                           Int[]                  @map("output_amounts")
+  currency                                String?
+  farmer                                  Farmer?                @relation(fields: [farmerId], references: [farmerId])
+  token_tokenTotransaction_input_token_1  Token?                 @relation("tokenTotransaction_input_token_1", fields: [inputToken1], references: [tokenId])
+  token_tokenTotransaction_input_token_2  Token?                 @relation("tokenTotransaction_input_token_2", fields: [inputToken2], references: [tokenId])
+  token_tokenTotransaction_input_token_3  Token?                 @relation("tokenTotransaction_input_token_3", fields: [inputToken3], references: [tokenId])
+  token_tokenTotransaction_input_token_4  Token?                 @relation("tokenTotransaction_input_token_4", fields: [inputToken4], references: [tokenId])
+  token_tokenTotransaction_output_token_1 Token?                 @relation("tokenTotransaction_output_token_1", fields: [outputToken1], references: [tokenId])
+  token_tokenTotransaction_output_token_2 Token?                 @relation("tokenTotransaction_output_token_2", fields: [outputToken2], references: [tokenId])
+
+  @@map("transaction")  
+}
+
+enum transaction_in_output {
+  token
+  fiat
+
+   @@map("transaction_in/output")
+}
+
+enum transaction_type {
+  buy
+  sell
+  farm
+  liquidity
+  claim
+  airdrop
+}

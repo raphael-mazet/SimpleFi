@@ -31,7 +31,7 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
           lockedPercent = formatter.format(1);
         }
         tempHoldingValues.push([token.name, combinedBalance.toFixed(2), lockedPercent, 'Loading', token.currentPrice]);
-        tempPriceApis.push(token.price_api);
+        tempPriceApis.push(token.priceApi);
       }
     })
     setHoldingValues(tempHoldingValues);

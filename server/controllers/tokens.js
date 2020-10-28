@@ -21,11 +21,11 @@ async function getUserFieldTokens (req, res) {
     const cropTokenQuery = helpers.generateFieldTokenQuery(cropTokens)
     const returnedTokens = {};
 
-    if (seedTokenQuery) {
+    if (seedTokenQuery.length) {
       const returnedSeed = await Tokens.selectUserFieldTokens(seedTokenQuery);
       returnedTokens.seedTokens = returnedSeed;
     }
-    if (cropTokenQuery) {
+    if (cropTokenQuery.length) {
       returnedCrop = await Tokens.selectUserFieldTokens(cropTokenQuery);
       returnedTokens.cropTokens = returnedCrop;
     }
@@ -41,7 +41,6 @@ async function getUserFieldTokens (req, res) {
     res.sendStatus(500);
   }
 }
-
 
 module.exports = {
   getTokens,

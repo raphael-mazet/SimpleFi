@@ -1,13 +1,15 @@
-const pool = require ('./pool');
+const { PrismaClient } = require("@prisma/client");
 const path = require ('path');
 
-async function getFields () {
+const prisma = new PrismaClient();
+
+async function getFields() {
   try {
-    const fields = await pool.query('select * from field');
-    return fields.rows;
+    const fields = await prisma.field.findMany();
+    return fields;
   } catch (err) {
     console.error(`Error at ${path.basename(__dirname)}/${path.basename(__filename)} ${err}`);
-  } 
+  }
 }
 
 module.exports = {
