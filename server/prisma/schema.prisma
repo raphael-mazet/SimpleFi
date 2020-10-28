@@ -20,7 +20,7 @@ model Field {
   name                             String?
   protocolId                       String?   @map("protocol_id")
   address                          String?
-  yieldType                        Json?     @map("yield_type ")
+  yieldType                        Json?     @map("yield_type")
   instructions                     Json?
   riskLevel                        Int?      @map("risk_level")
   seedToken1                       String?   @map("seed_token_1")
