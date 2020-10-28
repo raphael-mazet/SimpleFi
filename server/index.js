@@ -1,6 +1,5 @@
 const express = require('express');
 const router = require('./router');
-const pool = require('./models/pool');
 const cors = require('cors');
 const morgan = require('morgan');
 
@@ -14,12 +13,10 @@ app.use(router);
 
 (async () => {
   try {
-    await pool.connect();
-    console.log('SimpleFi DB connected 🐘');
     app.listen(port, () => {
       console.log(`Solo server listening on localhost:${port} 🎉`)
     });
   } catch (err) {
-    console.error('SimpleFi DB connection error', err)
+    console.error('Connection error', err)
   }
 })();
