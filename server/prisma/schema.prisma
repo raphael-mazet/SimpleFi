@@ -38,8 +38,8 @@ model Field {
   token_field_seed_token_2Totoken  Token?       @relation("field_seed_token_2Totoken", fields: [seedToken2], references: [tokenId])
   token_field_seed_token_3Totoken  Token?       @relation("field_seed_token_3Totoken", fields: [seedToken3], references: [tokenId])
   token_field_seed_token_4Totoken  Token?       @relation("field_seed_token_4Totoken", fields: [seedToken4], references: [tokenId])
-  field_crop                       field_crop[] @relation("fieldTofield_crop")
-  field_seed                       field_seed[] @relation("fieldTofield_seed")
+  field_crop                       fieldCrop[]  @relation("fieldTofield_crop")
+  field_seed                       fieldSeed[]  @relation("fieldTofield_seed")
 
   @@map("field")
 }
@@ -71,8 +71,8 @@ model Token {
   field_field_seed_token_2Totoken               Field[]       @relation("field_seed_token_2Totoken")
   field_field_seed_token_3Totoken               Field[]       @relation("field_seed_token_3Totoken")
   field_field_seed_token_4Totoken               Field[]       @relation("field_seed_token_4Totoken")
-  field_crop                                    field_crop[]  @relation("field_cropTotoken")
-  field_seed                                    field_seed[]  @relation("field_seedTotoken")
+  field_crop                                    fieldCrop[]   @relation("field_cropTotoken")
+  field_seed                                    fieldSeed[]   @relation("field_seedTotoken")
   protocol_protocol_governance_tokenTotoken     Protocol[]    @relation("protocol_governance_tokenTotoken")
   transaction_tokenTotransaction_input_token_1  Transaction[] @relation("tokenTotransaction_input_token_1")
   transaction_tokenTotransaction_input_token_2  Transaction[] @relation("tokenTotransaction_input_token_2")
@@ -111,22 +111,24 @@ model Transaction {
   @@map("transaction")
 }
 
-model field_crop {
-  token_id String
-  field_id String
-  field    Field  @relation("fieldTofield_crop", fields: [field_id], references: [fieldId])
-  token    Token  @relation("field_cropTotoken", fields: [token_id], references: [tokenId])
+model fieldCrop {
+  tokenId String  @map("token_id")
+  fieldId String  @map("field_id")
+  field    Field  @relation("fieldTofield_crop", fields: [fieldId], references: [fieldId])
+  token    Token  @relation("field_cropTotoken", fields: [tokenId], references: [tokenId])
 
-  @@id([token_id, field_id])
+  @@id([tokenId, fieldId])
+  @@map("field_crop")
 }
 
-model field_seed {
-  token_id String
-  field_id String
-  field    Field  @relation("fieldTofield_seed", fields: [field_id], references: [fieldId])
-  token    Token  @relation("field_seedTotoken", fields: [token_id], references: [tokenId])
+model fieldSeed {
+  tokenId String  @map("token_id")
+  fieldId String  @map("field_id")
+  field    Field  @relation("fieldTofield_seed", fields: [fieldId], references: [fieldId])
+  token    Token  @relation("field_seedTotoken", fields: [tokenId], references: [tokenId])
 
-  @@id([token_id, field_id])
+  @@id([tokenId, fieldId])
+  @@map("field_seed")
 }
 
 enum transaction_in_output {
