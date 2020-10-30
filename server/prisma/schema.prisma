@@ -29,7 +29,7 @@ model Field {
   seedToken4                       String?   @map("seed_token_4")
   cropToken1                       String?   @map("crop_token_1")
   cropToken2                       String?   @map("crop_token_2")
-  receiptToken                     String?   @map("receipt_token")
+  receiptToken                     String?   @unique @map("receipt_token")
   token_field_crop_token_1Totoken  Token?    @relation("field_crop_token_1Totoken", fields: [cropToken1], references: [tokenId])
   token_field_crop_token_2Totoken  Token?    @relation("field_crop_token_2Totoken", fields: [cropToken2], references: [tokenId])
   protocol                         Protocol? @relation(fields: [protocolId], references: [protocolId])
@@ -64,7 +64,7 @@ model Token {
   protocol_protocolTotoken_protocol_id          Protocol?     @relation("protocolTotoken_protocol_id", fields: [protocolId], references: [protocolId])
   field_field_crop_token_1Totoken               Field[]       @relation("field_crop_token_1Totoken")
   field_field_crop_token_2Totoken               Field[]       @relation("field_crop_token_2Totoken")
-  field_field_receipt_tokenTotoken              Field[]       @relation("field_receipt_tokenTotoken")
+  field_field_receipt_tokenTotoken              Field?        @relation("field_receipt_tokenTotoken")
   field_field_seed_token_1Totoken               Field[]       @relation("field_seed_token_1Totoken")
   field_field_seed_token_2Totoken               Field[]       @relation("field_seed_token_2Totoken")
   field_field_seed_token_3Totoken               Field[]       @relation("field_seed_token_3Totoken")
@@ -104,7 +104,7 @@ model Transaction {
   token_tokenTotransaction_output_token_1 Token?                 @relation("tokenTotransaction_output_token_1", fields: [outputToken1], references: [tokenId])
   token_tokenTotransaction_output_token_2 Token?                 @relation("tokenTotransaction_output_token_2", fields: [outputToken2], references: [tokenId])
 
-  @@map("transaction")  
+  @@map("transaction")
 }
 
 enum transaction_in_output {

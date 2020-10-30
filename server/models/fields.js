@@ -13,6 +13,22 @@ async function getFields() {
   }
 }
 
+async function getFieldWithReceiptToken(receiptToken) {
+  try {
+    const field = await prisma.field.findOne({
+      where: {
+        receiptToken: receiptToken,
+      }
+    })
+    return field;
+  } catch (err) {
+    console.error(`Error at ${path.basename(__dirname)}/${path.basename(__filename)} ${err}`);
+  } finally {
+    (async () => {await prisma.$disconnect()})();
+  }
+}
+
 module.exports = {
   getFields,
+  getFieldWithReceiptToken
 }
