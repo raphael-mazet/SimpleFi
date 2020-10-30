@@ -38,8 +38,8 @@ model Field {
   token_field_seed_token_2Totoken  Token?       @relation("field_seed_token_2Totoken", fields: [seedToken2], references: [tokenId])
   token_field_seed_token_3Totoken  Token?       @relation("field_seed_token_3Totoken", fields: [seedToken3], references: [tokenId])
   token_field_seed_token_4Totoken  Token?       @relation("field_seed_token_4Totoken", fields: [seedToken4], references: [tokenId])
-  field_crop                       fieldCrop[]  @relation("fieldTofield_crop")
-  field_seed                       fieldSeed[]  @relation("fieldTofield_seed")
+  fieldCrop                       fieldCrop[]   @relation("fieldTofieldCrop")
+  fieldSeed                       fieldSeed[]   @relation("fieldTofieldSeed")
 
   @@map("field")
 }
@@ -71,8 +71,8 @@ model Token {
   field_field_seed_token_2Totoken               Field[]       @relation("field_seed_token_2Totoken")
   field_field_seed_token_3Totoken               Field[]       @relation("field_seed_token_3Totoken")
   field_field_seed_token_4Totoken               Field[]       @relation("field_seed_token_4Totoken")
-  field_crop                                    fieldCrop[]   @relation("field_cropTotoken")
-  field_seed                                    fieldSeed[]   @relation("field_seedTotoken")
+  fieldCrop                                     fieldCrop[]   @relation("fieldCropTotoken")
+  fieldSeed                                     fieldSeed[]   @relation("fieldSeedTotoken")
   protocol_protocol_governance_tokenTotoken     Protocol[]    @relation("protocol_governance_tokenTotoken")
   transaction_tokenTotransaction_input_token_1  Transaction[] @relation("tokenTotransaction_input_token_1")
   transaction_tokenTotransaction_input_token_2  Transaction[] @relation("tokenTotransaction_input_token_2")
@@ -114,8 +114,8 @@ model Transaction {
 model fieldCrop {
   tokenId String  @map("token_id")
   fieldId String  @map("field_id")
-  field    Field  @relation("fieldTofield_crop", fields: [fieldId], references: [fieldId])
-  token    Token  @relation("field_cropTotoken", fields: [tokenId], references: [tokenId])
+  field    Field  @relation("fieldTofieldCrop", fields: [fieldId], references: [fieldId])
+  token    Token  @relation("fieldCropTotoken", fields: [tokenId], references: [tokenId])
 
   @@id([tokenId, fieldId])
   @@map("field_crop")
@@ -124,8 +124,8 @@ model fieldCrop {
 model fieldSeed {
   tokenId String  @map("token_id")
   fieldId String  @map("field_id")
-  field    Field  @relation("fieldTofield_seed", fields: [fieldId], references: [fieldId])
-  token    Token  @relation("field_seedTotoken", fields: [tokenId], references: [tokenId])
+  field    Field  @relation("fieldTofieldSeed", fields: [fieldId], references: [fieldId])
+  token    Token  @relation("fieldSeedTotoken", fields: [tokenId], references: [tokenId])
 
   @@id([tokenId, fieldId])
   @@map("field_seed")
