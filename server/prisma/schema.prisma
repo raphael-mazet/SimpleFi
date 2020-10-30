@@ -26,8 +26,8 @@ model Field {
   receiptToken                     String?     @unique @map("receipt_token")
   protocol                         Protocol?   @relation(fields: [protocolId], references: [protocolId])
   token_field_receipt_tokenTotoken Token?      @relation("field_receipt_tokenTotoken", fields: [receiptToken], references: [tokenId])
-  fieldCrop                        fieldCrop[] @relation("fieldTofieldCrop")
-  fieldSeed                        fieldSeed[] @relation("fieldTofieldSeed")
+  cropTokens                       fieldCrop[] @relation("fieldTofieldCrop")
+  seedTokens                       fieldSeed[] @relation("fieldTofieldSeed")
 
   @@map("field")
 }
