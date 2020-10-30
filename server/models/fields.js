@@ -31,6 +31,18 @@ async function getFieldWithReceiptToken(receiptToken) {
     const field = await prisma.field.findOne({
       where: {
         receiptToken: receiptToken,
+      },
+      include: {
+        fieldSeed: {
+          select: {
+            tokenId: true
+          }
+        },
+        fieldCrop: {
+          select: {
+            tokenId: true
+          }
+        }
       }
     })
     return field;
