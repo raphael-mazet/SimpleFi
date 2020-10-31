@@ -67,6 +67,7 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
       const { name, balance, seedTokens, cropTokens} = field;
       let underlying = '';
       let farming = '';
+      //TODO: get token name from cache
       seedTokens && seedTokens.forEach(token => underlying += `${token.name}, `);
       cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
       underlying = underlying.slice(0, -2);

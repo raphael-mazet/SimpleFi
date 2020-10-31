@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import apis from '../../apis';
+import helpers from '../../helpers';
 import { metamaskConnect } from '../../authentication/web3';
 import './App.css';
 import Nav from '../../components/Nav/Nav';
@@ -10,7 +11,6 @@ import MyAssets from '../MyAssets/MyAssets';
 function App() {
   const [trackedTokens, setTrackedTokens] = useState([]);
   const [trackedFields, setTrackedFields] = useState([]);
-  const [allTrackedLoaded, setAllTrackedLoaded] = useState(false);
   const [contractsLoaded, setContractsLoaded] = useState(false);
   const [userAccount, setUserAccount] = useState([]);
   const [userTokens, setUserTokens] = useState([]);
@@ -19,24 +19,17 @@ function App() {
   const [splash, setSplash] = useState(false)
   const history = useHistory();
 
-  //Get tracked tokens and fields from SimpleFi db
+  //Get tracked tokens and fields from SimpleFi db and attach contracts
   useEffect(() => {
     const getTokens = apis.getTokens();
     const getFields = apis.getFields();
     Promise.all([getTokens, getFields])
       .then(([tokens, fields]) => {
-        setTrackedTokens(tokens);
-        setTrackedFields(fields);
-        setAllTrackedLoaded(true);
+        setTrackedTokens(apis.createContracts(tokens, 'erc20'));
+        setTrackedFields(apis.createContracts(fields, 'field'));
+        setContractsLoaded(true);
     })
   }, [])
-  
-  //Create token and field contract interfaces
-  useEffect(() => {
-    setTrackedTokens(trackedTokens => apis.createContracts(trackedTokens, 'erc20'));
-    setTrackedFields(trackedFields => apis.createContracts(trackedFields, 'field'));
-    setContractsLoaded(true);
-  }, [allTrackedLoaded])
 
  async function connectWallet () {
     //TODO: autorefresh when toggle account from Metamask
@@ -60,10 +53,15 @@ function App() {
     if (userAccount.length && contractsLoaded) {
 
       apis.getAllUserBalances(userAccount[0], trackedTokens)
-        .then(tokenBalances => setUserTokens(tokenBalances));
-        
+        .then(tokensWithBalance => {
+          setUserTokens(tokensWithBalance)
+        });
+
       apis.getAllUserBalances(userAccount[0], trackedFields)
-        .then(fieldBalances => setUserFields(fieldBalances));
+        .then(fieldsWithBalance => {
+          fieldsWithBalance = helpers.populateFieldTokensFromCache(fieldsWithBalance, trackedTokens);
+          setUserFields(fieldsWithBalance)
+        });
 
     }
   }, [contractsLoaded, userAccount])
