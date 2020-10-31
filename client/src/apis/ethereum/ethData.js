@@ -58,6 +58,19 @@ async function getUserBalance (account, contract) {
     }
   }
 
+  //TODO: documentation
+  function getAllUserBalances (account, fieldOrTokenArr) {
+    const balancePromises = Promise.all(fieldOrTokenArr.map(async fieldOrToken => {
+        const { contract } = fieldOrToken;
+        const balance = await getUserBalance(account, contract);
+          if(balance) {
+            return { ...fieldOrToken, balance }
+          }
+        }))
+        .then(tokensWithBalances => tokensWithBalances.filter(token => token))
+    return balancePromises;
+    }
+
 
 /**
  * @func rewinder extracts the underlying tokens from a given field
@@ -66,6 +79,7 @@ async function getUserBalance (account, contract) {
  * @returns {array} containing token id, token balance and related field (to inform user of where tokens are locked)
  */
 async function rewinder (field, trackedTokens) {
+  console.log('field',field)
   //NOTE: simple case where seedTokens are for sure base tokens (will need update)
   //TODO: check if totalSupply() will work for contracts other than uniswap
   //TODO: check if better to set this at setUserField useEffect level
@@ -93,6 +107,7 @@ async function rewinder (field, trackedTokens) {
 export {
   createContracts,
   getUserBalance,
+  getAllUserBalances,
   rewinder
 }
 

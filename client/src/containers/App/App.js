@@ -58,44 +58,13 @@ function App() {
   // Create first set of userTokens with token balances
   useEffect(() => {
     if (userAccount.length && contractsLoaded) {
-      Promise.all(trackedTokens.map(async token => {
-        const { contract } = token;
-        const balance = await apis.getUserBalance(userAccount[0], contract);
-        if(balance) {
-          const { tokenId, protocolId, name, priceApi, address, isBase } = token;
-          return { tokenId, protocolId, name, priceApi, address, isBase, contract, balance }
-        }
-      }))
-        .then(tokensWithBalances => {
-          const filteredTokens = tokensWithBalances.filter(token => token);
-          setUserTokens(filteredTokens)})
-    }
-  }, [contractsLoaded, userAccount])
 
-  // Set first set of user fields
-  useEffect(() => {
-    if (userAccount.length && contractsLoaded) {
-      Promise.all(trackedFields.map(async field => {
-        const { contract } = field;
-        const balance = await apis.getUserBalance(userAccount[0], contract);
-        if (balance) {
-          const { fieldId, name, protocolId, address, instructions, riskLevel, receiptToken } = field;
+      apis.getAllUserBalances(userAccount[0], trackedTokens)
+        .then(tokenBalances => setUserTokens(tokenBalances));
+        
+      apis.getAllUserBalances(userAccount[0], trackedFields)
+        .then(fieldBalances => setUserFields(fieldBalances));
 
-          const seedTokens = (
-            ({seedToken1, seedToken2, seedToken3, seedToken4}) =>
-              ({seedToken1, seedToken2, seedToken3, seedToken4})
-          )(field);
-
-          const cropTokens = (
-            ({cropToken1, cropToken2,}) =>
-             ({cropToken1, cropToken2,})
-          )(field);
-          const fieldTokens = await apis.getUserFieldTokens({seedTokens, cropTokens});
-          return  {fieldId, contract, name, balance, protocolId, address, instructions, riskLevel, receiptToken, seedTokens: fieldTokens.seedTokens, cropTokens: fieldTokens.cropTokens};
-        }
-      })).then((userFieldsWithTokens) => {
-        const filteredFields = userFieldsWithTokens.filter(field => field);
-        setUserFields(filteredFields)})
     }
   }, [contractsLoaded, userAccount])
 
@@ -105,11 +74,12 @@ function App() {
       const updatedUserTokens = [...userTokens];
       const lockedUserTokens = [];
       userFields.forEach(async field => {
+        //TODO: do not set flag at each iteration
         setRewoundFlag(true);
         //FIXME: this field is hardcoded for testing purposes and due to differences in contract ABIs - fix to make more generic
         if(field.name === "MTA-wETH 50/50") {
           const rewound = await apis.rewinder(field, trackedTokens);
-          //@dev: shape: {tokenId, userTokenBalance, field}
+          //@dev: interface: {tokenId, userTokenBalance, field}
           lockedUserTokens.push(...rewound)
         }
         lockedUserTokens.forEach(token => {

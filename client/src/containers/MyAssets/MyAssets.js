@@ -10,12 +10,16 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
 
   useEffect(() => setSplash(true), []);
 
+  // combine locked and free balances
+  // 
+  // extract ref for price query at coingecko
   useEffect(() => {
     const tempHoldingValues = [];
     const tempPriceApis =[];
     userTokens.forEach(token => {
       if (token.isBase) {
         //TODO: modularise
+        //TODO: create as object in RQ and only then extract to array for reuse in holding details
         let lockedBalance = 0;
         let combinedBalance = 0;
         let lockedPercent = 0;
