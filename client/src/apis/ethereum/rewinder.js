@@ -1,31 +1,56 @@
+import helpers from '../../helpers';
+const ethers = require('ethers');
 
-//Example for MTA EarnPool5
-
-async function rewinder (field, trackedTokens) {
-  const totalFieldSupply = await field.contract.totalSupply();
+async function rewinder (userFields, trackedTokens, trackedFields) {
   const userTokenBalances = [];
-  const fieldHoldingPromises = [];
-  const tokenIds = [];
+  const userFeederFieldBalances = [];
 
-  field.seedTokens.forEach(token => {
-    const { tokenId, isBase } = token;
+  for (const mainField of userFields) {
 
-    if (isBase) {
-
+    let totalMainFieldSupply = await mainField.contract.totalSupply();
+    totalMainFieldSupply = Number(ethers.utils.formatUnits(totalMainFieldSupply, 18));
+    
+    //TODO: should call balance userBalance
+    const userShareOfMainField = mainField.balance / totalMainFieldSupply;
+ 
+    for (const token of mainField.seedTokens) {
+      await tokenBalanceExtractor(token, mainField, userShareOfMainField)
     }
-
-    const tokenContract = trackedTokens.find(el => el.tokenId === tokenId).contract;
-    const fieldSeedHolding = tokenContract.balanceOf(field.address);
-    //fieldSeedHolding and tokenId are pushed into two separate arrays so promises can resolve
-
-    fieldHoldingPromises.push(fieldSeedHolding);
-    tokenIds.push(tokenId);
-  })
+  }
   
-  await Promise.all(fieldHoldingPromises)
-    .then(fieldHoldings => fieldHoldings.forEach((fieldHolding, i) => {
-      const userTokenBalance = field.balance * fieldHolding / totalFieldSupply;
-      userTokenBalances.push({tokenId: tokenIds[i], userTokenBalance, field});
-    }))
-  return userTokenBalances;
+  return { userTokenBalances, userFeederFieldBalances };
+
+  async function tokenBalanceExtractor (token, field, share) {
+    const { tokenId, isBase } = token;
+    const tokenContract = trackedTokens.find(el => el.tokenId === tokenId).contract;
+  
+    let fieldSeedHolding = await tokenContract.balanceOf(field.address);
+    fieldSeedHolding = Number(ethers.utils.formatUnits(fieldSeedHolding, 18));
+  
+    if (isBase) {
+      const userTokenBalance = fieldSeedHolding * share;
+      userTokenBalances.push({token, userTokenBalance, field});
+  
+    } else {
+      let feederField = trackedFields.find(field => field.receiptToken === tokenId);
+
+      //TODO: check why not always necessary
+      [feederField] = helpers.populateFieldTokensFromCache([feederField], trackedTokens);
+  
+      let totalFeederSupply = await feederField.contract.totalSupply();
+      totalFeederSupply = Number(ethers.utils.formatUnits(totalFeederSupply, 18));
+      
+      const userFieldBalance = fieldSeedHolding * share;
+      const userFeederShare = userFieldBalance / totalFeederSupply;
+     
+      userFeederFieldBalances.push({feederField, userFieldBalance});
+  
+      for (const token of feederField.seedTokens) {
+        tokenBalanceExtractor(token, feederField, userFeederShare)
+      }
+    }
+  }
 }
+
+export default rewinder;
+

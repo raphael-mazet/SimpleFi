@@ -15,6 +15,8 @@ function App() {
   const [userAccount, setUserAccount] = useState([]);
   const [userTokens, setUserTokens] = useState([]);
   const [userFields, setUserFields] = useState([]);
+  const [rewoundTokenBalances, setRewoundTokenBalances] = useState([]);
+  const [rewoundFeederFieldBalances, setRewoundFeederFieldBalances] = useState([]);
   const [rewoundFlag, setRewoundFlag] = useState(false);
   const [splash, setSplash] = useState(false)
   const history = useHistory();
@@ -62,39 +64,28 @@ function App() {
           fieldsWithBalance = helpers.populateFieldTokensFromCache(fieldsWithBalance, trackedTokens);
           setUserFields(fieldsWithBalance)
         });
-
     }
   }, [contractsLoaded, userAccount])
 
-  // extract underlying tokens from user fields
+  //TODO: change name from rewinder
   useEffect(() => {
-    if (userFields.length && userTokens.length && !rewoundFlag){
-      const updatedUserTokens = [...userTokens];
-      const lockedUserTokens = [];
-      userFields.forEach(async field => {
-        //TODO: do not set flag at each iteration
-        setRewoundFlag(true);
-        //FIXME: this field is hardcoded for testing purposes and due to differences in contract ABIs - fix to make more generic
-        if(field.name === "MTA-wETH 50/50") {
-          const rewound = await apis.rewinder(field, trackedTokens);
-          //@dev: interface: {tokenId, userTokenBalance, field}
-          lockedUserTokens.push(...rewound)
-        }
-        lockedUserTokens.forEach(token => {
-          const existingUserToken = updatedUserTokens.find(userToken => userToken.tokenId === token.tokenId);
-          if (existingUserToken && existingUserToken.lockedBalance) existingUserToken.lockedBalance.push({balance: token.userTokenBalance, field})
-          else if (existingUserToken) existingUserToken.lockedBalance = [{balance: token.userTokenBalance, field}];
-          else {
-            const newUserToken = trackedTokens.find(trackedToken => trackedToken.tokenId === token.tokenId)
-            //TODO: if rewound token is not a "base" token, must be rewound again with corresponding field (recursive calls)
-            newUserToken.lockedBalance = [{balance: token.userTokenBalance, field}];
-            updatedUserTokens.push(newUserToken);
-          }
-        })
-        setUserTokens(userTokens => [...updatedUserTokens]);
-      })
-    }
+    if (userFields.length && userTokens.length && !rewoundFlag) {
+
+        apis.rewinder(userFields, trackedTokens, trackedFields)
+          .then(rewound => {
+            setRewoundTokenBalances (prev => [...prev, rewound.userTokenBalances]);
+            setRewoundFeederFieldBalances (prev => [...prev, rewound.userFeederFieldBalances]);
+            setRewoundFlag(true);
+          })
+      }
   }, [userFields, userTokens])
+
+  useEffect(() => {
+    
+
+  }, [rewoundFlag])
+
+
 
   return (
     <div>

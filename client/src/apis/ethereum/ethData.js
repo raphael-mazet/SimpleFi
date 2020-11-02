@@ -72,42 +72,9 @@ async function getUserBalance (account, contract) {
     }
 
 
-/**
- * @func rewinder extracts the underlying tokens from a given field
- * @param {field} object contract in which a user has invested to farm a given yield
- * @param {trackedTokens} array passed from App as helper needs access to contract interfaces
- * @returns {array} containing token id, token balance and related field (to inform user of where tokens are locked)
- */
-async function rewinder (field, trackedTokens) {
-  console.log('field',field)
-  //NOTE: simple case where seedTokens are for sure base tokens (will need update)
-  //TODO: check if totalSupply() will work for contracts other than uniswap
-  //TODO: check if better to set this at setUserField useEffect level
-  const totalFieldSupply = await field.contract.totalSupply();
-  const userTokenBalances = [];
-  const fieldHoldingPromises = [];
-  const tokenIds = [];
-
-  field.seedTokens.forEach(token => {
-    const { tokenId } = token;
-    const tokenContract = trackedTokens.find(el => el.tokenId === tokenId).contract;
-    const fieldSeedHolding = tokenContract.balanceOf(field.address);
-    fieldHoldingPromises.push(fieldSeedHolding);
-    tokenIds.push(tokenId);
-  })
-  
-  await Promise.all(fieldHoldingPromises)
-    .then(fieldHoldings => fieldHoldings.forEach((fieldHolding, i) => {
-      const userTokenBalance = field.balance * fieldHolding / totalFieldSupply;
-      userTokenBalances.push({tokenId: tokenIds[i], userTokenBalance, field});
-    }))
-  return userTokenBalances;
-}
-
 export {
   createContracts,
   getUserBalance,
   getAllUserBalances,
-  rewinder
 }
 
