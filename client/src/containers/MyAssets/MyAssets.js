@@ -7,19 +7,22 @@ import { holdingHeaders, holdingCurrencyCells, farmingHeaders, earningHeaders } 
 export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
   const [holdingValues, setHoldingValues] = useState([]);
   const [fieldValues, setFieldValues] = useState([]);
-  const [priceApis, setPriceApis] = useState([]);
 
   useEffect(() => setSplash(true), []);
 
-  // extract ref for price query at coingecko
+  // combine available & locked token balances and add prices from coinGecko
   useEffect(() => {
     const combinedHoldings = helpers.combineHoldings(userTokens);
+
     helpers.addHoldingPrices(combinedHoldings)
       .then(holdingsWithPrices => setHoldingValues(holdingsWithPrices))
 
   }, [userTokens])
 
   useEffect(() => {
+
+    //TODO: separate farming from Earning
+    //TODO: set Earning headers
     const tempFieldValues = [];
     userFields.forEach(field => {
       const { name, balance, seedTokens, cropTokens} = field;
