@@ -76,9 +76,9 @@ function App() {
       }
   }, [userFields, userTokens])
 
-  //TODO: need to double-check this, figure out why flag is necessary and add feederFields
-  //TODO: double-check trackedFields with fully populated crop/seedTokens
-  //TODO: why inconsistent populating meta?
+  //ASK: is flag necessary?
+  //TODO: add feeder fields
+  //FIXME: inconsistent populating of locked tokens
   useEffect(() => {
 
     if (rewoundFlag) {
