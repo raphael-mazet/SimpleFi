@@ -42,23 +42,19 @@ function addLockedTokenBalances (rewoundTokens, userTokens) {
 function addRestakedFieldBalances (rewoundFields, userFields) {
   //ASK: is this necessary?
   const updatedUserFields = [...userFields];
-  console.log(' ---> updatedUserFields', updatedUserFields);
-
   rewoundFields.forEach(rewoundField => {
     //identify if user already has a balance for curr field
     const existingUserField = updatedUserFields.find(userField => userField.fieldId === rewoundField.feederField.fieldId);
-    console.log(' ---> rewoundField', rewoundField);
-    console.log(' ---> existingUserField', existingUserField);
     //if so, add rewound field balance to the subField balance
-    if (existingUserField && existingUserField.feederFieldBalance) {
-      existingUserField.restakedBalance.push({balance: rewoundField.userFieldBalance, field: rewoundField.feederField});
+    if (existingUserField && existingUserField.restakedBalance) {
+      existingUserField.restakedBalance.push({balance: rewoundField.userFieldBalance, parentField: rewoundField.parentField});
     }
-    else if (existingUserField) existingUserField.restakedBalance = [{balance: rewoundField.userFieldBalance, field: rewoundField.feederField}];
+    else if (existingUserField) existingUserField.restakedBalance = [{balance: rewoundField.userFieldBalance, parentField: rewoundField.parentField}];
     //otherwise: create a new user Field
     else {
       //TODO: double-check this is necessary
       const newUserField = JSON.parse(JSON.stringify(rewoundField.feederField));
-      newUserField.restakedBalance = [{balance: rewoundField.userFieldBalance, field: rewoundField.feederField}]
+      newUserField.restakedBalance = [{balance: rewoundField.userFieldBalance, parentField: rewoundField.parentField}]
       updatedUserFields.push(newUserField);
     }
   })

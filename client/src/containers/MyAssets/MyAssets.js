@@ -1,80 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import './MyAssets.css';
 import SummaryTable from '../../components/SummaryTable/SummaryTable';
+import helpers from '../../helpers/index';
 import { holdingHeaders, holdingCurrencyCells, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
 
 export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
   const [holdingValues, setHoldingValues] = useState([]);
   const [fieldValues, setFieldValues] = useState([]);
-  const [priceApis, setPriceApis] = useState([]);
+  const [farmingValues, setFarmingValues] = useState([]);
+  const [earningValues, setEarningValues] = useState([]);
 
   useEffect(() => setSplash(true), []);
 
-  // combine locked and free balances
-  // 
-  // extract ref for price query at coingecko
+  // combine available & locked token balances and add prices from coinGecko
   useEffect(() => {
-    const tempHoldingValues = [];
-    const tempPriceApis =[];
-    userTokens.forEach(token => {
-      if (token.isBase) {
-        //TODO: modularise
-        //TODO: create as object in RQ and only then extract to array for reuse in holding details
-        let lockedBalance = 0;
-        let combinedBalance = 0;
-        let lockedPercent = 0;
-        const formatter = new Intl.NumberFormat("en-US", {style: 'percent'});
-        if (token.lockedBalance) {
-          lockedBalance = token.lockedBalance.reduce(((acc, curr) => acc + curr.balance), 0);
-        }
-        if (token.balance) {
-          combinedBalance = token.balance + lockedBalance;
-          lockedPercent = formatter.format(lockedBalance / combinedBalance);
-        } else {
-          combinedBalance = lockedBalance;
-          lockedPercent = formatter.format(1);
-        }
-        tempHoldingValues.push([token.name, combinedBalance.toFixed(2), lockedPercent, 'Loading', token.currentPrice]);
-        tempPriceApis.push(token.priceApi);
-      }
-    })
-    setHoldingValues(tempHoldingValues);
-    setPriceApis(tempPriceApis);
+    const combinedHoldings = helpers.combineHoldings(userTokens);
+
+    helpers.addHoldingPrices(combinedHoldings)
+      .then(holdingsWithPrices => setHoldingValues(holdingsWithPrices))
+
   }, [userTokens])
 
   useEffect(() => {
-    Promise.all(priceApis.map(async priceApi => {
-      if (priceApi){
-        const currentPrice = await apis.currentPrice(priceApi);
-        return currentPrice;
-      }
-    }))
-      .then(prices => {
-        const updatedHoldings = [];
-        prices.forEach((price, i) => {
-          const newValues = [...holdingValues[i]]
-          newValues[3] = (price * newValues[1]).toFixed(2); //set value
-          newValues[4] = price.toFixed(2); //set curr. price
-          updatedHoldings.push(newValues);
-        })
-        setHoldingValues(updatedHoldings)
-      })
-  }, [priceApis])
 
-  useEffect(() => {
-    const tempFieldValues = [];
-    userFields.forEach(field => {
-      const { name, balance, seedTokens, cropTokens} = field;
-      let underlying = '';
-      let farming = '';
-      //TODO: get token name from cache
-      seedTokens && seedTokens.forEach(token => underlying += `${token.name}, `);
-      cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
-      underlying = underlying.slice(0, -2);
-      farming = farming.slice(0, -2);
-      tempFieldValues.push([name, balance.toFixed(2), underlying, farming]);
-    })
-    setFieldValues(tempFieldValues)
+    const {farmingFields, earningFields} = helpers.fieldSeparator(userFields);
+    console.log(' ---> farmingFields', farmingFields);
+
+    setFarmingValues(farmingFields);
+    setEarningValues(earningFields);
+    
+
+    // //TODO: separate farming from Earning
+    // //TODO: set Earning headers
+    // const tempFieldValues = [];
+    // userFields.forEach(field => {
+    //   const { name, balance, seedTokens, cropTokens} = field;
+    //   let underlying = '';
+    //   let farming = '';
+    //   //TODO: get token name from cache
+    //   seedTokens && seedTokens.forEach(token => underlying += `${token.name}, `);
+    //   cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
+    //   underlying = underlying.slice(0, -2);
+    //   farming = farming.slice(0, -2);
+    //   tempFieldValues.push([name, balance.toFixed(2), underlying, farming]);
+    // })
+    // setFieldValues(tempFieldValues)
   }, [userFields])
 
   return (
@@ -87,9 +57,14 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
         <div className="container-header">
           <h2>Farming</h2>
         </div>
-        <SummaryTable headers={farmingHeaders} userValues={fieldValues} tableName={'farming'} currencyCells={[]}/>
+        <SummaryTable headers={farmingHeaders} userValues={farmingValues} tableName={'farming'} currencyCells={[]}/>
       </div>
-      {/*TODO: add tokens earning table*/}
+      <div className="summary-container summary-earning">
+        <div className="container-header">
+          <h2>Earning</h2>
+        </div>
+        <SummaryTable headers={earningHeaders} userValues={earningValues} tableName={'earning'} currencyCells={[]}/>
+      </div>
       {/* <div className="summary-earning">
         <h2>Earning</h2>
         <SummaryTable headers={earningHeaders}/>
