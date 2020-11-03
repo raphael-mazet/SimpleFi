@@ -24,6 +24,7 @@ model Field {
   instructions                     Json?
   riskLevel                        Int?        @map("risk_level")
   receiptToken                     String?     @unique @map("receipt_token")
+  isEarning                        Boolean?    @map("is_earning")
   protocol                         Protocol?   @relation(fields: [protocolId], references: [protocolId])
   token_field_receipt_tokenTotoken Token?      @relation("field_receipt_tokenTotoken", fields: [receiptToken], references: [tokenId])
   cropTokens                       fieldCrop[] @relation("fieldTofieldCrop")
@@ -50,7 +51,7 @@ model Token {
   name                                          String?
   priceApi                                      String?       @map("price_api")
   address                                       String?
-  isBase                                        Boolean
+  isBase                                        Boolean       @map("is_base")
   protocol_protocolTotoken_protocol_id          Protocol?     @relation("protocolTotoken_protocol_id", fields: [protocolId], references: [protocolId])
   field_field_receipt_tokenTotoken              Field?        @relation("field_receipt_tokenTotoken")
   fieldCrop                                     fieldCrop[]   @relation("fieldCropTotoken")
