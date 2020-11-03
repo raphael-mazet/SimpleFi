@@ -1,5 +1,5 @@
 
-//TODO: remember to set credentials: include for session cookies
+//TODO: set credentials: include for session cookies
 export default async function fetchRequest (path, options) {
   const response = await fetch(path, options)
     .then(res => res.status <= 400 ? res : Promise.reject(res))
