@@ -55,9 +55,7 @@ function App() {
     if (userAccount.length && contractsLoaded) {
 
       apis.getAllUserBalances(userAccount[0], trackedTokens)
-        .then(tokensWithBalance => {
-          setUserTokens(tokensWithBalance)
-        });
+        .then(tokensWithBalance => setUserTokens(tokensWithBalance));
 
       apis.getAllUserBalances(userAccount[0], trackedFields)
         .then(fieldsWithBalance => {
@@ -73,17 +71,43 @@ function App() {
 
         apis.rewinder(userFields, trackedTokens, trackedFields)
           .then(rewound => {
-            setRewoundTokenBalances (prev => [...prev, rewound.userTokenBalances]);
-            setRewoundFeederFieldBalances (prev => [...prev, rewound.userFeederFieldBalances]);
+            console.log(' ---> rewound.userTokenBalances', rewound.userTokenBalances);
+            setRewoundTokenBalances (prev => [...prev, ...rewound.userTokenBalances]);
+            setRewoundFeederFieldBalances (prev => [...prev, ...rewound.userFeederFieldBalances]);
             setRewoundFlag(true);
           })
       }
   }, [userFields, userTokens])
 
+  //TODO: need to double-check this, figure out why flag is necessary and add feederFields
+  //TODO: double-check trackedFields with fully populated crop/seedTokens
   useEffect(() => {
-    
 
-  }, [rewoundFlag])
+    if (rewoundFlag) {
+      const updatedUserTokens = [...userTokens];
+
+      console.log(' ---> rewoundTokenBalances', rewoundTokenBalances);
+      
+      rewoundTokenBalances.forEach(rewoundToken => {
+        console.log(' ---> rewoundToken', rewoundToken);
+        const existingUserToken = updatedUserTokens.find(userToken => userToken.tokenId === rewoundToken.token.tokenId);
+        //FIXME: really bad to be mutating cache directly
+        //TODO: modularise
+        if (existingUserToken && existingUserToken.lockedBalance) {
+          existingUserToken.lockedBalance.push({balance: rewoundToken.userTokenBalance, field: rewoundToken.field});
+        }
+        else if (existingUserToken) existingUserToken.lockedBalance = [{balance: rewoundToken.userTokenBalance, field: rewoundToken.field}];
+        else {
+          const newUserToken = JSON.parse(JSON.stringify(rewoundToken.token));
+          newUserToken.lockedBalance = [{balance: rewoundToken.userTokenBalance, field: rewoundToken.field}]
+          updatedUserTokens.push(newUserToken);
+        }
+      })
+
+      setUserTokens(() => [...updatedUserTokens]);
+    }
+
+  }, [rewoundTokenBalances, rewoundFlag])
 
 
 
