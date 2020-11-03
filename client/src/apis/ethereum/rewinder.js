@@ -44,7 +44,7 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
       const userFeederShare = userFieldBalance / totalFeederSupply;
       
       //rewoundFieldBalances will contain any field with a receipt token that was fed into a field the user has staked in
-      userFeederFieldBalances.push({feederField, userFieldBalance});
+      userFeederFieldBalances.push({feederField, userFieldBalance, parentField: field});
   
       for (const token of feederField.seedTokens) {
         tokenBalanceExtractor(token, feederField, userFeederShare)

@@ -69,8 +69,8 @@ function App() {
     if (userFields.length && userTokens.length && !rewoundFlag) {
         apis.rewinder(userFields, trackedTokens, trackedFields)
           .then(rewound => {
-            setRewoundTokenBalances (prev => [...prev, ...rewound.userTokenBalances]);
-            setRewoundFieldBalances (prev => [...prev, ...rewound.userFeederFieldBalances]);
+            setRewoundTokenBalances (prev => [...prev, ...rewound.userTokenBalances])
+            setRewoundFieldBalances (prev => [...prev, ...rewound.userFeederFieldBalances])
             setRewoundFlag(true);
           })
       }
@@ -85,10 +85,11 @@ function App() {
       setUserTokens(updatedUserTokens);
     }
 
+    //TODO: needs parent field here in restakedBalance instead of current field
     const updatedUserFields = helpers.addRestakedFieldBalances(rewoundFieldBalances, userFields);
     setUserFields(updatedUserFields);
 
-  }, [rewoundTokenBalances, rewoundFieldBalances, rewoundFlag])
+  }, [rewoundFlag])
 
   return (
     <div>
