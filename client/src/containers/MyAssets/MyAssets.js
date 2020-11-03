@@ -10,12 +10,16 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
 
   useEffect(() => setSplash(true), []);
 
+  // combine locked and free balances
+  // 
+  // extract ref for price query at coingecko
   useEffect(() => {
     const tempHoldingValues = [];
     const tempPriceApis =[];
     userTokens.forEach(token => {
       if (token.isBase) {
         //TODO: modularise
+        //TODO: create as object in RQ and only then extract to array for reuse in holding details
         let lockedBalance = 0;
         let combinedBalance = 0;
         let lockedPercent = 0;
@@ -63,6 +67,7 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
       const { name, balance, seedTokens, cropTokens} = field;
       let underlying = '';
       let farming = '';
+      //TODO: get token name from cache
       seedTokens && seedTokens.forEach(token => underlying += `${token.name}, `);
       cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
       underlying = underlying.slice(0, -2);
