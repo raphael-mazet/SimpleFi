@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './MyAssets.css';
 import SummaryTable from '../../components/SummaryTable/SummaryTable';
+import helpers from '../../helpers/index';
 import { holdingHeaders, holdingCurrencyCells, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
 
 export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
@@ -14,6 +15,8 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
   useEffect(() => {
     const tempHoldingValues = [];
     const tempPriceApis =[];
+    console.log('combineHoldings()', helpers.combineHoldings(userTokens))
+    console.log(' ---> helpers.combineHoldings', helpers.combineHoldings);
     userTokens.forEach(token => {
       if (token.isBase) {
         //TODO: modularise
