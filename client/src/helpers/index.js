@@ -1,6 +1,7 @@
-import { populateFieldTokensFromCache, addLockedTokenBalances } from './appHelpers';
+import { populateFieldTokensFromCache, addLockedTokenBalances, addRestakedFieldBalances } from './appHelpers';
 
 export default {
   populateFieldTokensFromCache,
-  addLockedTokenBalances
+  addLockedTokenBalances,
+  addRestakedFieldBalances
 }

@@ -16,7 +16,7 @@ function App() {
   const [userTokens, setUserTokens] = useState([]);
   const [userFields, setUserFields] = useState([]);
   const [rewoundTokenBalances, setRewoundTokenBalances] = useState([]);
-  const [rewoundFeederFieldBalances, setRewoundFeederFieldBalances] = useState([]);
+  const [rewoundFieldBalances, setRewoundFieldBalances] = useState([]);
   const [rewoundFlag, setRewoundFlag] = useState(false);
   const [splash, setSplash] = useState(false)
   const history = useHistory();
@@ -70,15 +70,14 @@ function App() {
         apis.rewinder(userFields, trackedTokens, trackedFields)
           .then(rewound => {
             setRewoundTokenBalances (prev => [...prev, ...rewound.userTokenBalances]);
-            setRewoundFeederFieldBalances (prev => [...prev, ...rewound.userFeederFieldBalances]);
+            setRewoundFieldBalances (prev => [...prev, ...rewound.userFeederFieldBalances]);
             setRewoundFlag(true);
           })
       }
   }, [userFields, userTokens])
 
   //ASK: is flag necessary?
-  //TODO: add feeder fields
-  //FIXME: inconsistent populating of locked tokens
+  //FIXME: inconsistent populating of locked tokens - sometimes misses some
   useEffect(() => {
 
     if (rewoundFlag) {
@@ -86,7 +85,10 @@ function App() {
       setUserTokens(updatedUserTokens);
     }
 
-  }, [rewoundTokenBalances, rewoundFlag])
+    const updatedUserFields = helpers.addRestakedFieldBalances(rewoundFieldBalances, userFields);
+    setUserFields(updatedUserFields);
+
+  }, [rewoundTokenBalances, rewoundFieldBalances, rewoundFlag])
 
   return (
     <div>

@@ -33,16 +33,17 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
   
     } else {
       let feederField = trackedFields.find(field => field.receiptToken === tokenId);
-
+      
       //TODO: check why not always necessary
       [feederField] = helpers.populateFieldTokensFromCache([feederField], trackedTokens);
-  
+      
       let totalFeederSupply = await feederField.contract.totalSupply();
       totalFeederSupply = Number(ethers.utils.formatUnits(totalFeederSupply, 18));
       
       const userFieldBalance = fieldSeedHolding * share;
       const userFeederShare = userFieldBalance / totalFeederSupply;
-     
+      
+      //rewoundFieldBalances will contain any field with a receipt token that was fed into a field the user has staked in
       userFeederFieldBalances.push({feederField, userFieldBalance});
   
       for (const token of feederField.seedTokens) {
