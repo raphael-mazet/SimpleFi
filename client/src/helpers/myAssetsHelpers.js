@@ -1,10 +1,11 @@
+import apis from '../apis/index';
+
 function combineHoldings (userTokens) {
   
   const combinedHoldings = [];
-  
+
   userTokens.forEach(token => {
     
-
     if (token.isBase) {
       //TODO: create as object in RQ and only then extract to array for reuse in holding details
       let lockedBalance = 0;
@@ -14,7 +15,6 @@ function combineHoldings (userTokens) {
       
       if (token.lockedBalance) {
         lockedBalance = token.lockedBalance.reduce((acc, curr) => acc + curr.balance, 0);
-        console.log(' ---> lockedBalance', lockedBalance);
       }
 
       if (token.balance) {
@@ -25,12 +25,33 @@ function combineHoldings (userTokens) {
         lockedPercent = formatter.format(1);
       }
 
-      combinedHoldings.push([token.name, combinedBalance.toFixed(2), lockedPercent, 'Loading', token.currentPrice]);
+      combinedHoldings.push([token.name, combinedBalance.toFixed(2), lockedPercent, 'Loading', token.priceApi]);
     }
   })
   return combinedHoldings;
 }
 
+async function addHoldingPrices(combinedHoldings) {
+
+  const priceApis = combinedHoldings.map(token => token[4]);
+
+  const tokenPrices = await Promise.all(
+    priceApis.map(async priceApi => {
+      if (priceApi){
+        const currentPrice = await apis.currentPrice(priceApi);
+        return currentPrice;
+      }
+  }))
+
+  tokenPrices.forEach((price, i) => {
+    combinedHoldings[i][3] = (price * combinedHoldings[i][1]).toFixed(2); //set value
+    combinedHoldings[i][4] = price.toFixed(2); //set curr. price
+  })
+
+  return combinedHoldings;
+}
+
 export {
-  combineHoldings
+  combineHoldings,
+  addHoldingPrices
 }

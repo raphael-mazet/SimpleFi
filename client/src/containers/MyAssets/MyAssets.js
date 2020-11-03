@@ -13,54 +13,11 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
 
   // extract ref for price query at coingecko
   useEffect(() => {
-    const tempHoldingValues = [];
-    const tempPriceApis =[];
-    console.log('combineHoldings()', helpers.combineHoldings(userTokens))
-    console.log(' ---> helpers.combineHoldings', helpers.combineHoldings);
-    userTokens.forEach(token => {
-      if (token.isBase) {
-        //TODO: modularise
-        //TODO: create as object in RQ and only then extract to array for reuse in holding details
-        let lockedBalance = 0;
-        let combinedBalance = 0;
-        let lockedPercent = 0;
-        const formatter = new Intl.NumberFormat("en-US", {style: 'percent'});
-        if (token.lockedBalance) {
-          lockedBalance = token.lockedBalance.reduce(((acc, curr) => acc + curr.balance), 0);
-        }
-        if (token.balance) {
-          combinedBalance = token.balance + lockedBalance;
-          lockedPercent = formatter.format(lockedBalance / combinedBalance);
-        } else {
-          combinedBalance = lockedBalance;
-          lockedPercent = formatter.format(1);
-        }
-        tempHoldingValues.push([token.name, combinedBalance.toFixed(2), lockedPercent, 'Loading', token.currentPrice]);
-        tempPriceApis.push(token.priceApi);
-      }
-    })
-    setHoldingValues(tempHoldingValues);
-    setPriceApis(tempPriceApis);
-  }, [userTokens])
+    const combinedHoldings = helpers.combineHoldings(userTokens);
+    helpers.addHoldingPrices(combinedHoldings)
+      .then(holdingsWithPrices => setHoldingValues(holdingsWithPrices))
 
-  useEffect(() => {
-    Promise.all(priceApis.map(async priceApi => {
-      if (priceApi){
-        const currentPrice = await apis.currentPrice(priceApi);
-        return currentPrice;
-      }
-    }))
-      .then(prices => {
-        const updatedHoldings = [];
-        prices.forEach((price, i) => {
-          const newValues = [...holdingValues[i]]
-          newValues[3] = (price * newValues[1]).toFixed(2); //set value
-          newValues[4] = price.toFixed(2); //set curr. price
-          updatedHoldings.push(newValues);
-        })
-        setHoldingValues(updatedHoldings)
-      })
-  }, [priceApis])
+  }, [userTokens])
 
   useEffect(() => {
     const tempFieldValues = [];
