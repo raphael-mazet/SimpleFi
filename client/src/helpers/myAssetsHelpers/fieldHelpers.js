@@ -1,15 +1,29 @@
-const tempFieldValues = [];
-    userFields.forEach(field => {
+function fieldSeparator (userFields){
+  const farmingFields = [];
+  const earningFields = [];
+  
+  userFields.forEach(field => {
 
-      //TODO: create two lists: earning and Farming
-      const { name, balance, seedTokens, cropTokens} = field;
-      let underlying = '';
+    const { name, balance, seedTokens, cropTokens, isEarning } = field;
+    let underlying = '';
+    seedTokens && seedTokens.forEach(token => underlying += `${token.name}, `);
+    underlying = underlying.slice(0, -2);
+      
+    if (cropTokens.length) {
       let farming = '';
-      //TODO: get token name from cache
-      seedTokens && seedTokens.forEach(token => underlying += `${token.name}, `);
       cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
-      underlying = underlying.slice(0, -2);
       farming = farming.slice(0, -2);
-      tempFieldValues.push([name, balance.toFixed(2), underlying, farming]);
-    })
-    setFieldValues(tempFieldValues)
+      farmingFields.push([name, balance.toFixed(2), underlying, farming])
+    }
+
+    if (isEarning) {
+      earningFields.push([name, balance.toFixed(2), underlying, 'tbd'])
+    }
+  })
+
+  return {farmingFields, earningFields}
+}
+
+export {
+  fieldSeparator
+}

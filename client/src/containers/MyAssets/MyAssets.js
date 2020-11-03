@@ -7,6 +7,8 @@ import { holdingHeaders, holdingCurrencyCells, farmingHeaders, earningHeaders } 
 export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
   const [holdingValues, setHoldingValues] = useState([]);
   const [fieldValues, setFieldValues] = useState([]);
+  const [farmingValues, setFarmingValues] = useState([]);
+  const [earningValues, setEarningValues] = useState([]);
 
   useEffect(() => setSplash(true), []);
 
@@ -21,21 +23,28 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
 
   useEffect(() => {
 
-    //TODO: separate farming from Earning
-    //TODO: set Earning headers
-    const tempFieldValues = [];
-    userFields.forEach(field => {
-      const { name, balance, seedTokens, cropTokens} = field;
-      let underlying = '';
-      let farming = '';
-      //TODO: get token name from cache
-      seedTokens && seedTokens.forEach(token => underlying += `${token.name}, `);
-      cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
-      underlying = underlying.slice(0, -2);
-      farming = farming.slice(0, -2);
-      tempFieldValues.push([name, balance.toFixed(2), underlying, farming]);
-    })
-    setFieldValues(tempFieldValues)
+    const {farmingFields, earningFields} = helpers.fieldSeparator(userFields);
+    console.log(' ---> farmingFields', farmingFields);
+
+    setFarmingValues(farmingFields);
+    setEarningValues(earningFields);
+    
+
+    // //TODO: separate farming from Earning
+    // //TODO: set Earning headers
+    // const tempFieldValues = [];
+    // userFields.forEach(field => {
+    //   const { name, balance, seedTokens, cropTokens} = field;
+    //   let underlying = '';
+    //   let farming = '';
+    //   //TODO: get token name from cache
+    //   seedTokens && seedTokens.forEach(token => underlying += `${token.name}, `);
+    //   cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
+    //   underlying = underlying.slice(0, -2);
+    //   farming = farming.slice(0, -2);
+    //   tempFieldValues.push([name, balance.toFixed(2), underlying, farming]);
+    // })
+    // setFieldValues(tempFieldValues)
   }, [userFields])
 
   return (
@@ -48,9 +57,14 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
         <div className="container-header">
           <h2>Farming</h2>
         </div>
-        <SummaryTable headers={farmingHeaders} userValues={fieldValues} tableName={'farming'} currencyCells={[]}/>
+        <SummaryTable headers={farmingHeaders} userValues={farmingValues} tableName={'farming'} currencyCells={[]}/>
       </div>
-      {/*TODO: add tokens earning table*/}
+      <div className="summary-container summary-earning">
+        <div className="container-header">
+          <h2>Earning</h2>
+        </div>
+        <SummaryTable headers={earningHeaders} userValues={earningValues} tableName={'earning'} currencyCells={[]}/>
+      </div>
       {/* <div className="summary-earning">
         <h2>Earning</h2>
         <SummaryTable headers={earningHeaders}/>
