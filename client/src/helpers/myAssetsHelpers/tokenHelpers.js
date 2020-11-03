@@ -1,4 +1,4 @@
-import apis from '../apis/index';
+import apis from '../../apis/index';
 
 function combineHoldings (userTokens) {
   

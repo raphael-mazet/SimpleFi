@@ -1,5 +1,5 @@
 import { populateFieldTokensFromCache, addLockedTokenBalances, addRestakedFieldBalances } from './appHelpers';
-import { combineHoldings, addHoldingPrices } from './myAssetsHelpers';
+import { combineHoldings, addHoldingPrices } from './myAssetsHelpers/tokenHelpers';
 
 export default {
   populateFieldTokensFromCache,
