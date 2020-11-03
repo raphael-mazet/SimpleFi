@@ -10,8 +10,6 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
 
   useEffect(() => setSplash(true), []);
 
-  // combine locked and free balances
-  // 
   // extract ref for price query at coingecko
   useEffect(() => {
     const tempHoldingValues = [];
