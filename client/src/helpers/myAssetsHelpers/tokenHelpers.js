@@ -31,22 +31,17 @@ function combineHoldings (userTokens) {
   return combinedHoldings;
 }
 
+//TODO: avoid addHoldingPrices being called multiple times(first with [], then meta/uni, then meta/uni/weth)
 async function addHoldingPrices(combinedHoldings) {
 
-  const priceApis = combinedHoldings.map(token => token[4]);
+  const priceApis = combinedHoldings.map(token => token[4]).join();
+  const allPrices = await apis.manyPrices(priceApis);
 
-  const tokenPrices = await Promise.all(
-    priceApis.map(async priceApi => {
-      if (priceApi){
-        const currentPrice = await apis.currentPrice(priceApi);
-        return currentPrice;
-      }
-  }))
-
-  tokenPrices.forEach((price, i) => {
-    combinedHoldings[i][3] = (price * combinedHoldings[i][1]).toFixed(2); //set value
-    combinedHoldings[i][4] = price.toFixed(2); //set curr. price
-  })
+  for (const price in allPrices) {
+    const holdingIndex = combinedHoldings.findIndex(el => el[4] === price);
+    combinedHoldings[holdingIndex][3] = ((allPrices[price].usd * combinedHoldings[holdingIndex][1]).toFixed(2));
+    combinedHoldings[holdingIndex][4] = allPrices[price].usd.toFixed(2);
+  }
 
   return combinedHoldings;
 }
