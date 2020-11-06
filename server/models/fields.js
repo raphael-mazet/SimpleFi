@@ -14,6 +14,13 @@ async function getFields() {
           select: {
             tokenId: true
           }
+        },
+        contractInterface: {
+          select: {
+            name: true,
+            abi: true,
+            isErc: true
+          }
         }
       }
     });

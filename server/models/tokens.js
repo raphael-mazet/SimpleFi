@@ -3,7 +3,17 @@ const path = require ('path');
 
 async function getTokens() {
   try {
-    const tokens = await prisma.token.findMany();
+    const tokens = await prisma.token.findMany({
+      include: {
+        contractInterface: {
+          select: {
+            name: true,
+            abi: true,
+            isErc: true
+          }
+        }
+      }
+    });
     return tokens;
   } catch(err) {
     console.error(`Error at ${path.basename(__dirname)}/${path.basename(__filename)} ${err}`);
