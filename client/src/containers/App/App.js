@@ -18,22 +18,10 @@ function App() {
   const [rewoundTokenBalances, setRewoundTokenBalances] = useState([]);
   const [rewoundFieldBalances, setRewoundFieldBalances] = useState([]);
   const [rewoundFlag, setRewoundFlag] = useState(false);
-  const [splash, setSplash] = useState(false)
+  const [splash, setSplash] = useState(false);
   const history = useHistory();
 
-  //Get tracked tokens and fields from SimpleFi db and attach contracts
-  useEffect(() => {
-    const getTokens = apis.getTokens();
-    const getFields = apis.getFields();
-    Promise.all([getTokens, getFields])
-      .then(([tokens, fields]) => {
-        setTrackedTokens(apis.createContracts(tokens, 'erc20'));
-        setTrackedFields(apis.createContracts(fields, 'field'));
-        setContractsLoaded(true);
-    })
-  }, [])
-
- async function connectWallet () {
+  async function connectWallet () {
     //TODO: autorefresh when toggle account from Metamask
     if (window.ethereum) {
       const newAccount = await metamaskConnect();
@@ -50,6 +38,18 @@ function App() {
     }
   }
 
+  //Get tracked tokens and fields from SimpleFi db and attach contracts
+  useEffect(() => {
+    const getTokens = apis.getTokens();
+    const getFields = apis.getFields();
+    Promise.all([getTokens, getFields])
+      .then(([tokens, fields]) => {
+        setTrackedTokens(apis.createContracts(tokens));
+        setTrackedFields(apis.createContracts(fields));
+        setContractsLoaded(true);
+    })
+  }, [])
+
   // Create first set of userTokens with token balances
   useEffect(() => {
     if (userAccount.length && contractsLoaded) {
@@ -65,6 +65,7 @@ function App() {
     }
   }, [contractsLoaded, userAccount])
 
+  // Add all underlying token and field balances
   useEffect(() => {
     if (userFields.length && userTokens.length && !rewoundFlag) {
         apis.rewinder(userFields, trackedTokens, trackedFields)
@@ -77,7 +78,6 @@ function App() {
   }, [userFields, userTokens])
 
   //ASK: is flag necessary?
-  //FIXME: inconsistent populating of locked tokens - sometimes misses some
   useEffect(() => {
 
     if (rewoundFlag) {
@@ -85,7 +85,6 @@ function App() {
       setUserTokens(updatedUserTokens);
     }
 
-    //TODO: needs parent field here in restakedBalance instead of current field
     const updatedUserFields = helpers.addRestakedFieldBalances(rewoundFieldBalances, userFields);
     setUserFields(updatedUserFields);
 

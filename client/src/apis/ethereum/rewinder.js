@@ -17,7 +17,6 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
       await tokenBalanceExtractor(token, mainField, userShareOfMainField)
     }
   }
-  
   return { userTokenBalances, userFeederFieldBalances };
 
   async function tokenBalanceExtractor (token, field, share) {
@@ -47,7 +46,7 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
       userFeederFieldBalances.push({feederField, userFieldBalance, parentField: field});
   
       for (const token of feederField.seedTokens) {
-        tokenBalanceExtractor(token, feederField, userFeederShare)
+        await tokenBalanceExtractor(token, feederField, userFeederShare)
       }
     }
   }

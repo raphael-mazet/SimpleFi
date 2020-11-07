@@ -1,42 +1,8 @@
 import { ethers } from 'ethers';
-import { erc20, stakingField } from '../../data/ethContractTypes';
 
 // Create provider
 //TODO: potentially add default provider
 const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-//TODO: beware, documentation may not be entirely up to date
-/**
- * @func createContract creates an instance of a new ethers contract interface
- * @param {collection} array of tracked tokens or fields with same type 
- * @param {type} string contract type determines abi used for contract
- * @returns {object} new contract interfaces
- */
-function createContracts (collection, type) {
-  const collectionWithContracts = [];
-  
-  let abi;
-  switch (type) {
-    case 'erc20': 
-      abi = erc20;
-      break;
-    
-    case 'field':
-      abi = stakingField;
-      break;
-
-    default: abi = erc20;
-    }
-
-  collection.forEach(element => {
-    const { address } = element;
-    const newContract = new ethers.Contract(address, abi, provider);
-    element.contract = newContract;
-    collectionWithContracts.push(element);
-  })
-
-  return collectionWithContracts;
-}
 
 /**
  * @func getUserBalance retrieves balance of an ethereum account's tokens and stakes
@@ -60,20 +26,23 @@ async function getUserBalance (account, contract) {
 
   //TODO: documentation
   function getAllUserBalances (account, fieldOrTokenArr) {
-    const balancePromises = Promise.all(fieldOrTokenArr.map(async fieldOrToken => {
-        const { contract } = fieldOrToken;
-        const balance = await getUserBalance(account, contract);
+    const balancePromises = Promise.all(
+      fieldOrTokenArr.map(
+        async fieldOrToken => {
+          const { contract } = fieldOrToken;
+          const balance = await getUserBalance(account, contract);
           if(balance) {
             return { ...fieldOrToken, balance }
           }
-        }))
+        }
+      )
+    )
+        //this step is needed because....
         .then(tokensWithBalances => tokensWithBalances.filter(token => token))
     return balancePromises;
     }
 
-
 export {
-  createContracts,
   getUserBalance,
   getAllUserBalances,
 }
