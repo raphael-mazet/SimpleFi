@@ -19,7 +19,7 @@ async function getUserBalance (account, contract) {
     let decimals;
     if (contract.decimals) decimals = await contract.decimals();
     const balance = await contract.balanceOf(account);
-    //TODO: check farming contract decimals?
+    //TODO: check farming contract decimals - add to DB?
     return Number(ethers.utils.formatUnits(balance, decimals || 18));
     }
   }
@@ -37,7 +37,7 @@ async function getUserBalance (account, contract) {
         }
       )
     )
-        //this step is needed because....
+        //ASK: this step is needed because...?
         .then(tokensWithBalances => tokensWithBalances.filter(token => token))
     return balancePromises;
     }
