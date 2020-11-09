@@ -11,7 +11,7 @@ import MyAssets from '../MyAssets/MyAssets';
 function App() {
   const [trackedTokens, setTrackedTokens] = useState([]);
   const [trackedFields, setTrackedFields] = useState([]);
-  const [contractsLoaded, setContractsLoaded] = useState(false);
+  const [balanceContractsLoaded, setBalanceContractsLoaded] = useState(false);
   const [userAccount, setUserAccount] = useState([]);
   const [userTokens, setUserTokens] = useState([]);
   const [userFields, setUserFields] = useState([]);
@@ -46,14 +46,13 @@ function App() {
       .then(([tokens, fields]) => {
         setTrackedTokens(apis.createBalanceContracts(tokens));
         setTrackedFields(apis.createBalanceContracts(fields));
-        setContractsLoaded(true);
+        setBalanceContractsLoaded(true);
     })
   }, [])
 
   // Create first set of userTokens with token balances
   useEffect(() => {
-    if (userAccount.length && contractsLoaded) {
-      console.log('hello! Fail!')
+    if (userAccount.length && balanceContractsLoaded) {
 
       apis.getAllUserBalances(userAccount[0], trackedTokens)
         .then(tokensWithBalance => setUserTokens(tokensWithBalance));
@@ -64,7 +63,7 @@ function App() {
           setUserFields(fieldsWithBalance)
         });
     }
-  }, [contractsLoaded, userAccount])
+  }, [balanceContractsLoaded, userAccount])
 
   // Add all underlying token and field balances
   useEffect(() => {

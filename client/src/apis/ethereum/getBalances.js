@@ -29,8 +29,8 @@ async function getUserBalance (account, contract) {
     const balancePromises = Promise.all(
       fieldOrTokenArr.map(
         async fieldOrToken => {
-          const { contract } = fieldOrToken;
-          const balance = await getUserBalance(account, contract);
+          const { balanceContract } = fieldOrToken;
+          const balance = await getUserBalance(account, balanceContract);
           if(balance) {
             return { ...fieldOrToken, balance }
           }
