@@ -29,6 +29,7 @@ model Field {
   contractInterface                ContractInterface? @relation("contract_interfaceTofield", fields: [contractInterfaceId], references: [ciId])
   protocol                         Protocol?          @relation(fields: [protocolId], references: [protocolId])
   token_field_receipt_tokenTotoken Token?             @relation("field_receipt_tokenTotoken", fields: [receiptToken], references: [tokenId])
+  contractAddresses                contractAddress[]  @relation("contract_addressTofield")
   cropTokens                       FieldCrop[]        @relation("fieldTofieldCrop")
   seedTokens                       FieldSeed[]        @relation("fieldTofieldSeed")
 
@@ -109,24 +110,38 @@ model FieldCrop {
 }
 
 model FieldSeed {
-  tokenId String @map("token_id")
-  fieldId String @map("field_id")
-  field   Field  @relation("fieldTofieldSeed", fields: [fieldId], references: [fieldId])
-  token   Token  @relation("fieldSeedTotoken", fields: [tokenId], references: [tokenId])
+  tokenId       String @map("token_id")
+  fieldId       String @map("field_id")
+  seedPosition  Int?   @map("seed_position")
+  field         Field  @relation("fieldTofieldSeed", fields: [fieldId], references: [fieldId])
+  token         Token  @relation("fieldSeedTotoken", fields: [tokenId], references: [tokenId])
 
   @@id([tokenId, fieldId])
   @@map("field_seed")
 }
 
 model ContractInterface {
-  ciId   String   @id @map("ci_id")
-  name   String
-  abi    Json
-  isErc  Boolean? @map("is_erc")
-  field  Field[]  @relation("contract_interfaceTofield")
-  token  Token[]  @relation("contract_interfaceTotoken")
+  ciId            String            @id @map("ci_id")
+  name            String
+  abi             Json
+  isErc           Boolean?          @map("is_erc")
+  contractAddress contractAddress[] @relation("contract_addressTocontract_interface")
+  field           Field[]           @relation("contract_interfaceTofield")
+  token           Token[]           @relation("contract_interfaceTotoken")
 
   @@map("contract_interface")
+}
+
+model contractAddress {
+  addressId           String            @id @map("address_id")
+  fieldId             String            @map("field_id")
+  contractInterfaceId String            @map("contract_interface")
+  addressTypes        address_type[]    @map("address_type")
+  address             String
+  contractInterface   ContractInterface @relation("contract_addressTocontract_interface", fields: [contractInterfaceId], references: [ciId])
+  field               Field             @relation("contract_addressTofield", fields: [fieldId], references: [fieldId])
+
+  @@map("contract_address")
 }
 
 enum transaction_in_output {
@@ -143,4 +158,11 @@ enum transaction_type {
   liquidity
   claim
   airdrop
+}
+
+enum address_type {
+  balance
+  underlying
+  earning
+  deposit
 }

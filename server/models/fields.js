@@ -7,7 +7,8 @@ async function getFields() {
       include: {
         seedTokens: {
           select: {
-            tokenId: true
+            tokenId: true,
+            seedPosition: true
           }
         },
         cropTokens: {
@@ -20,6 +21,13 @@ async function getFields() {
             name: true,
             abi: true,
             isErc: true
+          }
+        },
+        contractAddresses: {
+          select: {
+            addressTypes: true,
+            address: true,
+            contractInterface: true
           }
         }
       }
