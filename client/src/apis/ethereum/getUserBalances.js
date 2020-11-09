@@ -1,8 +1,5 @@
 import { ethers } from 'ethers';
-
-// Create provider
-//TODO: potentially add default provider
-const provider = new ethers.providers.Web3Provider(window.ethereum);
+import provider from './ethProvider';
 
 /**
  * @func getUserBalance retrieves balance of an ethereum account's tokens and stakes
@@ -34,7 +31,7 @@ async function getUserBalance (account, contract) {
       fieldOrTokenArr.map(
         async fieldOrToken => {
           const { balanceContract } = fieldOrToken;
-          const userBalance = await getUserBalance(account, balanceContract, fieldOrToken.name);
+          const userBalance = await getUserBalance(account, balanceContract);
           if(userBalance.balance) {
             return { ...fieldOrToken, userBalance }
           }

@@ -1,7 +1,5 @@
 import { ethers } from 'ethers';
-
-//TODO: potentially add default provider
-const provider = new ethers.providers.Web3Provider(window.ethereum);
+import provider from './ethProvider';
 
 /**
  * @func createContract creates an instance of a new ethers contract interface
@@ -27,7 +25,7 @@ function createBalanceContracts (collection) {
       const { address, contractInterface } = element;
       balanceContract = new ethers.Contract(address, contractInterface.abi, provider);
     }
-    
+
     element.balanceContract = balanceContract;
     collectionWithContracts.push(element);
   })
