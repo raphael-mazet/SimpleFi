@@ -4,7 +4,7 @@ function fieldSeparator (userFields){
   
   userFields.forEach(field => {
 
-    const { name, balance, seedTokens, cropTokens, isEarning } = field;
+    const { name, userBalance, seedTokens, cropTokens, isEarning } = field;
     let underlying = '';
     seedTokens && seedTokens.forEach(token => underlying += `${token.name}, `);
     underlying = underlying.slice(0, -2);
@@ -13,11 +13,11 @@ function fieldSeparator (userFields){
       let farming = '';
       cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
       farming = farming.slice(0, -2);
-      farmingFields.push([name, balance.toFixed(2), underlying, farming])
+      farmingFields.push([name, userBalance.balance.toFixed(2), underlying, farming])
     }
 
     if (isEarning) {
-      earningFields.push([name, balance.toFixed(2), underlying, 'tbd'])
+      earningFields.push([name, userBalance.balance.toFixed(2), underlying, 'tbd'])
     }
   })
 

@@ -7,7 +7,7 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
 
   for (const mainField of userFields) {
 
-    let totalMainFieldSupply = await mainField.contract.totalSupply();
+    let totalMainFieldSupply = await mainField.balanceContract.totalSupply();
     totalMainFieldSupply = Number(ethers.utils.formatUnits(totalMainFieldSupply, 18));
     
     //TODO: should call balance userBalance

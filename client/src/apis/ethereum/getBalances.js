@@ -20,9 +20,13 @@ async function getUserBalance (account, contract) {
     if (contract.decimals) decimals = await contract.decimals();
     const balance = await contract.balanceOf(account);
     //TODO: check farming contract decimals - add to DB?
-    return Number(ethers.utils.formatUnits(balance, decimals || 18));
+    return {
+      balance: Number(ethers.utils.formatUnits(balance, decimals || 18)),
+      //sometimes returns as bigInt
+      decimals: Number(decimals || 18),
     }
   }
+}
 
   //TODO: documentation
   function getAllUserBalances (account, fieldOrTokenArr) {
@@ -30,9 +34,9 @@ async function getUserBalance (account, contract) {
       fieldOrTokenArr.map(
         async fieldOrToken => {
           const { balanceContract } = fieldOrToken;
-          const balance = await getUserBalance(account, balanceContract);
-          if(balance) {
-            return { ...fieldOrToken, balance }
+          const userBalance = await getUserBalance(account, balanceContract, fieldOrToken.name);
+          if(userBalance.balance) {
+            return { ...fieldOrToken, userBalance }
           }
         }
       )
