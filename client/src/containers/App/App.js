@@ -44,8 +44,8 @@ function App() {
     const getFields = apis.getFields();
     Promise.all([getTokens, getFields])
       .then(([tokens, fields]) => {
-        setTrackedTokens(apis.createContracts(tokens));
-        setTrackedFields(apis.createContracts(fields));
+        setTrackedTokens(apis.createBalanceContracts(tokens));
+        setTrackedFields(apis.createBalanceContracts(fields));
         setContractsLoaded(true);
     })
   }, [])
@@ -53,6 +53,7 @@ function App() {
   // Create first set of userTokens with token balances
   useEffect(() => {
     if (userAccount.length && contractsLoaded) {
+      console.log('hello! Fail!')
 
       apis.getAllUserBalances(userAccount[0], trackedTokens)
         .then(tokensWithBalance => setUserTokens(tokensWithBalance));
