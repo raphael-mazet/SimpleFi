@@ -6,10 +6,10 @@ function populateFieldTokensFromCache (fieldsWithBalance, trackedTokens) {
     });
     
     field.seedTokens = field.seedTokens.map(token => {
-      const { seedPosition } = token;
+      const { seedIndex } = token;
       return {
         ...trackedTokens.find(trackedToken => token.tokenId === trackedToken.tokenId),
-        seedPosition
+        seedIndex
       }
     });
     

@@ -7,26 +7,27 @@ async function getFieldSeedHoldings (field, token, tokenContract) {
 
   let fieldBalance;
 
+  //TODO: add Uniswap
   switch (reserveMethod.type) {
 
     case "curveSwap":
-      //TODO: rename this seedIndex in DB
-      const tokenIndex = token.seedPosition;
+      const tokenIndex = token.seedIndex;
+      const { decimals } = token.contractInterface;
 
-      if (!field.underlyingContract) {
+      if (!field.fieldContracts.underlyingContract) {
         const { address, abi } = reserveMethod;
-        field.underlyingContract = new ethers.Contract(address, abi, provider);
+        field.fieldContracts.underlyingContract = new ethers.Contract(address, abi, provider);
       }
 
-      //TODO: add decimals to DB
-      fieldBalance = await field.underlyingContract.balances(tokenIndex);
-      fieldBalance = ethers.utils.formatUnits(fieldBalance, 18)
+      fieldBalance = await field.fieldContracts.underlyingContract.balances(tokenIndex);
+      fieldBalance = ethers.utils.formatUnits(fieldBalance, decimals)
+      
       break;
 
     default: 
-    //TODO: refactor this as fields will no longer have default single addresses
-    fieldBalance = await tokenContract.balanceOf(field.address);
+    fieldBalance = await tokenContract.contract.balanceOf(field.address);
     fieldBalance = Number(ethers.utils.formatUnits(fieldBalance, 18));
+    
     break;
 
   }
