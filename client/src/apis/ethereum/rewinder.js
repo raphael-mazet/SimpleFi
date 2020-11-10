@@ -34,7 +34,6 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
 
     //determine underlying reserve balance extraction method
     let fieldSeedHolding = await getFieldSeedHoldings(field, token, tokenContract);
-    console.log(`${field.name} holding of ${token.name}`, fieldSeedHolding);
   
     if (isBase) {
       const userTokenBalance = fieldSeedHolding * share;

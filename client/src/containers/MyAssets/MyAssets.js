@@ -13,8 +13,9 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
 
   // combine available & locked token balances and add prices from coinGecko
   useEffect(() => {
-    const combinedHoldings = helpers.combineHoldings(userTokens);
+    const combinedHoldings = helpers.combineTokenHoldings(userTokens);
 
+    //TODO: fix sUSD
     helpers.addHoldingPrices(combinedHoldings)
       .then(holdingsWithPrices => setHoldingValues(holdingsWithPrices))
 

@@ -1,6 +1,6 @@
 import apis from '../../apis/index';
 
-function combineHoldings (userTokens) {
+function combineTokenHoldings (userTokens) {
   
   const combinedHoldings = [];
 
@@ -47,6 +47,6 @@ async function addHoldingPrices(combinedHoldings) {
 }
 
 export {
-  combineHoldings,
+  combineTokenHoldings,
   addHoldingPrices
 }
