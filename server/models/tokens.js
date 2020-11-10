@@ -9,7 +9,8 @@ async function getTokens() {
           select: {
             name: true,
             abi: true,
-            isErc: true
+            isErc: true,
+            decimals: true
           }
         }
       }
