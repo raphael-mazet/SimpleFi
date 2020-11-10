@@ -10,10 +10,8 @@ async function getFieldSeedHoldings (field, token, tokenContract) {
   switch (reserveMethod.type) {
 
     case "curveSwap":
-      console.log(' ---> token.name from GFSH', token.name);
       //TODO: rename this seedIndex in DB
       const tokenIndex = token.seedPosition;
-      console.log(' ---> tokenIndex', tokenIndex);
 
       if (!field.underlyingContract) {
         const { address, abi } = reserveMethod;
@@ -32,7 +30,6 @@ async function getFieldSeedHoldings (field, token, tokenContract) {
     break;
 
   }
-  console.log('fieldBa;ance', fieldBalance);
   return fieldBalance;
 }
 

@@ -9,17 +9,15 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
 
   for (const mainField of userFields) {
     
-    console.log(' ---> mainField.name', mainField.name);
-    console.log(' ---> mainField.seedTokens', mainField.seedTokens);
+    console.log(' ---> mainField', mainField);
+
     let totalMainFieldSupply = await mainField.balanceContract.totalSupply();
     totalMainFieldSupply = Number(ethers.utils.formatUnits(totalMainFieldSupply, 18));
-    console.log(' ---> totalMainFieldSupply', totalMainFieldSupply);
     
     //TODO: should call balance userBalance
     const userShareOfMainField = mainField.balance / totalMainFieldSupply;
  
     for (const token of mainField.seedTokens) {
-      console.log(' ---> token before tokenBalanceExtractor', token);
       await tokenBalanceExtractor(token, mainField, userShareOfMainField)
     }
   }
@@ -27,9 +25,6 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
 
   async function tokenBalanceExtractor (token, field, share) {
     const { tokenId, isBase, balanceContract } = token;
-    console.log(' ---> token.name', token.name);
-    console.log(' ---> token', token);
-    console.log(' ---> field', field);
 
     //TODO: take advantage of this to figure out prepopulated contracts
     //FIXME: seems there is no need for this step - because populated from cache

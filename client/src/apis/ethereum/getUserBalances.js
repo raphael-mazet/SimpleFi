@@ -8,20 +8,17 @@ import provider from './ethProvider';
  * @returns {string} account balance
  * @dev not all contracts specify decimals with which to parse balance, so defaults to 18
  */
-async function getUserBalance (account, contract) {
-  if (!contract) {
+async function getUserBalance (account, targetContract) {
+  if (!targetContract) {
     const balance = await provider.getBalance(account);
     return Number(ethers.utils.formatEther(balance));
+
   } else {
-    let decimals;
-    if (contract.decimals) decimals = await contract.decimals();
-    const balance = await contract.balanceOf(account);
-    //TODO: check farming contract decimals - add to DB?
-    return {
-      balance: Number(ethers.utils.formatUnits(balance, decimals || 18)),
-      //sometimes returns as bigInt
-      decimals: Number(decimals || 18),
-    }
+    const { contract, decimals } = targetContract.balanceContract || targetContract;
+    let balance = await contract.balanceOf(account);
+    balance = Number(ethers.utils.formatUnits(balance, decimals));
+
+    return balance;
   }
 }
 
@@ -30,16 +27,21 @@ async function getUserBalance (account, contract) {
     const balancePromises = Promise.all(
       fieldOrTokenArr.map(
         async fieldOrToken => {
-          const { balanceContract } = fieldOrToken;
-          const userBalance = await getUserBalance(account, balanceContract);
-          if(userBalance.balance) {
+          let contract;
+          if (fieldOrToken.tokenId) {
+            contract = fieldOrToken.tokenContract;
+          } else {
+            contract = fieldOrToken.fieldContracts;
+          }
+          const userBalance = await getUserBalance(account, contract);
+          if(userBalance) {
             return { ...fieldOrToken, userBalance }
           }
         }
       )
     )
-        //ASK: this step is needed because...?
-        .then(tokensWithBalances => tokensWithBalances.filter(token => token))
+      //filter undefined value from map
+      .then(tokensWithBalances => tokensWithBalances.filter(token => token))
     return balancePromises;
     }
 

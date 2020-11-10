@@ -13,11 +13,11 @@ function fieldSeparator (userFields){
       let farming = '';
       cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
       farming = farming.slice(0, -2);
-      farmingFields.push([name, userBalance.balance.toFixed(2), underlying, farming])
+      farmingFields.push([name, userBalance.toFixed(2), underlying, farming])
     }
 
     if (isEarning) {
-      earningFields.push([name, userBalance.balance.toFixed(2), underlying, 'tbd'])
+      earningFields.push([name, userBalance.toFixed(2), underlying, 'tbd'])
     }
   })
 

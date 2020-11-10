@@ -10,23 +10,34 @@ function createBalanceContracts (collection) {
   const collectionWithContracts = [];
   
   collection.forEach(element => {
-
-    const { contractAddresses} = element;
-    let balanceContract;
     
     //for Fields
-    if (contractAddresses) {
-      const balanceAddress = contractAddresses.filter(address => address.addressTypes.includes('balance'))[0];
-      balanceContract = new ethers.Contract(balanceAddress.address, balanceAddress.contractInterface.abi, provider)
+    if (element.fieldId) {
+      const { contractAddresses } = element;
+      //TODO: enforce unicity of filter here?
+      let balanceAddress = contractAddresses.filter(address => address.addressTypes.includes('balance'));
+      if (balanceAddress.length === 1) {
+        balanceAddress = balanceAddress[0]
+      } else {
+        throw 'Balance address should be unique';
+      }
+      element.fieldContracts = {
+        balanceContract: {
+          contract: new ethers.Contract(balanceAddress.address, balanceAddress.contractInterface.abi, provider),
+          decimals: balanceAddress.contractInterface.decimals
+        }
+      }
     }
 
     //for tokens
     else {
       const { address, contractInterface } = element;
-      balanceContract = new ethers.Contract(address, contractInterface.abi, provider);
+      element.tokenContract = {
+        contract: new ethers.Contract(address, contractInterface.abi, provider),
+        decimals: contractInterface.decimals
+      }
     }
 
-    element.balanceContract = balanceContract;
     collectionWithContracts.push(element);
   })
 
