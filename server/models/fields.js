@@ -8,7 +8,7 @@ async function getFields() {
         seedTokens: {
           select: {
             tokenId: true,
-            seedPosition: true
+            seedIndex: true
           }
         },
         cropTokens: {
