@@ -24,15 +24,8 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
 
 
   async function tokenBalanceExtractor (token, field, share) {
-    const { tokenId, isBase, balanceContract } = token;
+    const { tokenId, isBase, tokenContract } = token;
 
-    //TODO: take advantage of this to figure out prepopulated contracts
-    //FIXME: seems there is no need for this step - because populated from cache
-    //FIXME: for initial userfields only: need to double check when necessary and when
-    //FIXME: tracked fields is modified by reference
-    const tokenContract = trackedTokens.find(el => el.tokenId === tokenId).tokenContract;
-
-    //determine underlying reserve balance extraction method
     let fieldSeedHolding = await getFieldSeedHoldings(field, token, tokenContract);
   
     if (isBase) {
@@ -41,11 +34,9 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
   
     } else {
       let feederField = trackedFields.find(field => field.receiptToken === tokenId);
-      
-      //TODO: check why not always necessary - BECAUSE WAS SET AT GETUSERBALANCE STAGE! dblcheck
-      // console.log(' ---> feederField before', feederField.seedTokens);
+      //TODO: stop this from changing tracked Fields as well as user fields
+      //TODO: avoid populating this multiple times (once in App.js)
       [feederField] = helpers.populateFieldTokensFromCache([feederField], trackedTokens);
-      // console.log(' ---> feederField after§', feederField.seedTokens);
       
       const { contract, decimals } = feederField.fieldContracts.balanceContract;
 

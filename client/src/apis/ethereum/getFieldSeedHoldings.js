@@ -4,6 +4,8 @@ import helpers from '../../helpers'
 
 async function getFieldSeedHoldings (field, token, tokenContract) {
   const reserveMethod = helpers.findFieldMethod(field, 'underlying');
+  const { decimals } = token.contractInterface;
+  const tokenIndex = token.seedIndex;
 
   let fieldBalance;
 
@@ -11,8 +13,6 @@ async function getFieldSeedHoldings (field, token, tokenContract) {
   switch (reserveMethod.type) {
 
     case "curveSwap":
-      const tokenIndex = token.seedIndex;
-      const { decimals } = token.contractInterface;
 
       if (!field.fieldContracts.underlyingContract) {
         const { address, abi } = reserveMethod;
@@ -24,10 +24,14 @@ async function getFieldSeedHoldings (field, token, tokenContract) {
       
       break;
 
+    case "uniswap":
+      const fieldReserves = await field.fieldContracts.balanceContract.contract.getReserves();
+      fieldBalance = Number(ethers.utils.formatUnits(fieldReserves[tokenIndex], decimals));
+      break;
+
     default: 
     fieldBalance = await tokenContract.contract.balanceOf(field.address);
-    fieldBalance = Number(ethers.utils.formatUnits(fieldBalance, 18));
-    
+    fieldBalance = Number(ethers.utils.formatUnits(fieldBalance, decimals));
     break;
 
   }
