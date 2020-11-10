@@ -110,11 +110,11 @@ model FieldCrop {
 }
 
 model FieldSeed {
-  tokenId       String @map("token_id")
-  fieldId       String @map("field_id")
-  seedPosition  Int?   @map("seed_position")
-  field         Field  @relation("fieldTofieldSeed", fields: [fieldId], references: [fieldId])
-  token         Token  @relation("fieldSeedTotoken", fields: [tokenId], references: [tokenId])
+  tokenId      String @map("token_id")
+  fieldId      String @map("field_id")
+  seedPosition Int?   @map("seed_position")
+  field        Field  @relation("fieldTofieldSeed", fields: [fieldId], references: [fieldId])
+  token        Token  @relation("fieldSeedTotoken", fields: [tokenId], references: [tokenId])
 
   @@id([tokenId, fieldId])
   @@map("field_seed")
@@ -125,6 +125,7 @@ model ContractInterface {
   name            String
   abi             Json
   isErc           Boolean?          @map("is_erc")
+  decimals        Int?
   contractAddress contractAddress[] @relation("contract_addressTocontract_interface")
   field           Field[]           @relation("contract_interfaceTofield")
   token           Token[]           @relation("contract_interfaceTotoken")
