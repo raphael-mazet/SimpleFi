@@ -16,19 +16,22 @@ model Farmer {
 }
 
 model Field {
-  fieldId                          String      @id @map("field_id")
+  fieldId                          String             @id @map("field_id")
   name                             String?
-  protocolId                       String?     @map("protocol_id")
+  protocolId                       String?            @map("protocol_id")
   address                          String?
-  yieldType                        Json?       @map("yield_type")
+  yieldType                        Json?              @map("yield_type")
   instructions                     Json?
-  riskLevel                        Int?        @map("risk_level")
-  receiptToken                     String?     @unique @map("receipt_token")
-  isEarning                        Boolean?    @map("is_earning")
-  protocol                         Protocol?   @relation(fields: [protocolId], references: [protocolId])
-  token_field_receipt_tokenTotoken Token?      @relation("field_receipt_tokenTotoken", fields: [receiptToken], references: [tokenId])
-  cropTokens                       fieldCrop[] @relation("fieldTofieldCrop")
-  seedTokens                       fieldSeed[] @relation("fieldTofieldSeed")
+  riskLevel                        Int?               @map("risk_level")
+  receiptToken                     String?            @unique @map("receipt_token")
+  isEarning                        Boolean?           @map("is_earning")
+  contractInterfaceId              String?            @map("contract_interface")
+  contractInterface                ContractInterface? @relation("contract_interfaceTofield", fields: [contractInterfaceId], references: [ciId])
+  protocol                         Protocol?          @relation(fields: [protocolId], references: [protocolId])
+  token_field_receipt_tokenTotoken Token?             @relation("field_receipt_tokenTotoken", fields: [receiptToken], references: [tokenId])
+  contractAddresses                contractAddress[]  @relation("contract_addressTofield")
+  cropTokens                       FieldCrop[]        @relation("fieldTofieldCrop")
+  seedTokens                       FieldSeed[]        @relation("fieldTofieldSeed")
 
   @@map("field")
 }
@@ -46,23 +49,25 @@ model Protocol {
 }
 
 model Token {
-  tokenId                                       String        @id @map("token_id")
-  protocolId                                    String?       @map("protocol_id")
+  tokenId                                       String             @id @map("token_id")
+  protocolId                                    String?            @map("protocol_id")
   name                                          String?
-  priceApi                                      String?       @map("price_api")
+  priceApi                                      String?            @map("price_api")
   address                                       String?
-  isBase                                        Boolean       @map("is_base")
-  protocol_protocolTotoken_protocol_id          Protocol?     @relation("protocolTotoken_protocol_id", fields: [protocolId], references: [protocolId])
-  field_field_receipt_tokenTotoken              Field?        @relation("field_receipt_tokenTotoken")
-  fieldCrop                                     fieldCrop[]   @relation("fieldCropTotoken")
-  fieldSeed                                     fieldSeed[]   @relation("fieldSeedTotoken")
-  protocol_protocol_governance_tokenTotoken     Protocol[]    @relation("protocol_governance_tokenTotoken")
-  transaction_tokenTotransaction_input_token_1  Transaction[] @relation("tokenTotransaction_input_token_1")
-  transaction_tokenTotransaction_input_token_2  Transaction[] @relation("tokenTotransaction_input_token_2")
-  transaction_tokenTotransaction_input_token_3  Transaction[] @relation("tokenTotransaction_input_token_3")
-  transaction_tokenTotransaction_input_token_4  Transaction[] @relation("tokenTotransaction_input_token_4")
-  transaction_tokenTotransaction_output_token_1 Transaction[] @relation("tokenTotransaction_output_token_1")
-  transaction_tokenTotransaction_output_token_2 Transaction[] @relation("tokenTotransaction_output_token_2")
+  isBase                                        Boolean            @map("is_base")
+  contractInterfaceId                           String?            @map("contract_interface")
+  contractInterface                             ContractInterface? @relation("contract_interfaceTotoken", fields: [contractInterfaceId], references: [ciId])
+  protocol_protocolTotoken_protocol_id          Protocol?          @relation("protocolTotoken_protocol_id", fields: [protocolId], references: [protocolId])
+  field_field_receipt_tokenTotoken              Field?             @relation("field_receipt_tokenTotoken")
+  fieldCrop                                     FieldCrop[]        @relation("fieldCropTotoken")
+  fieldSeed                                     FieldSeed[]        @relation("fieldSeedTotoken")
+  protocol_protocol_governance_tokenTotoken     Protocol[]         @relation("protocol_governance_tokenTotoken")
+  transaction_tokenTotransaction_input_token_1  Transaction[]      @relation("tokenTotransaction_input_token_1")
+  transaction_tokenTotransaction_input_token_2  Transaction[]      @relation("tokenTotransaction_input_token_2")
+  transaction_tokenTotransaction_input_token_3  Transaction[]      @relation("tokenTotransaction_input_token_3")
+  transaction_tokenTotransaction_input_token_4  Transaction[]      @relation("tokenTotransaction_input_token_4")
+  transaction_tokenTotransaction_output_token_1 Transaction[]      @relation("tokenTotransaction_output_token_1")
+  transaction_tokenTotransaction_output_token_2 Transaction[]      @relation("tokenTotransaction_output_token_2")
 
   @@map("token")
 }
@@ -94,7 +99,7 @@ model Transaction {
   @@map("transaction")
 }
 
-model fieldCrop {
+model FieldCrop {
   tokenId String @map("token_id")
   fieldId String @map("field_id")
   field   Field  @relation("fieldTofieldCrop", fields: [fieldId], references: [fieldId])
@@ -104,14 +109,40 @@ model fieldCrop {
   @@map("field_crop")
 }
 
-model fieldSeed {
-  tokenId String @map("token_id")
-  fieldId String @map("field_id")
-  field   Field  @relation("fieldTofieldSeed", fields: [fieldId], references: [fieldId])
-  token   Token  @relation("fieldSeedTotoken", fields: [tokenId], references: [tokenId])
+model FieldSeed {
+  tokenId    String @map("token_id")
+  fieldId    String @map("field_id")
+  seedIndex  Int?   @map("seed_index")
+  field      Field  @relation("fieldTofieldSeed", fields: [fieldId], references: [fieldId])
+  token      Token  @relation("fieldSeedTotoken", fields: [tokenId], references: [tokenId])
 
   @@id([tokenId, fieldId])
   @@map("field_seed")
+}
+
+model ContractInterface {
+  ciId            String            @id @map("ci_id")
+  name            String
+  abi             Json
+  isErc           Boolean?          @map("is_erc")
+  decimals        Int?
+  contractAddress contractAddress[] @relation("contract_addressTocontract_interface")
+  field           Field[]           @relation("contract_interfaceTofield")
+  token           Token[]           @relation("contract_interfaceTotoken")
+
+  @@map("contract_interface")
+}
+
+model contractAddress {
+  addressId           String            @id @map("address_id")
+  fieldId             String            @map("field_id")
+  contractInterfaceId String            @map("contract_interface")
+  addressTypes        address_type[]    @map("address_type")
+  address             String
+  contractInterface   ContractInterface @relation("contract_addressTocontract_interface", fields: [contractInterfaceId], references: [ciId])
+  field               Field             @relation("contract_addressTofield", fields: [fieldId], references: [fieldId])
+
+  @@map("contract_address")
 }
 
 enum transaction_in_output {
@@ -128,4 +159,11 @@ enum transaction_type {
   liquidity
   claim
   airdrop
+}
+
+enum address_type {
+  balance
+  underlying
+  earning
+  deposit
 }

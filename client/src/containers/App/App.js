@@ -11,29 +11,17 @@ import MyAssets from '../MyAssets/MyAssets';
 function App() {
   const [trackedTokens, setTrackedTokens] = useState([]);
   const [trackedFields, setTrackedFields] = useState([]);
-  const [contractsLoaded, setContractsLoaded] = useState(false);
+  const [balanceContractsLoaded, setBalanceContractsLoaded] = useState(false);
   const [userAccount, setUserAccount] = useState([]);
   const [userTokens, setUserTokens] = useState([]);
   const [userFields, setUserFields] = useState([]);
   const [rewoundTokenBalances, setRewoundTokenBalances] = useState([]);
   const [rewoundFieldBalances, setRewoundFieldBalances] = useState([]);
   const [rewoundFlag, setRewoundFlag] = useState(false);
-  const [splash, setSplash] = useState(false)
+  const [splash, setSplash] = useState(false);
   const history = useHistory();
 
-  //Get tracked tokens and fields from SimpleFi db and attach contracts
-  useEffect(() => {
-    const getTokens = apis.getTokens();
-    const getFields = apis.getFields();
-    Promise.all([getTokens, getFields])
-      .then(([tokens, fields]) => {
-        setTrackedTokens(apis.createContracts(tokens, 'erc20'));
-        setTrackedFields(apis.createContracts(fields, 'field'));
-        setContractsLoaded(true);
-    })
-  }, [])
-
- async function connectWallet () {
+  async function connectWallet () {
     //TODO: autorefresh when toggle account from Metamask
     if (window.ethereum) {
       const newAccount = await metamaskConnect();
@@ -50,9 +38,21 @@ function App() {
     }
   }
 
+  //Get tracked tokens and fields from SimpleFi db and attach contracts
+  useEffect(() => {
+    const getTokens = apis.getTokens();
+    const getFields = apis.getFields();
+    Promise.all([getTokens, getFields])
+      .then(([tokens, fields]) => {
+        setTrackedTokens(apis.createBalanceContracts(tokens));
+        setTrackedFields(apis.createBalanceContracts(fields));
+        setBalanceContractsLoaded(true);
+    })
+  }, [])
+
   // Create first set of userTokens with token balances
   useEffect(() => {
-    if (userAccount.length && contractsLoaded) {
+    if (userAccount.length && balanceContractsLoaded) {
 
       apis.getAllUserBalances(userAccount[0], trackedTokens)
         .then(tokensWithBalance => setUserTokens(tokensWithBalance));
@@ -63,8 +63,9 @@ function App() {
           setUserFields(fieldsWithBalance)
         });
     }
-  }, [contractsLoaded, userAccount])
+  }, [balanceContractsLoaded, userAccount])
 
+  // Add all underlying token and field balances
   useEffect(() => {
     if (userFields.length && userTokens.length && !rewoundFlag) {
         apis.rewinder(userFields, trackedTokens, trackedFields)
@@ -77,7 +78,6 @@ function App() {
   }, [userFields, userTokens])
 
   //ASK: is flag necessary?
-  //FIXME: inconsistent populating of locked tokens - sometimes misses some
   useEffect(() => {
 
     if (rewoundFlag) {
@@ -85,7 +85,6 @@ function App() {
       setUserTokens(updatedUserTokens);
     }
 
-    //TODO: needs parent field here in restakedBalance instead of current field
     const updatedUserFields = helpers.addRestakedFieldBalances(rewoundFieldBalances, userFields);
     setUserFields(updatedUserFields);
 
