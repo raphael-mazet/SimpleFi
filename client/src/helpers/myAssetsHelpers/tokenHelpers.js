@@ -17,8 +17,8 @@ function combineHoldings (userTokens) {
         lockedBalance = token.lockedBalance.reduce((acc, curr) => acc + curr.balance, 0);
       }
 
-      if (token.balance) {
-        combinedBalance = token.balance + lockedBalance;
+      if (token.userBalance) {
+        combinedBalance = token.userBalance + lockedBalance;
         lockedPercent = formatter.format(lockedBalance / combinedBalance);
       } else {
         combinedBalance = lockedBalance;

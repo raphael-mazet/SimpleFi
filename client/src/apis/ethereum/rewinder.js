@@ -39,12 +39,11 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
     if (isBase) {
       const userTokenBalance = fieldSeedHolding * share;
       userTokenBalances.push({token, userTokenBalance, field});
-      console.log(' ---> userTokenBalance', userTokenBalance);
   
     } else {
       let feederField = trackedFields.find(field => field.receiptToken === tokenId);
       
-      //TODO: check why not always necessary
+      //TODO: check why not always necessary - BECAUSE WAS SET AT GETUSERBALANCE STAGE! dblcheck
       // console.log(' ---> feederField before', feederField.seedTokens);
       [feederField] = helpers.populateFieldTokensFromCache([feederField], trackedTokens);
       // console.log(' ---> feederField after§', feederField.seedTokens);
