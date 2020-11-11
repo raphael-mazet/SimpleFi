@@ -1,7 +1,7 @@
 import { populateFieldTokensFromCache, addLockedTokenBalances, addRestakedFieldBalances } from './appHelpers';
 import { combineTokenHoldings, addHoldingPrices } from './myAssetsHelpers/tokenHelpers';
 import { fieldSeparator } from './myAssetsHelpers/fieldHelpers';
-import findFieldMethod from './ethHelpers';
+import findFieldAddressType from './ethHelpers';
 
 export default {
   populateFieldTokensFromCache,
@@ -10,5 +10,5 @@ export default {
   combineTokenHoldings,
   addHoldingPrices,
   fieldSeparator,
-  findFieldMethod
+  findFieldAddressType
 }

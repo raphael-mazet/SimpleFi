@@ -4,7 +4,6 @@ const baseUrl = 'http://localhost:3020';
 const tokensEP = '/tokens';
 const fieldTokensEP = '/userfieldtokens'
 
-//TODO: authentication - credentials: include
 function  getTokens () {
   return fetchRequest(baseUrl + tokensEP);
 }

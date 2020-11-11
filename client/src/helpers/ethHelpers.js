@@ -1,15 +1,21 @@
 import fieldInterfaceTypes from '../data/fieldTypes';
 
-function findFieldMethod (field, dataType) {
+function findFieldAddressType (field, dataType) {
 
   const relevantAddress = field.contractAddresses.find(address => address.addressTypes.includes(dataType));
+  if (!relevantAddress) throw 'No relevant address was found - findFieldAddressType()'
+
   const { address } = relevantAddress;
   const { ciId, abi  } = relevantAddress.contractInterface;
 
+  let addressType;
+
   for (let type in fieldInterfaceTypes) {
-    if (fieldInterfaceTypes[type].filter(el => el.ciId === ciId).length) return {address, abi, type};
+    if (fieldInterfaceTypes[type].filter(el => el.ciId === ciId).length) addressType = type;
+    else addressType = 'default';
   }
-  return 'default'
+
+  return {address, abi, addressType};
 }
 
-export default findFieldMethod;
+export default findFieldAddressType;

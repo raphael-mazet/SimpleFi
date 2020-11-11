@@ -16,22 +16,19 @@ model Farmer {
 }
 
 model Field {
-  fieldId                          String             @id @map("field_id")
+  fieldId                          String            @id @map("field_id")
   name                             String?
-  protocolId                       String?            @map("protocol_id")
-  address                          String?
-  yieldType                        Json?              @map("yield_type")
+  protocolId                       String?           @map("protocol_id")
+  yieldType                        Json?             @map("yield_type")
   instructions                     Json?
-  riskLevel                        Int?               @map("risk_level")
-  receiptToken                     String?            @unique @map("receipt_token")
-  isEarning                        Boolean?           @map("is_earning")
-  contractInterfaceId              String?            @map("contract_interface")
-  contractInterface                ContractInterface? @relation("contract_interfaceTofield", fields: [contractInterfaceId], references: [ciId])
-  protocol                         Protocol?          @relation(fields: [protocolId], references: [protocolId])
-  token_field_receipt_tokenTotoken Token?             @relation("field_receipt_tokenTotoken", fields: [receiptToken], references: [tokenId])
-  contractAddresses                contractAddress[]  @relation("contract_addressTofield")
-  cropTokens                       FieldCrop[]        @relation("fieldTofieldCrop")
-  seedTokens                       FieldSeed[]        @relation("fieldTofieldSeed")
+  riskLevel                        Int?              @map("risk_level")
+  receiptToken                     String?           @unique @map("receipt_token")
+  isEarning                        Boolean?          @map("is_earning")
+  protocol                         Protocol?         @relation(fields: [protocolId], references: [protocolId])
+  token_field_receipt_tokenTotoken Token?            @relation("field_receipt_tokenTotoken", fields: [receiptToken], references: [tokenId])
+  contractAddresses                contractAddress[] @relation("contract_addressTofield")
+  cropTokens                       FieldCrop[]       @relation("fieldTofieldCrop")
+  seedTokens                       FieldSeed[]       @relation("fieldTofieldSeed")
 
   @@map("field")
 }
@@ -110,11 +107,11 @@ model FieldCrop {
 }
 
 model FieldSeed {
-  tokenId    String @map("token_id")
-  fieldId    String @map("field_id")
-  seedIndex  Int?   @map("seed_index")
-  field      Field  @relation("fieldTofieldSeed", fields: [fieldId], references: [fieldId])
-  token      Token  @relation("fieldSeedTotoken", fields: [tokenId], references: [tokenId])
+  tokenId   String @map("token_id")
+  fieldId   String @map("field_id")
+  seedIndex Int?   @map("seed_index")
+  field     Field  @relation("fieldTofieldSeed", fields: [fieldId], references: [fieldId])
+  token     Token  @relation("fieldSeedTotoken", fields: [tokenId], references: [tokenId])
 
   @@id([tokenId, fieldId])
   @@map("field_seed")
@@ -127,7 +124,6 @@ model ContractInterface {
   isErc           Boolean?          @map("is_erc")
   decimals        Int?
   contractAddress contractAddress[] @relation("contract_addressTocontract_interface")
-  field           Field[]           @relation("contract_interfaceTofield")
   token           Token[]           @relation("contract_interfaceTotoken")
 
   @@map("contract_interface")

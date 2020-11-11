@@ -15,7 +15,6 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
   useEffect(() => {
     const combinedHoldings = helpers.combineTokenHoldings(userTokens);
 
-    //TODO: fix sUSD
     helpers.addHoldingPrices(combinedHoldings)
       .then(holdingsWithPrices => setHoldingValues(holdingsWithPrices))
 

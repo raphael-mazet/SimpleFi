@@ -1,4 +1,3 @@
-//TODO: create restaked balance for fields - do I actually earn fees? (yes for mStable Earnpool 5)
 function combineFieldBalances(userFields){
 
   const combinedBalances = [];
