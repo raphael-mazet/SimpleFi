@@ -16,13 +16,6 @@ async function getFields() {
             tokenId: true
           }
         },
-        contractInterface: {
-          select: {
-            name: true,
-            abi: true,
-            isErc: true
-          }
-        },
         contractAddresses: {
           select: {
             addressTypes: true,
