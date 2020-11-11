@@ -34,7 +34,7 @@ function addLockedTokenBalances (rewoundTokens, userTokens) {
     else if (existingUserToken) existingUserToken.lockedBalance = [{balance: rewoundToken.userTokenBalance, field: rewoundToken.field}];
     //otherwise: create a new user Token
     else {
-      //TODO: double-check this is necessary
+      //ASK: check this is necessary
       const newUserToken = JSON.parse(JSON.stringify(rewoundToken.token));
       newUserToken.lockedBalance = [{balance: rewoundToken.userTokenBalance, field: rewoundToken.field}]
       updatedUserTokens.push(newUserToken);
@@ -57,7 +57,7 @@ function addRestakedFieldBalances (rewoundFields, userFields) {
     else if (existingUserField) existingUserField.restakedBalance = [{balance: rewoundField.userFieldBalance, parentField: rewoundField.parentField}];
     //otherwise: create a new user Field
     else {
-      //TODO: double-check this is necessary
+      //ASK: check this is necessary
       const newUserField = JSON.parse(JSON.stringify(rewoundField.feederField));
       newUserField.restakedBalance = [{balance: rewoundField.userFieldBalance, parentField: rewoundField.parentField}]
       updatedUserFields.push(newUserField);

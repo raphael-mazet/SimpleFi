@@ -3,19 +3,21 @@ import provider from './ethProvider';
 import helpers from '../../helpers'
 
 async function getFieldSeedHoldings (field, token, tokenContract) {
-  const reserveMethod = helpers.findFieldMethod(field, 'underlying');
+
+  //NOTE: underlying currently denotes both the address that holds seed reserves, 
+  //NOTE: and the address whose ABI contains a balance reserve query function
+  const reserveAddress = helpers.findFieldAddressType(field, 'underlying');
+  const { type, address, abi } = reserveAddress;
   const { decimals } = token.contractInterface;
   const tokenIndex = token.seedIndex;
 
   let fieldBalance;
 
-  //TODO: add Uniswap
-  switch (reserveMethod.type) {
+  switch (type) {
 
     case "curveSwap":
 
       if (!field.fieldContracts.underlyingContract) {
-        const { address, abi } = reserveMethod;
         field.fieldContracts.underlyingContract = new ethers.Contract(address, abi, provider);
       }
 
@@ -24,12 +26,13 @@ async function getFieldSeedHoldings (field, token, tokenContract) {
       break;
 
     case "uniswap":
-      const fieldReserves = await field.fieldContracts.balanceContract.contract.getReserves();
+      const reserveContract = field.fieldContracts.balanceContract.contract;
+      const fieldReserves = await reserveContract.getReserves();
       fieldBalance = Number(ethers.utils.formatUnits(fieldReserves[tokenIndex], decimals));
       break;
 
     default: 
-    fieldBalance = await tokenContract.contract.balanceOf(field.address);
+    fieldBalance = await tokenContract.contract.balanceOf(address);
     fieldBalance = Number(ethers.utils.formatUnits(fieldBalance, decimals));
     break;
 
