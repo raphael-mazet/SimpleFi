@@ -21,7 +21,6 @@ async function getFieldSeedHoldings (field, token, tokenContract) {
 
       fieldBalance = await field.fieldContracts.underlyingContract.balances(tokenIndex);
       fieldBalance = ethers.utils.formatUnits(fieldBalance, decimals)
-      
       break;
 
     case "uniswap":
