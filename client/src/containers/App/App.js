@@ -85,7 +85,7 @@ function App() {
       setUserTokens(updatedUserTokens);
     }
 
-    const updatedUserFields = helpers.addRestakedFieldBalances(rewoundFieldBalances, userFields);
+    const updatedUserFields = helpers.addStakedFieldBalances(rewoundFieldBalances, userFields);
     setUserFields(updatedUserFields);
 
   }, [rewoundFlag])

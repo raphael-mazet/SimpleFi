@@ -1,29 +1,26 @@
-function combineFieldBalances(userFields){
-
-  const combinedBalances = [];
-
-  userFields.forEach(field => {
+function combineFieldBalances(field){
        
-      let restakedBalance = 0;
+      let stakedBalance = 0;
       let combinedBalance = 0;
-      let restakedPercent = 0;
+      let stakedPercent = 0;
       const formatter = new Intl.NumberFormat("en-US", {style: 'percent'});
       
-      if (field.restakedBalance) {
-        restakedBalance = field.restakedBalance.reduce((acc, curr) => acc + curr.balance, 0);
+      if (field.stakedBalance) {
+        stakedBalance = field.stakedBalance.reduce((acc, curr) => acc + curr.balance, 0);
       }
 
       if (field.userBalance) {
-        combinedBalance = field.userBalance + restakedBalance;
-        restakedPercent = formatter.format(restakedBalance / combinedBalance);
+        combinedBalance = field.userBalance + stakedBalance;
+        stakedPercent = formatter.format(stakedBalance / combinedBalance);
       } else {
-        combinedBalance = restakedBalance;
-        restakedPercent = formatter.format(1);
+        combinedBalance = stakedBalance;
+        stakedPercent = formatter.format(1);
       }
-
-      combinedBalance.push([field.name, combinedBalance.toFixed(2), restakedPercent]);
-  })
-  return combinedBalances;
+      
+  return {
+    combinedBalance: combinedBalance.toFixed(2),
+    stakedPercent
+  };
 }
 
 
@@ -33,11 +30,15 @@ function fieldSeparator (userFields){
   
   userFields.forEach(field => {
 
+    const { combinedBalance, stakedPercent } = combineFieldBalances(field);
     const { name, userBalance, seedTokens, cropTokens, isEarning } = field;
+
     let underlying = '';
     seedTokens && seedTokens.forEach(token => underlying += `${token.name}, `);
     underlying = underlying.slice(0, -2);
       
+    //NOTE: currently not adding combined balance to farming- must check
+    //NOTE: on case by case if staking voids rewards on Curve in particular
     if (cropTokens.length) {
       let farming = '';
       cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
@@ -46,7 +47,7 @@ function fieldSeparator (userFields){
     }
 
     if (isEarning) {
-      earningFields.push([name, userBalance.toFixed(2), underlying, 'tbd'])
+      earningFields.push([name, combinedBalance, stakedPercent, underlying, 'tbd'])
     }
   })
 
@@ -54,6 +55,5 @@ function fieldSeparator (userFields){
 }
 
 export {
-  combineFieldBalances,
   fieldSeparator
 }
