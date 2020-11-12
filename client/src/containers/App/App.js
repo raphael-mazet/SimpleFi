@@ -17,7 +17,7 @@ function App() {
   const [userFields, setUserFields] = useState([]);
   const [rewoundTokenBalances, setRewoundTokenBalances] = useState([]);
   const [rewoundFieldBalances, setRewoundFieldBalances] = useState([]);
-  const [totalFieldSupplies, setTotalFieldSupplies] = useState([]);
+  const [fieldSuppliesAndReserves, setFieldSuppliesAndReserves] = useState([]);
   const [rewoundFlag, setRewoundFlag] = useState(false);
   const [splash, setSplash] = useState(false);
   const history = useHistory();
@@ -74,23 +74,25 @@ function App() {
         .then(rewound => {
             setRewoundTokenBalances (rewound.userTokenBalances)
             setRewoundFieldBalances (rewound.userFeederFieldBalances)
-            setTotalFieldSupplies(rewound.totalFieldSupplies)
+            setFieldSuppliesAndReserves(rewound.fieldBalances)
             setRewoundFlag(true);
           })
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [userFields, userTokens])
 
-  //ASK: is flag necessary?
   useEffect(() => {
 
     if (rewoundFlag) {
       const updatedUserTokens = helpers.addLockedTokenBalances(rewoundTokenBalances, userTokens);
+      // TODO: get all token prices - add non-Base from base. Set in new cache so can be easily updated
       setUserTokens(updatedUserTokens);
     }
 
-    const updatedUserFields = helpers.addStakedFieldBalances(rewoundFieldBalances, userFields);
-    setUserFields(updatedUserFields);
+    const fieldsWithStakedBalances = helpers.addStakedFieldBalances(rewoundFieldBalances, userFields);
+    const fieldsWithSuppliesAndReserves = helpers.addFieldSuppliesAndReserves(fieldSuppliesAndReserves, fieldsWithStakedBalances);
+    //TODO: get farming reward rates quid Curve?
+    setUserFields(fieldsWithSuppliesAndReserves);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [rewoundFlag])

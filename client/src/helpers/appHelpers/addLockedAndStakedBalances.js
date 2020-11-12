@@ -1,25 +1,3 @@
-function populateFieldTokensFromCache (fieldsWithBalance, trackedTokens) {
-  fieldsWithBalance = fieldsWithBalance.map(field => {
-    
-    field.cropTokens = field.cropTokens.map(token => {
-      return trackedTokens.find(trackedToken => token.tokenId === trackedToken.tokenId)
-    });
-    
-    field.seedTokens = field.seedTokens.map(token => {
-      const { seedIndex } = token;
-      return {
-        ...trackedTokens.find(trackedToken => token.tokenId === trackedToken.tokenId),
-        seedIndex
-      }
-    });
-    
-    return field;
-  })
-
-  return fieldsWithBalance;
-}
-
-
 function addLockedTokenBalances (rewoundTokens, userTokens) {
   //ASK: is this necessary?
   const updatedUserTokens = [...userTokens];
@@ -67,7 +45,6 @@ function addStakedFieldBalances (rewoundFields, userFields) {
 }
 
 export {
-  populateFieldTokensFromCache,
   addLockedTokenBalances,
   addStakedFieldBalances
 }

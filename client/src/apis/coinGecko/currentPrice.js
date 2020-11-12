@@ -11,7 +11,7 @@ function  currentPrice (tokenId) {
 
 function  manyPrices (tokenIds) {
   tokenIds = tokenIds.replace(/,/g, '%2C')
-  return fetchRequest(baseUrl + manyPriceEP + tokenIds+ "&vs_currencies=usd%2Ceur")
+  return fetchRequest(baseUrl + manyPriceEP + tokenIds+ "&vs_currencies=usd%2Ceur%2Cgbp")
 }
 
 export {

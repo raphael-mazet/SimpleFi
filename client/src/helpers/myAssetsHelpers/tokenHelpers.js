@@ -36,6 +36,7 @@ async function addHoldingPrices(combinedHoldings) {
 
   const priceApis = combinedHoldings.map(token => token[3]).join();
   const allPrices = await apis.manyPrices(priceApis);
+  console.log(' ---> allPrices', allPrices);
 
   for (const price in allPrices) {
     const holdingIndex = combinedHoldings.findIndex(el => el[3] === price);

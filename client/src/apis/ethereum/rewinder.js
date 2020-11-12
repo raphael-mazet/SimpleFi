@@ -1,21 +1,18 @@
 import helpers from '../../helpers';
 import { getTotalFieldSupply, getFieldSeedReserves } from './';
-const ethers = require('ethers');
 
 async function rewinder (userFields, trackedTokens, trackedFields) {
 
   const userTokenBalances = [];
   const userFeederFieldBalances = [];
   const totalFieldSupplyCache = []; // { fieldName, totalFieldSupply }
-  const fieldSeedHoldingCache = []; // { fieldName, seedReserves: [{tokenName, fieldReserve}] }
+  const fieldSeedReserveCache = []; // { fieldName, seedReserves: [{tokenName, fieldReserve}] }
 
 
   for (const mainField of userFields) {
     
     const { contract, decimals } = mainField.fieldContracts.balanceContract;
-
     const totalMainFieldSupply = await getTotalFieldSupply(mainField.name, contract, decimals, totalFieldSupplyCache);
-
     const userShareOfMainField = mainField.userBalance / totalMainFieldSupply;
  
     for (const token of mainField.seedTokens) {
@@ -23,18 +20,19 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
     }
   }
 
+  const fieldBalances = helpers.combineFieldSuppliesAndReserves(totalFieldSupplyCache, fieldSeedReserveCache);
+
   return {
     userTokenBalances,
     userFeederFieldBalances,
-    totalFieldSupplies: totalFieldSupplyCache
+    fieldBalances
    };
 
 
   async function tokenBalanceExtractor (token, field, share) {
     const { tokenId, isBase, tokenContract } = token;
 
-    let fieldSeedReserve = await getFieldSeedReserves(field, token, tokenContract, fieldSeedHoldingCache);
-    // console.log(' ---> field.name, fieldSeedReserve', field.name, fieldSeedReserve);
+    let fieldSeedReserve = await getFieldSeedReserves(field, token, tokenContract, fieldSeedReserveCache);
   
     if (isBase) {
       const userTokenBalance = fieldSeedReserve * share;
