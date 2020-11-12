@@ -1,14 +1,13 @@
 import helpers from '../../helpers';
-import { getTotalFieldSupply, getFieldSeedHoldings } from './';
+import { getTotalFieldSupply, getFieldSeedReserves } from './';
 const ethers = require('ethers');
 
 async function rewinder (userFields, trackedTokens, trackedFields) {
 
   const userTokenBalances = [];
   const userFeederFieldBalances = [];
-  // { fieldName, totalFieldSupply }
-  const totalFieldSupplyCache = [];
-  const fieldSeedHoldingCache = [];
+  const totalFieldSupplyCache = []; // { fieldName, totalFieldSupply }
+  const fieldSeedHoldingCache = []; // { fieldName, seedReserves: [{tokenName, fieldReserve}] }
 
 
   for (const mainField of userFields) {
@@ -16,7 +15,6 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
     const { contract, decimals } = mainField.fieldContracts.balanceContract;
 
     const totalMainFieldSupply = await getTotalFieldSupply(mainField.name, contract, decimals, totalFieldSupplyCache);
-    // console.log(' ---> totalMainFieldSupply', totalMainFieldSupply);
 
     const userShareOfMainField = mainField.userBalance / totalMainFieldSupply;
  
@@ -35,11 +33,11 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
   async function tokenBalanceExtractor (token, field, share) {
     const { tokenId, isBase, tokenContract } = token;
 
-    let fieldSeedHolding = await getFieldSeedHoldings(field, token, tokenContract);
-    console.log(' ---> field.name, fieldSeedHolding', field.name, fieldSeedHolding);
+    let fieldSeedReserve = await getFieldSeedReserves(field, token, tokenContract, fieldSeedHoldingCache);
+    // console.log(' ---> field.name, fieldSeedReserve', field.name, fieldSeedReserve);
   
     if (isBase) {
-      const userTokenBalance = fieldSeedHolding * share;
+      const userTokenBalance = fieldSeedReserve * share;
       userTokenBalances.push({token, userTokenBalance, field});
   
     } else {
@@ -50,7 +48,7 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
       
       const { contract, decimals } = feederField.fieldContracts.balanceContract;
       const totalFeederSupply = await getTotalFieldSupply(feederField.name, contract, decimals, totalFieldSupplyCache);
-      const userFieldBalance = fieldSeedHolding * share;
+      const userFieldBalance = fieldSeedReserve * share;
       const userFeederShare = userFieldBalance / totalFeederSupply;
       
       //rewoundFieldBalances will contain any field with a receipt token that was fed into a field the user has staked in

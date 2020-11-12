@@ -1,7 +1,7 @@
 import {getUserBalance, getAllUserBalances} from './getUserBalances';
 import createBalanceContracts from './balanceContractCreator';
 import getTotalFieldSupply from './getTotalFieldSupply'
-import getFieldSeedHoldings from './getFieldSeedHoldings';
+import getFieldSeedReserves from './getFieldSeedReserves';
 import rewinder from './rewinder';
 
 export {
@@ -9,6 +9,6 @@ export {
   getUserBalance,
   getAllUserBalances,
   getTotalFieldSupply,
-  getFieldSeedHoldings,
+  getFieldSeedReserves,
   rewinder
 }
