@@ -4,12 +4,15 @@ import SummaryTable from '../../components/SummaryTable/SummaryTable';
 import helpers from '../../helpers/index';
 import { holdingHeaders, holdingCurrencyCells, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
 
-export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
+export default function MyAssets ({userTokens, userFields, setSplash}) {
   const [holdingValues, setHoldingValues] = useState([]);
   const [farmingValues, setFarmingValues] = useState([]);
   const [earningValues, setEarningValues] = useState([]);
 
-  useEffect(() => setSplash(true), []);
+  useEffect(() => {
+    setSplash(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // combine available & locked token balances and add prices from coinGecko
   useEffect(() => {

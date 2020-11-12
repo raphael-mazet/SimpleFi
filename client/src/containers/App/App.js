@@ -63,6 +63,7 @@ function App() {
           setUserFields(fieldsWithBalance)
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [balanceContractsLoaded, userAccount])
 
   // Add all underlying token and field balances
@@ -75,6 +76,7 @@ function App() {
             setRewoundFlag(true);
           })
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [userFields, userTokens])
 
   //ASK: is flag necessary?
@@ -88,6 +90,7 @@ function App() {
     const updatedUserFields = helpers.addStakedFieldBalances(rewoundFieldBalances, userFields);
     setUserFields(updatedUserFields);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [rewoundFlag])
 
   return (
@@ -96,7 +99,7 @@ function App() {
       <Switch>
         <Route path='/' exact render={() => <Welcome connect={connectWallet} setSplash={setSplash}/>}/>
         <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/>
-        //TODO: add new holding details routes
+        {/*TODO: add new holding details routes*/}
         {/* <Route path='/dashboard/:tokenName' render={() => <HoldingDetails userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
         {/* <Route path='/chart' exact render={() => <HoldingChart userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
       </Switch>

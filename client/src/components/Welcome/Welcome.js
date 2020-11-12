@@ -5,7 +5,10 @@ import Footer from '../Footer/Footer';
 
 export default function Welcome ({connect, setSplash}) {
 
-  useEffect(() => setSplash(false), [])
+  useEffect(() => {
+    setSplash(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps  
+  }, [])
 
   return (
     <>

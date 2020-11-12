@@ -17,7 +17,6 @@ async function getUserBalance (account, targetContract) {
     const { contract, decimals } = targetContract.balanceContract || targetContract;
     let balance = await contract.balanceOf(account);
     balance = Number(ethers.utils.formatUnits(balance, decimals));
-    let supply = await contract.totalSupply();
     
     return balance;
   }
