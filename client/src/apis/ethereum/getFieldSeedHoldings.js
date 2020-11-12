@@ -4,7 +4,7 @@ import helpers from '../../helpers'
 
 async function getFieldSeedHoldings (field, token, tokenContract) {
 
-  //NOTE: underlying currently denotes both the address that holds seed reserves, 
+  //NOTE: 'underlying' currently denotes both the address that holds seed reserves, 
   //NOTE: and the address whose ABI contains a balance reserve query function
   const reserveAddress = helpers.findFieldAddressType(field, 'underlying');
   const { type, address, abi } = reserveAddress;

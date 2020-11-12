@@ -9,13 +9,10 @@ export default function MyAssets ({userTokens, userFields, setSplash}) {
   const [farmingValues, setFarmingValues] = useState([]);
   const [earningValues, setEarningValues] = useState([]);
 
-  useEffect(() => {
-    setSplash(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   // combine available & locked token balances and add prices from coinGecko
   useEffect(() => {
+
+    // if setSplash
     const combinedHoldings = helpers.combineTokenHoldings(userTokens);
 
     helpers.addHoldingPrices(combinedHoldings)

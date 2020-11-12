@@ -1,18 +1,22 @@
 import helpers from '../../helpers';
-import { getFieldSeedHoldings } from './';
+import { getTotalFieldSupply, getFieldSeedHoldings } from './';
 const ethers = require('ethers');
 
 async function rewinder (userFields, trackedTokens, trackedFields) {
 
   const userTokenBalances = [];
   const userFeederFieldBalances = [];
+  // { fieldName, totalFieldSupply }
+  const totalFieldSupplyCache = [];
+  const fieldSeedHoldingCache = [];
+
 
   for (const mainField of userFields) {
     
     const { contract, decimals } = mainField.fieldContracts.balanceContract;
 
-    let totalMainFieldSupply = await contract.totalSupply();
-    totalMainFieldSupply = Number(ethers.utils.formatUnits(totalMainFieldSupply, decimals));
+    const totalMainFieldSupply = await getTotalFieldSupply(mainField.name, contract, decimals, totalFieldSupplyCache);
+    // console.log(' ---> totalMainFieldSupply', totalMainFieldSupply);
 
     const userShareOfMainField = mainField.userBalance / totalMainFieldSupply;
  
@@ -20,13 +24,19 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
       await tokenBalanceExtractor(token, mainField, userShareOfMainField)
     }
   }
-  return { userTokenBalances, userFeederFieldBalances };
+
+  return {
+    userTokenBalances,
+    userFeederFieldBalances,
+    totalFieldSupplies: totalFieldSupplyCache
+   };
 
 
   async function tokenBalanceExtractor (token, field, share) {
     const { tokenId, isBase, tokenContract } = token;
 
     let fieldSeedHolding = await getFieldSeedHoldings(field, token, tokenContract);
+    console.log(' ---> field.name, fieldSeedHolding', field.name, fieldSeedHolding);
   
     if (isBase) {
       const userTokenBalance = fieldSeedHolding * share;
@@ -39,10 +49,7 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
       [feederField] = helpers.populateFieldTokensFromCache([feederField], trackedTokens);
       
       const { contract, decimals } = feederField.fieldContracts.balanceContract;
-
-      let totalFeederSupply = await contract.totalSupply();
-      totalFeederSupply = Number(ethers.utils.formatUnits(totalFeederSupply, decimals));
-      
+      const totalFeederSupply = await getTotalFieldSupply(feederField.name, contract, decimals, totalFieldSupplyCache);
       const userFieldBalance = fieldSeedHolding * share;
       const userFeederShare = userFieldBalance / totalFeederSupply;
       

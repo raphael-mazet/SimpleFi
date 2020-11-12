@@ -1,12 +1,14 @@
 import {getUserBalance, getAllUserBalances} from './getUserBalances';
 import createBalanceContracts from './balanceContractCreator';
+import getTotalFieldSupply from './getTotalFieldSupply'
+import getFieldSeedHoldings from './getFieldSeedHoldings';
 import rewinder from './rewinder';
-import getFieldSeedHoldings from './getFieldSeedHoldings'
 
 export {
   createBalanceContracts,
   getUserBalance,
   getAllUserBalances,
+  getTotalFieldSupply,
   getFieldSeedHoldings,
   rewinder
 }

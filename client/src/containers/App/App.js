@@ -17,6 +17,7 @@ function App() {
   const [userFields, setUserFields] = useState([]);
   const [rewoundTokenBalances, setRewoundTokenBalances] = useState([]);
   const [rewoundFieldBalances, setRewoundFieldBalances] = useState([]);
+  const [totalFieldSupplies, setTotalFieldSupplies] = useState([]);
   const [rewoundFlag, setRewoundFlag] = useState(false);
   const [splash, setSplash] = useState(false);
   const history = useHistory();
@@ -70,9 +71,10 @@ function App() {
   useEffect(() => {
     if (userFields.length && userTokens.length && !rewoundFlag) {
         apis.rewinder(userFields, trackedTokens, trackedFields)
-          .then(rewound => {
-            setRewoundTokenBalances (prev => [...prev, ...rewound.userTokenBalances])
-            setRewoundFieldBalances (prev => [...prev, ...rewound.userFeederFieldBalances])
+        .then(rewound => {
+            setRewoundTokenBalances (rewound.userTokenBalances)
+            setRewoundFieldBalances (rewound.userFeederFieldBalances)
+            setTotalFieldSupplies(rewound.totalFieldSupplies)
             setRewoundFlag(true);
           })
       }
