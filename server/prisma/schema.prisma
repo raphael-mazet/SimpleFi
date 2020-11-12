@@ -17,7 +17,7 @@ model Farmer {
 
 model Field {
   fieldId                          String            @id @map("field_id")
-  name                             String?
+  name                             String?           @unique
   protocolId                       String?           @map("protocol_id")
   yieldType                        Json?             @map("yield_type")
   instructions                     Json?
@@ -48,7 +48,7 @@ model Protocol {
 model Token {
   tokenId                                       String             @id @map("token_id")
   protocolId                                    String?            @map("protocol_id")
-  name                                          String?
+  name                                          String?            @unique
   priceApi                                      String?            @map("price_api")
   address                                       String?
   isBase                                        Boolean            @map("is_base")
