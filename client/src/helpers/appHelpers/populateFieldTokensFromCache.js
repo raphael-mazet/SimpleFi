@@ -19,4 +19,4 @@ function populateFieldTokensFromCache (fieldsWithBalance, trackedTokens) {
   return fieldsWithBalance;
 }
 
-export default populateFieldTokensFromCache
+export default populateFieldTokensFromCache;

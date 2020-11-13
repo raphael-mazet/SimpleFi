@@ -1,6 +1,10 @@
-import { addLockedTokenBalances, addStakedFieldBalances } from './appHelpers/addLockedAndStakedBalances';
-import addFieldSuppliesAndReserves from './appHelpers/addFieldSuppliesAndReserves';
-import populateFieldTokensFromCache from './appHelpers/populateFieldTokensFromCache';
+import {
+  populateFieldTokensFromCache,
+  addLockedTokenBalances,
+  addFieldSuppliesAndReserves,
+  addStakedFieldBalances,
+  getTokenPrices
+} from './appHelpers'
 import { combineTokenHoldings, addHoldingPrices } from './myAssetsHelpers/tokenHelpers';
 import { fieldSeparator } from './myAssetsHelpers/fieldHelpers';
 import findFieldAddressType from './ethHelpers/findFieldAddressType';
@@ -11,6 +15,7 @@ export default {
   addLockedTokenBalances,
   addFieldSuppliesAndReserves,
   addStakedFieldBalances,
+  getTokenPrices,
   combineTokenHoldings,
   addHoldingPrices,
   fieldSeparator,

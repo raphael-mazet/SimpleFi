@@ -1,4 +1,5 @@
 import { currentPrice, manyPrices } from './coinGecko/currentPrice';
+import supportedCurrencies from './coinGecko/supportedCurrencies';
 import { getTokens, getUserFieldTokens } from './simpleFiDb/tokens';
 import { getFields } from './simpleFiDb/fields';
 import {
@@ -11,6 +12,7 @@ import {
 export default {
   currentPrice,
   manyPrices,
+  supportedCurrencies,
   getTokens,
   getUserFieldTokens,
   getFields,

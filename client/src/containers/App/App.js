@@ -18,6 +18,7 @@ function App() {
   const [rewoundTokenBalances, setRewoundTokenBalances] = useState([]);
   const [rewoundFieldBalances, setRewoundFieldBalances] = useState([]);
   const [fieldSuppliesAndReserves, setFieldSuppliesAndReserves] = useState([]);
+  const [userTokenPrices, setUserTokenPrices] = useState([]);
   const [rewoundFlag, setRewoundFlag] = useState(false);
   const [splash, setSplash] = useState(false);
   const history = useHistory();
@@ -85,15 +86,16 @@ function App() {
 
     if (rewoundFlag) {
       const updatedUserTokens = helpers.addLockedTokenBalances(rewoundTokenBalances, userTokens);
-      // TODO: get all token prices - add non-Base from base. Set in new cache so can be easily updated
       setUserTokens(updatedUserTokens);
+      
+      const fieldsWithStakedBalances = helpers.addStakedFieldBalances(rewoundFieldBalances, userFields);
+      const fieldsWithSuppliesAndReserves = helpers.addFieldSuppliesAndReserves(fieldSuppliesAndReserves, fieldsWithStakedBalances);
+      //TODO: get farming reward rates quid Curve?
+      setUserFields(fieldsWithSuppliesAndReserves);
+      
+      helpers.getTokenPrices(updatedUserTokens, fieldsWithSuppliesAndReserves)
+        .then(tokenPrices => setUserTokenPrices(tokenPrices))
     }
-
-    const fieldsWithStakedBalances = helpers.addStakedFieldBalances(rewoundFieldBalances, userFields);
-    const fieldsWithSuppliesAndReserves = helpers.addFieldSuppliesAndReserves(fieldSuppliesAndReserves, fieldsWithStakedBalances);
-    //TODO: get farming reward rates quid Curve?
-    setUserFields(fieldsWithSuppliesAndReserves);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [rewoundFlag])
 
@@ -102,7 +104,7 @@ function App() {
       <Nav connect={connectWallet} splash={splash}/>
       <Switch>
         <Route path='/' exact render={() => <Welcome connect={connectWallet} setSplash={setSplash}/>}/>
-        <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/>
+        <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} userTokenPrices={userTokenPrices} setSplash={setSplash}/>}/>
         {/*TODO: add new holding details routes*/}
         {/* <Route path='/dashboard/:tokenName' render={() => <HoldingDetails userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
         {/* <Route path='/chart' exact render={() => <HoldingChart userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
