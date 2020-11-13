@@ -18,7 +18,7 @@ function App() {
   const [rewoundTokenBalances, setRewoundTokenBalances] = useState([]);
   const [rewoundFieldBalances, setRewoundFieldBalances] = useState([]);
   const [fieldSuppliesAndReserves, setFieldSuppliesAndReserves] = useState([]);
-  const [userTokenPrices, setUserTokenPrices] = useState([]);
+  const [userTokenPrices, setUserTokenPrices] = useState({});
   const [rewoundFlag, setRewoundFlag] = useState(false);
   const [splash, setSplash] = useState(false);
   const history = useHistory();

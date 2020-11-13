@@ -4,7 +4,7 @@ import SummaryTable from '../../components/SummaryTable/SummaryTable';
 import helpers from '../../helpers/index';
 import { holdingHeaders, holdingCurrencyCells, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
 
-export default function MyAssets ({userTokens, userFields, setSplash}) {
+export default function MyAssets ({userTokens, userFields, userTokenPrices}) {
   const [holdingValues, setHoldingValues] = useState([]);
   const [farmingValues, setFarmingValues] = useState([]);
   const [earningValues, setEarningValues] = useState([]);
@@ -14,11 +14,10 @@ export default function MyAssets ({userTokens, userFields, setSplash}) {
 
     // if setSplash
     const combinedHoldings = helpers.combineTokenHoldings(userTokens);
+    const holdingsWithPrices = helpers.addHoldingPrices(combinedHoldings, userTokenPrices);
+    setHoldingValues(holdingsWithPrices);
 
-    helpers.addHoldingPrices(combinedHoldings)
-      .then(holdingsWithPrices => setHoldingValues(holdingsWithPrices))
-
-  }, [userTokens])
+  }, [userTokenPrices])
 
   // separate farming and earning fields
   useEffect(() => {
