@@ -32,6 +32,7 @@ function App() {
       else if (newAccount[0] !== userAccount[0]) {
         const resetUserTokens = setUserTokens([]);
         const resetUserFields = setUserFields([]);
+        //ASK: not sure this does anything
         Promise.all([resetUserTokens, resetUserFields])
           .then(resets => {setUserAccount(newAccount);})
       }
@@ -55,16 +56,20 @@ function App() {
   // Create first set of userTokens with token balances
   useEffect(() => {
     if (userAccount.length && balanceContractsLoaded) {
+  
+      const getTokenBalances = apis.getAllUserBalances(userAccount[0], trackedTokens);
+      const getFieldBalances = apis.getAllUserBalances(userAccount[0], trackedFields);
 
-      apis.getAllUserBalances(userAccount[0], trackedTokens)
-        .then(tokensWithBalance => setUserTokens(tokensWithBalance));
+      Promise.all([getTokenBalances, getFieldBalances])
+        .then(([tokensWithBalance, fieldsWithBalance]) => {
+          setUserTokens(tokensWithBalance);
 
-      apis.getAllUserBalances(userAccount[0], trackedFields)
-        .then(fieldsWithBalance => {
           fieldsWithBalance = helpers.populateFieldTokensFromCache(fieldsWithBalance, trackedTokens);
-          setUserFields(fieldsWithBalance)
-        });
+          setUserFields(fieldsWithBalance);
+          if (!fieldsWithBalance.length) setRewoundFlag(true);
+        })
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [balanceContractsLoaded, userAccount])
 
@@ -80,7 +85,7 @@ function App() {
           })
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps  
-  }, [userFields, userTokens])
+  }, [userFields])
 
   useEffect(() => {
 
@@ -93,8 +98,12 @@ function App() {
       //TODO: get farming reward rates quid Curve?
       setUserFields(fieldsWithSuppliesAndReserves);
       
-      helpers.getTokenPrices(updatedUserTokens, fieldsWithSuppliesAndReserves)
-        .then(tokenPrices => setUserTokenPrices(tokenPrices))
+      helpers.getTokenPrices(updatedUserTokens, fieldsWithSuppliesAndReserves, trackedTokens)
+        .then(tokenPrices => {
+          setUserTokenPrices(tokenPrices)
+          helpers.getAPYs(fieldsWithSuppliesAndReserves, updatedUserTokens, tokenPrices)
+            .then(res => console.log(res))
+        })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [rewoundFlag])

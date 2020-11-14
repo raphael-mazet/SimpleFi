@@ -12,6 +12,7 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices}) {
   // combine available & locked token balances and add prices from coinGecko
   useEffect(() => {
 
+    //FIXME: will not trigger if user has no fields (token prices set at rewound flag)
     // if setSplash
     const combinedHoldings = helpers.combineTokenHoldings(userTokens);
     const holdingsWithPrices = helpers.addHoldingPrices(combinedHoldings, userTokenPrices);
