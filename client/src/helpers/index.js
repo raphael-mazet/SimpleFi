@@ -3,7 +3,8 @@ import {
   addLockedTokenBalances,
   addFieldSuppliesAndReserves,
   addStakedFieldBalances,
-  getTokenPrices
+  getTokenPrices,
+  getAPYs
 } from './appHelpers'
 import { combineTokenHoldings, addHoldingPrices } from './myAssetsHelpers/tokenHelpers';
 import { fieldSeparator } from './myAssetsHelpers/fieldHelpers';
@@ -16,6 +17,7 @@ export default {
   addFieldSuppliesAndReserves,
   addStakedFieldBalances,
   getTokenPrices,
+  getAPYs,
   combineTokenHoldings,
   addHoldingPrices,
   fieldSeparator,

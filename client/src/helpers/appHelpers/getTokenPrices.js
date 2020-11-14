@@ -1,6 +1,6 @@
 import apis from '../../apis/index';
 
-async function getTokenPrices(userTokens, userFields) {
+async function getTokenPrices(userTokens, userFields, trackedTokens) {
 
   const apiList = [];
   const nonBaseTokens = [];
@@ -16,11 +16,21 @@ async function getTokenPrices(userTokens, userFields) {
     }
   })
 
+  userFields.forEach(userField => {
+    if (userField.cropTokens.length) {
+      userField.cropTokens.forEach(token => {
+        if (!apiList.includes(token.priceApi)) apiList.push(token.priceApi)
+      })
+    }
+  })
+  console.log(' ---> apiList', apiList);
+
   const baseTokenPrices = await apis.manyPrices(apiList.join());
+  console.log(' ---> baseTokenPrices', baseTokenPrices);
 
   // change api response to token name, not priceApi
   const revertToName = Object.entries(baseTokenPrices).map(token => {
-    const targetToken = userTokens.find(userToken => userToken.priceApi === token[0]);
+    const targetToken = trackedTokens.find(trackedToken => trackedToken.priceApi === token[0]);
     token[0] = targetToken.name;
     return token;
   })
