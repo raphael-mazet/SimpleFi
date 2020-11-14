@@ -133,8 +133,8 @@ model contractAddress {
   addressId           String            @id @map("address_id")
   fieldId             String            @map("field_id")
   contractInterfaceId String            @map("contract_interface")
-  addressTypes        address_type[]    @map("address_type")
   address             String
+  addressTypes        address_type[]    @map("address_type")
   contractInterface   ContractInterface @relation("contract_addressTocontract_interface", fields: [contractInterfaceId], references: [ciId])
   field               Field             @relation("contract_addressTofield", fields: [fieldId], references: [fieldId])
 
@@ -162,4 +162,6 @@ enum address_type {
   underlying
   earning
   deposit
+  rewardRate
+  rewardWeight
 }
