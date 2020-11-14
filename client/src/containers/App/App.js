@@ -95,7 +95,6 @@ function App() {
       
       const fieldsWithStakedBalances = helpers.addStakedFieldBalances(rewoundFieldBalances, userFields);
       const fieldsWithSuppliesAndReserves = helpers.addFieldSuppliesAndReserves(fieldSuppliesAndReserves, fieldsWithStakedBalances);
-      //TODO: get farming reward rates quid Curve?
       setUserFields(fieldsWithSuppliesAndReserves);
       
       helpers.getTokenPrices(updatedUserTokens, fieldsWithSuppliesAndReserves, trackedTokens)
