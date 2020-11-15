@@ -3,6 +3,8 @@ import createBalanceContracts from './balanceContractCreator';
 import getTotalFieldSupply from './getTotalFieldSupply'
 import getFieldSeedReserves from './getFieldSeedReserves';
 import rewinder from './rewinder';
+import getSnxTypeAPY from './getAPYs/snxTypeAPY';
+import getCurveTypeAPY from './getAPYs/curveTypeAPY'
 
 export {
   createBalanceContracts,
@@ -10,5 +12,7 @@ export {
   getAllUserBalances,
   getTotalFieldSupply,
   getFieldSeedReserves,
+  getSnxTypeAPY,
+  getCurveTypeAPY,
   rewinder
 }

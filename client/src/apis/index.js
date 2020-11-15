@@ -6,7 +6,9 @@ import {
   getUserBalance,
   getAllUserBalances,
   createBalanceContracts,
-  rewinder
+  rewinder,
+  getSnxTypeAPY,
+  getCurveTypeAPY
 } from './ethereum/index';
 
 export default {
@@ -19,5 +21,7 @@ export default {
   createBalanceContracts,
   getUserBalance,
   getAllUserBalances,
-  rewinder
+  rewinder,
+  getSnxTypeAPY,
+  getCurveTypeAPY
 }

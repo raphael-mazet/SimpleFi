@@ -23,10 +23,8 @@ async function getTokenPrices(userTokens, userFields, trackedTokens) {
       })
     }
   })
-  console.log(' ---> apiList', apiList);
 
   const baseTokenPrices = await apis.manyPrices(apiList.join());
-  console.log(' ---> baseTokenPrices', baseTokenPrices);
 
   // change api response to token name, not priceApi
   const revertToName = Object.entries(baseTokenPrices).map(token => {

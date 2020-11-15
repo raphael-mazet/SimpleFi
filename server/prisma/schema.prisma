@@ -119,7 +119,7 @@ model FieldSeed {
 
 model ContractInterface {
   ciId            String            @id @map("ci_id")
-  name            String
+  name            String            @unique
   abi             Json
   isErc           Boolean?          @map("is_erc")
   decimals        Int?
