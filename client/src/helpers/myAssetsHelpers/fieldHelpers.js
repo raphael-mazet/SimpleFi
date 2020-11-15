@@ -27,6 +27,7 @@ function combineFieldBalances(field){
 function fieldSeparator (userFields){
   const farmingFields = [];
   const earningFields = [];
+  const formatter = new Intl.NumberFormat("en-US", {style: 'percent'});
   
   userFields.forEach(field => {
 
@@ -43,7 +44,10 @@ function fieldSeparator (userFields){
       let farming = '';
       cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
       farming = farming.slice(0, -2);
-      farmingFields.push([name, userBalance.toFixed(2), underlying, farming])
+
+      const APY = formatter.format(field.farmingAPY)
+
+      farmingFields.push([name, userBalance.toFixed(2), farming, APY])
     }
 
     if (isEarning) {

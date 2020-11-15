@@ -95,13 +95,12 @@ function App() {
       
       const fieldsWithStakedBalances = helpers.addStakedFieldBalances(rewoundFieldBalances, userFields);
       const fieldsWithSuppliesAndReserves = helpers.addFieldSuppliesAndReserves(fieldSuppliesAndReserves, fieldsWithStakedBalances);
-      setUserFields(fieldsWithSuppliesAndReserves);
       
       helpers.getTokenPrices(updatedUserTokens, fieldsWithSuppliesAndReserves, trackedTokens)
         .then(tokenPrices => {
-          setUserTokenPrices(tokenPrices)
+          setUserTokenPrices(tokenPrices);
           helpers.getAPYs(fieldsWithSuppliesAndReserves, updatedUserTokens, tokenPrices)
-            .then(res => console.log(res))
+            .then(fieldsWithAPYs => setUserFields(fieldsWithAPYs))
         })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps  

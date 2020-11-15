@@ -1,8 +1,8 @@
 const farmingHeaders = [
   'Name',
   'Balance',
-  'Underlying',
-  'Farming'
+  'Farming',
+  'APY'
 ];
 
 export default farmingHeaders;
