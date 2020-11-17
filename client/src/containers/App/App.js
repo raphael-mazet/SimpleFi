@@ -41,6 +41,8 @@ function App() {
     }
   }
 
+
+
   //Get tracked tokens and fields from SimpleFi db and attach contracts
   useEffect(() => {
     const getTokens = apis.getTokens();
@@ -51,6 +53,7 @@ function App() {
         setTrackedFields(apis.createBalanceContracts(fields));
         setBalanceContractsLoaded(true);
     })
+
   }, [])
 
   // Create first set of userTokens with token balances
