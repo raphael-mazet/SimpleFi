@@ -1,6 +1,6 @@
 import apollo from '../../../../apollo';
 import { gql } from '@apollo/client';
-import getCurveEarningAPY from './curveEarningAPYs';
+import getCurveEarningAPY from './curveEarningAPY/getCurveEarningAPY';
  
  async function getEarningAPYs (field, userTokens, userTokenPrices) {
 

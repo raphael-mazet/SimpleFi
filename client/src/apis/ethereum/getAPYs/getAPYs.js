@@ -1,5 +1,4 @@
-import apis from '../../../apis';
-import getFarmingAPYs from './getFarmingAPYs';
+import getFarmingAPYs from './farmingAPYs/getFarmingAPYs';
 import getEarningAPYs from './earningAPYs/getEarningAPYs';
 
 async function getAPYs (userFields, userTokens, userTokenPrices) {
@@ -7,6 +6,7 @@ async function getAPYs (userFields, userTokens, userTokenPrices) {
   const fieldsWithAPYs = [...userFields];
 
   for (let field of fieldsWithAPYs) {
+    console.log(' ---> field.name', field.name);
     
     if (field.cropTokens.length) {
       field.farmingAPY = await getFarmingAPYs(field, userTokens, userTokenPrices);

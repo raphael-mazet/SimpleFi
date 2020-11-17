@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import provider from '../../ethProvider';
 
-async function getSnxTypeAPY(rewardRateAddress, field, userTokenPrices) {
+async function getSnxFarmingAPY(rewardRateAddress, field, userTokenPrices) {
   const { address, contractInterface } = rewardRateAddress;
   const contract = new ethers.Contract(address, contractInterface.abi, provider);
        
@@ -22,4 +22,4 @@ async function getSnxTypeAPY(rewardRateAddress, field, userTokenPrices) {
 
 }
 
-export default getSnxTypeAPY;
+export default getSnxFarmingAPY;

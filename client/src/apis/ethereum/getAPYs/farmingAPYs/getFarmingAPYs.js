@@ -1,18 +1,23 @@
-import apis from '../../../apis';
+import getSnxFarmingAPY from './snxFarmingAPY';
+import getCurveFarmingAPY from './curveFarmingAPY';
 
 //formula for APY: (yearlyReward * cropPrice) / (totalSupply * seedPrice)
 async function getFarmingAPYs (field, userTokens, userTokenPrices) {
   const rewardRateAddress = field.contractAddresses.find(address => address.addressTypes.includes('rewardRate'));
   let APY;
 
+  console.log(' ---> rewardRateAddress', rewardRateAddress);
+  console.log(' ---> rewardRateAddress.contractInterface.name', rewardRateAddress.contractInterface.name);
+
   switch (rewardRateAddress.contractInterface.name) {
+
     case "synthetix susd farm":
     case "mstable farm":
-      APY = await apis.getSnxTypeAPY(rewardRateAddress, field, userTokenPrices);
+      APY = await getSnxFarmingAPY(rewardRateAddress, field, userTokenPrices);
       break;
 
     case 'curve pool gauge':
-      APY = await apis.getCurveTypeAPY(rewardRateAddress, field, userTokens, userTokenPrices);
+      APY = await getCurveFarmingAPY(rewardRateAddress, field, userTokens, userTokenPrices);
       break;
   }
   

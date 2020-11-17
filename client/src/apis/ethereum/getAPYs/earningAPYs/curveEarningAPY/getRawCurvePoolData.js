@@ -1,15 +1,14 @@
-import curveRawStatsEPs from '../../../../data/fieldData/curveRawStatsEPs';
-import fetchRequest from '../../../fetchRequest';
+import curveRawStatsEPs from './curveRawStatsEPs';
+import fetchRequest from '../../../../fetchRequest';
 
 const curveMainEP = 'https://www.curve.fi/raw-stats/';
 const indivPoolConcat = '-1440m.json';
 const apyEP = 'apys.json';
 const apyCache = [];
 
-async function getOneDailyCurvePoolRawData(name) {
+async function getOneCurvePoolRawData(name) {
   const path = curveRawStatsEPs[name] + indivPoolConcat;
   const allDaysPoolData = await fetchRequest(curveMainEP + path);
-  console.log(' ---> allDaysPoolData', name, allDaysPoolData);
   return allDaysPoolData;
 }
 
@@ -18,6 +17,6 @@ async function getAllCurvePoolRawAPY() {
 }
 
 export {
-  getOneDailyCurvePoolRawData,
+  getOneCurvePoolRawData,
   getAllCurvePoolRawAPY
 } 

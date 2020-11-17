@@ -1,18 +1,19 @@
-import apis from '../../apis/index';
+import gecko from './currentPrice';
+import supportedCurrencies from './supportedCurrencies';
 
 async function getTokenPrices(userTokens, userFields, trackedTokens) {
 
   const apiList = [];
   const nonBaseTokens = [];
   const currencyModel = {};
-  apis.supportedCurrencies.forEach(currency => currencyModel[currency] = 0);
+  supportedCurrencies.forEach(currency => currencyModel[currency] = 0);
 
   userTokens.forEach(token => {
     const { name, tokenId, isBase, priceApi } = token;
     if (priceApi) apiList.push(priceApi);
     else {
       if (!isBase) nonBaseTokens.push({name, tokenId});
-      else throw new Error(`token ${name} is neither base nor has an api`);
+      else throw new Error(`token ${name} is neither base nor has an price api`);
     }
   })
 
@@ -24,7 +25,7 @@ async function getTokenPrices(userTokens, userFields, trackedTokens) {
     }
   })
 
-  const baseTokenPrices = await apis.manyPrices(apiList.join());
+  const baseTokenPrices = await gecko.manyPrices(apiList.join());
 
   // change api response to token name, not priceApi
   const revertToName = Object.entries(baseTokenPrices).map(token => {

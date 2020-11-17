@@ -42,7 +42,6 @@ function App() {
   }
 
 
-
   //Get tracked tokens and fields from SimpleFi db and attach contracts
   useEffect(() => {
     const getTokens = apis.getTokens();
@@ -99,10 +98,10 @@ function App() {
       const fieldsWithStakedBalances = helpers.addStakedFieldBalances(rewoundFieldBalances, userFields);
       const fieldsWithSuppliesAndReserves = helpers.addFieldSuppliesAndReserves(fieldSuppliesAndReserves, fieldsWithStakedBalances);
       
-      helpers.getTokenPrices(updatedUserTokens, fieldsWithSuppliesAndReserves, trackedTokens)
+      apis.getTokenPrices(updatedUserTokens, fieldsWithSuppliesAndReserves, trackedTokens)
         .then(tokenPrices => {
           setUserTokenPrices(tokenPrices);
-          helpers.getAPYs(fieldsWithSuppliesAndReserves, updatedUserTokens, tokenPrices)
+          apis.getAPYs(fieldsWithSuppliesAndReserves, updatedUserTokens, tokenPrices)
             .then(fieldsWithAPYs => setUserFields(fieldsWithAPYs))
         })
     }

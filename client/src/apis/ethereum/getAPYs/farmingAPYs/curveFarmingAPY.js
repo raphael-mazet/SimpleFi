@@ -1,10 +1,14 @@
 import { ethers } from 'ethers';
 import provider from '../../ethProvider';
 
-async function getCurveTypeAPY(rewardRateAddress, field, userTokens, userTokenPrices) {
+async function getCurveFarmingAPY(rewardRateAddress, field, userTokens, userTokenPrices) {
+
+  console.log(' ---> rewardRateAddress', rewardRateAddress);
+  console.log(' ---> field in getCurveFarmingAPY', field);
 
   const rewardWeightAddress = field.contractAddresses.find(address => address.addressTypes.includes('rewardWeight'));
   
+  console.log(' ---> rewardWeightAddress', rewardWeightAddress);
   const rewardRateContract = new ethers.Contract(rewardRateAddress.address, rewardRateAddress.contractInterface.abi, provider);
   const rewardWeightContract = new ethers.Contract(rewardWeightAddress.address, rewardWeightAddress.contractInterface.abi, provider);
   
@@ -34,5 +38,5 @@ async function getCurveTypeAPY(rewardRateAddress, field, userTokens, userTokenPr
   return (annualPayout * cropPrice) / (totalSupply * seedPrice);
 }
 
-  export default getCurveTypeAPY;
+  export default getCurveFarmingAPY;
 
