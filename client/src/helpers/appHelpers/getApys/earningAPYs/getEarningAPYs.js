@@ -1,5 +1,6 @@
-import apollo from '../../../apollo';
-import { gql } from '@apollo/client'; 
+import apollo from '../../../../apollo';
+import { gql } from '@apollo/client';
+import getCurveEarningAPY from './curveEarningAPYs';
  
  async function getEarningAPYs (field, userTokens, userTokenPrices) {
 
@@ -40,6 +41,11 @@ import { gql } from '@apollo/client';
 
     APY = trailingDailyVolume * 0.003 * 365 / totalValue;
     break;
+
+    case "curve swap 4 (sUSD)":
+    case "curve swap 3 (sBTC)":
+      APY = await getCurveEarningAPY(field, userTokens, userTokenPrices);
+      break;
 
     default:
 

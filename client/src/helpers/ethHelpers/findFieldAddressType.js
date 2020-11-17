@@ -1,4 +1,4 @@
-import fieldInterfaceTypes from '../../data/fieldTypes';
+import fieldInterfaceTypes from '../../data/fieldData/fieldTypes';
 
 function findFieldAddressType (field, dataType) {
 

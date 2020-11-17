@@ -1,6 +1,6 @@
 import apis from '../../../apis';
 import getFarmingAPYs from './getFarmingAPYs';
-import getEarningAPYs from './getEarningAPYs';
+import getEarningAPYs from './earningAPYs/getEarningAPYs';
 
 async function getAPYs (userFields, userTokens, userTokenPrices) {
 

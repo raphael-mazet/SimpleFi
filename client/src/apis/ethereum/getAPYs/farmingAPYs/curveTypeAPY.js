@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import provider from '../ethProvider';
+import provider from '../../ethProvider';
 
 async function getCurveTypeAPY(rewardRateAddress, field, userTokens, userTokenPrices) {
 
