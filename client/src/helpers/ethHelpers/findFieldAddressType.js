@@ -1,9 +1,9 @@
-import fieldInterfaceTypes from '../data/fieldTypes';
+import fieldInterfaceTypes from '../../data/fieldData/fieldTypes';
 
 function findFieldAddressType (field, dataType) {
 
   const relevantAddress = field.contractAddresses.find(address => address.addressTypes.includes(dataType));
-  if (!relevantAddress) throw 'No relevant address was found - findFieldAddressType()'
+  if (!relevantAddress) throw new Error('No relevant address was found - findFieldAddressType()');
 
   const { address } = relevantAddress;
   const { ciId, abi  } = relevantAddress.contractInterface;

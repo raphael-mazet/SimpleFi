@@ -14,7 +14,7 @@ const fieldInterfaceTypes = {
       name: "uniswap V2 earn",
       ciId: "8718740f-6d08-4482-9a0c-c0cb2561f01c"
     }
-  ]
+  ],
 }
 
 export default fieldInterfaceTypes;

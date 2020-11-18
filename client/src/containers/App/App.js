@@ -17,6 +17,8 @@ function App() {
   const [userFields, setUserFields] = useState([]);
   const [rewoundTokenBalances, setRewoundTokenBalances] = useState([]);
   const [rewoundFieldBalances, setRewoundFieldBalances] = useState([]);
+  const [fieldSuppliesAndReserves, setFieldSuppliesAndReserves] = useState([]);
+  const [userTokenPrices, setUserTokenPrices] = useState({});
   const [rewoundFlag, setRewoundFlag] = useState(false);
   const [splash, setSplash] = useState(false);
   const history = useHistory();
@@ -30,6 +32,7 @@ function App() {
       else if (newAccount[0] !== userAccount[0]) {
         const resetUserTokens = setUserTokens([]);
         const resetUserFields = setUserFields([]);
+        //ASK: not sure this does anything
         Promise.all([resetUserTokens, resetUserFields])
           .then(resets => {setUserAccount(newAccount);})
       }
@@ -37,6 +40,7 @@ function App() {
       alert('Please install Metamask to use SimpleFi (https://metamask.io/)')
     }
   }
+
 
   //Get tracked tokens and fields from SimpleFi db and attach contracts
   useEffect(() => {
@@ -48,46 +52,60 @@ function App() {
         setTrackedFields(apis.createBalanceContracts(fields));
         setBalanceContractsLoaded(true);
     })
+
   }, [])
 
   // Create first set of userTokens with token balances
   useEffect(() => {
     if (userAccount.length && balanceContractsLoaded) {
+  
+      const getTokenBalances = apis.getAllUserBalances(userAccount[0], trackedTokens);
+      const getFieldBalances = apis.getAllUserBalances(userAccount[0], trackedFields);
 
-      apis.getAllUserBalances(userAccount[0], trackedTokens)
-        .then(tokensWithBalance => setUserTokens(tokensWithBalance));
+      Promise.all([getTokenBalances, getFieldBalances])
+        .then(([tokensWithBalance, fieldsWithBalance]) => {
+          setUserTokens(tokensWithBalance);
 
-      apis.getAllUserBalances(userAccount[0], trackedFields)
-        .then(fieldsWithBalance => {
           fieldsWithBalance = helpers.populateFieldTokensFromCache(fieldsWithBalance, trackedTokens);
-          setUserFields(fieldsWithBalance)
-        });
+          setUserFields(fieldsWithBalance);
+          if (!fieldsWithBalance.length) setRewoundFlag(true);
+        })
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [balanceContractsLoaded, userAccount])
 
   // Add all underlying token and field balances
   useEffect(() => {
     if (userFields.length && userTokens.length && !rewoundFlag) {
         apis.rewinder(userFields, trackedTokens, trackedFields)
-          .then(rewound => {
-            setRewoundTokenBalances (prev => [...prev, ...rewound.userTokenBalances])
-            setRewoundFieldBalances (prev => [...prev, ...rewound.userFeederFieldBalances])
+        .then(rewound => {
+            setRewoundTokenBalances (rewound.userTokenBalances)
+            setRewoundFieldBalances (rewound.userFeederFieldBalances)
+            setFieldSuppliesAndReserves(rewound.fieldBalances)
             setRewoundFlag(true);
           })
       }
-  }, [userFields, userTokens])
+    // eslint-disable-next-line react-hooks/exhaustive-deps  
+  }, [userFields])
 
-  //ASK: is flag necessary?
   useEffect(() => {
 
     if (rewoundFlag) {
       const updatedUserTokens = helpers.addLockedTokenBalances(rewoundTokenBalances, userTokens);
       setUserTokens(updatedUserTokens);
+      
+      const fieldsWithStakedBalances = helpers.addStakedFieldBalances(rewoundFieldBalances, userFields);
+      const fieldsWithSuppliesAndReserves = helpers.addFieldSuppliesAndReserves(fieldSuppliesAndReserves, fieldsWithStakedBalances);
+      
+      apis.getTokenPrices(updatedUserTokens, fieldsWithSuppliesAndReserves, trackedTokens)
+        .then(tokenPrices => {
+          setUserTokenPrices(tokenPrices);
+          apis.getAPYs(fieldsWithSuppliesAndReserves, updatedUserTokens, tokenPrices)
+            .then(fieldsWithAPYs => setUserFields(fieldsWithAPYs))
+        })
     }
-
-    const updatedUserFields = helpers.addStakedFieldBalances(rewoundFieldBalances, userFields);
-    setUserFields(updatedUserFields);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [rewoundFlag])
 
   return (
@@ -95,8 +113,8 @@ function App() {
       <Nav connect={connectWallet} splash={splash}/>
       <Switch>
         <Route path='/' exact render={() => <Welcome connect={connectWallet} setSplash={setSplash}/>}/>
-        <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/>
-        //TODO: add new holding details routes
+        <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} userTokenPrices={userTokenPrices} setSplash={setSplash}/>}/>
+        {/*TODO: add new holding details routes*/}
         {/* <Route path='/dashboard/:tokenName' render={() => <HoldingDetails userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
         {/* <Route path='/chart' exact render={() => <HoldingChart userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
       </Switch>

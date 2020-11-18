@@ -1,14 +1,22 @@
-import { populateFieldTokensFromCache, addLockedTokenBalances, addStakedFieldBalances } from './appHelpers';
+import {
+  populateFieldTokensFromCache,
+  addLockedTokenBalances,
+  addFieldSuppliesAndReserves,
+  addStakedFieldBalances,
+} from './appHelpers'
 import { combineTokenHoldings, addHoldingPrices } from './myAssetsHelpers/tokenHelpers';
 import { fieldSeparator } from './myAssetsHelpers/fieldHelpers';
-import findFieldAddressType from './ethHelpers';
+import findFieldAddressType from './ethHelpers/findFieldAddressType';
+import combineFieldSuppliesAndReserves from './ethHelpers/combineFieldSuppliesAndReserves';
 
 export default {
   populateFieldTokensFromCache,
   addLockedTokenBalances,
+  addFieldSuppliesAndReserves,
   addStakedFieldBalances,
   combineTokenHoldings,
   addHoldingPrices,
   fieldSeparator,
-  findFieldAddressType
+  findFieldAddressType,
+  combineFieldSuppliesAndReserves
 }

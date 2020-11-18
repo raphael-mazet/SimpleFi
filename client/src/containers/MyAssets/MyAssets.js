@@ -4,21 +4,20 @@ import SummaryTable from '../../components/SummaryTable/SummaryTable';
 import helpers from '../../helpers/index';
 import { holdingHeaders, holdingCurrencyCells, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
 
-export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
+export default function MyAssets ({userTokens, userFields, userTokenPrices}) {
   const [holdingValues, setHoldingValues] = useState([]);
   const [farmingValues, setFarmingValues] = useState([]);
   const [earningValues, setEarningValues] = useState([]);
 
-  useEffect(() => setSplash(true), []);
-
   // combine available & locked token balances and add prices from coinGecko
   useEffect(() => {
+
+    // if setSplash
     const combinedHoldings = helpers.combineTokenHoldings(userTokens);
+    const holdingsWithPrices = helpers.addHoldingPrices(combinedHoldings, userTokenPrices);
+    setHoldingValues(holdingsWithPrices);
 
-    helpers.addHoldingPrices(combinedHoldings)
-      .then(holdingsWithPrices => setHoldingValues(holdingsWithPrices))
-
-  }, [userTokens])
+  }, [userTokenPrices])
 
   // separate farming and earning fields
   useEffect(() => {
@@ -30,7 +29,7 @@ export default function MyAssets ({userTokens, userFields, apis, setSplash}) {
   return (
     <div className="myassets-summary">
       <div className="summary-container summary-holding">
-        <h2>Holding</h2>
+  <h2>Holding: {holdingValues.reduce((acc, curr) => acc + Math.floor(Number(curr[4])), 0)}</h2>
         <SummaryTable headers={holdingHeaders} userValues={holdingValues} tableName={'holding'} currencyCells={holdingCurrencyCells}/>
       </div>
       <div className="summary-container summary-farming">

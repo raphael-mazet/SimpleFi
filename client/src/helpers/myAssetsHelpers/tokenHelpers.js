@@ -25,22 +25,21 @@ function combineTokenHoldings (userTokens) {
         lockedPercent = formatter.format(1);
       }
 
-      combinedHoldings.push([token.name, combinedBalance.toFixed(2), lockedPercent, token.priceApi, 'Loading']);
+      combinedHoldings.push([token.name, combinedBalance.toFixed(2), lockedPercent, 'Loading', 'Loading']);
     }
   })
   return combinedHoldings;
 }
 
-//TODO: avoid addHoldingPrices being called multiple times(first with [], then meta/uni, then meta/uni/weth)
-async function addHoldingPrices(combinedHoldings) {
 
-  const priceApis = combinedHoldings.map(token => token[3]).join();
-  const allPrices = await apis.manyPrices(priceApis);
+function addHoldingPrices(combinedHoldings, userTokenPrices) {
 
-  for (const price in allPrices) {
-    const holdingIndex = combinedHoldings.findIndex(el => el[3] === price);
-    combinedHoldings[holdingIndex][4] = ((allPrices[price].usd * combinedHoldings[holdingIndex][1]).toFixed(2));
-    combinedHoldings[holdingIndex][3] = allPrices[price].usd.toFixed(2);
+  for (const price in userTokenPrices) {
+    const holdingIndex = combinedHoldings.findIndex(el => el[0] === price);
+    if (holdingIndex !== -1) {
+      combinedHoldings[holdingIndex][4] = ((userTokenPrices[price].usd * combinedHoldings[holdingIndex][1]).toFixed(2));
+      combinedHoldings[holdingIndex][3] = userTokenPrices[price].usd.toFixed(2);
+    }
   }
 
   return combinedHoldings;

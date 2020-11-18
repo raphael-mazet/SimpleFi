@@ -19,7 +19,7 @@ function createBalanceContracts (collection) {
       if (balanceAddress.length === 1) {
         balanceAddress = balanceAddress[0]
       } else {
-        throw 'Error identifying balance address, may not exist or not be unique - createBalanceContracts()';
+        throw new Error('Error identifying balance address, may not exist or not be unique - createBalanceContracts()');
       }
       element.fieldContracts = {
         balanceContract: {

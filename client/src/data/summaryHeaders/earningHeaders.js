@@ -2,8 +2,7 @@ const earningHeaders = [
   'Name',
   'Balance',
   'Staked',
-  'Underlying',
-  'Earning'
+  'APY'
 ];
 
   export default earningHeaders;

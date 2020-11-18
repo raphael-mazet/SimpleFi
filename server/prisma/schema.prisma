@@ -17,7 +17,7 @@ model Farmer {
 
 model Field {
   fieldId                          String            @id @map("field_id")
-  name                             String?
+  name                             String?           @unique
   protocolId                       String?           @map("protocol_id")
   yieldType                        Json?             @map("yield_type")
   instructions                     Json?
@@ -48,7 +48,7 @@ model Protocol {
 model Token {
   tokenId                                       String             @id @map("token_id")
   protocolId                                    String?            @map("protocol_id")
-  name                                          String?
+  name                                          String?            @unique
   priceApi                                      String?            @map("price_api")
   address                                       String?
   isBase                                        Boolean            @map("is_base")
@@ -119,7 +119,7 @@ model FieldSeed {
 
 model ContractInterface {
   ciId            String            @id @map("ci_id")
-  name            String
+  name            String            @unique
   abi             Json
   isErc           Boolean?          @map("is_erc")
   decimals        Int?
@@ -133,8 +133,8 @@ model contractAddress {
   addressId           String            @id @map("address_id")
   fieldId             String            @map("field_id")
   contractInterfaceId String            @map("contract_interface")
-  addressTypes        address_type[]    @map("address_type")
   address             String
+  addressTypes        address_type[]    @map("address_type")
   contractInterface   ContractInterface @relation("contract_addressTocontract_interface", fields: [contractInterfaceId], references: [ciId])
   field               Field             @relation("contract_addressTofield", fields: [fieldId], references: [fieldId])
 
@@ -162,4 +162,6 @@ enum address_type {
   underlying
   earning
   deposit
+  rewardRate
+  rewardWeight
 }
