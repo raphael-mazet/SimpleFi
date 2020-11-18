@@ -17,6 +17,7 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices}) {
     const holdingsWithPrices = helpers.addHoldingPrices(combinedHoldings, userTokenPrices);
     setHoldingValues(holdingsWithPrices);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [userTokenPrices])
 
   // separate farming and earning fields
