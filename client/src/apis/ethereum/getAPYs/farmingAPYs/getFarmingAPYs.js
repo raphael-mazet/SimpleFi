@@ -16,8 +16,11 @@ async function getFarmingAPYs (field, userTokens, userTokenPrices) {
     case 'curve pool gauge':
       APY = await getCurveFarmingAPY(rewardRateAddress, field, userTokens, userTokenPrices);
       break;
+
+    default:
+      APY = 'undefined';
   }
-  
+
   return APY;
 }
 
