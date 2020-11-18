@@ -6,9 +6,6 @@ async function getFarmingAPYs (field, userTokens, userTokenPrices) {
   const rewardRateAddress = field.contractAddresses.find(address => address.addressTypes.includes('rewardRate'));
   let APY;
 
-  console.log(' ---> rewardRateAddress', rewardRateAddress);
-  console.log(' ---> rewardRateAddress.contractInterface.name', rewardRateAddress.contractInterface.name);
-
   switch (rewardRateAddress.contractInterface.name) {
 
     case "synthetix susd farm":

@@ -32,11 +32,7 @@ function fieldSeparator (userFields){
   userFields.forEach(field => {
 
     const { combinedBalance, stakedPercent } = combineFieldBalances(field);
-    const { name, userBalance, seedTokens, cropTokens, isEarning } = field;
-
-    let underlying = '';
-    seedTokens && seedTokens.forEach(token => underlying += `${token.name}, `);
-    underlying = underlying.slice(0, -2);
+    const { name, userBalance, cropTokens, isEarning } = field;
       
     //NOTE: currently not adding combined balance to farming- must check
     //NOTE: on case by case if staking voids rewards on Curve in particular
@@ -51,7 +47,8 @@ function fieldSeparator (userFields){
     }
 
     if (isEarning) {
-      earningFields.push([name, combinedBalance, stakedPercent, underlying, 'tbd'])
+      const APY = formatter.format(field.earningAPY)
+      earningFields.push([name, combinedBalance, stakedPercent, APY])
     }
   })
 
