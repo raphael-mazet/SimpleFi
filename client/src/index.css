@@ -14,10 +14,6 @@ a, button {
   all: unset;
 }
 
-h1 {
+h1, h2, p {
   all: unset;
-}
-
-h2 {
-  all:unset;
 }

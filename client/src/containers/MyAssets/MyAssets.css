@@ -9,8 +9,7 @@
 .summary-container {
   display: flex;
   flex-direction: column;
-  /* background-color: #ebecf0; */
-  background-color: var(--opaque-grey); 
+  border-width: 1px;
   border-radius: 10px;
   position: relative;
   margin: 20px 50px;
@@ -18,10 +17,8 @@
 }
 
 .summary-container h2 {
-  /* color: #172B4D; */
   color: white;
   display: block;
-  /* font-size: 1.5em; */
   font-size: 1.5em;
   margin-top: 0.83em;
   margin-bottom: 0.83em;
@@ -29,7 +26,25 @@
   font-weight: 500
 }
 
-.summary-table-row {
-  height: 45px;
+.summary-container-header {
+  display: flex;
 }
 
+.summary-container-table {
+  display: block;
+  transform-origin: top center;
+  /* opacity: 0; */
+  /* animation-fill-mode: forwards; */
+  /* transition: 1s; */
+  /* animation: fade 1s; */
+  /* animation: growDown 3s ease-in-out forwards; */
+}
+
+@keyframes growDown {
+  0% {
+    transform: scaleY(0)
+  }
+  100% {
+    transform: scaleY(1)
+  }
+}

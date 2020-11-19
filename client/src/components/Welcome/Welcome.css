@@ -1,3 +1,5 @@
+@import '../../CSS/variables.css';
+
 .welcome {
   display: flex;
   position: relative;
@@ -45,7 +47,6 @@
 }
 
 .splash-connect {
-  /* align-self: center; */
   margin-left: 120px;
 }
 
@@ -66,7 +67,7 @@ Link {
 .welcome-button {
   display: flex;
   justify-content: center;
-  background-color: rgb(87, 195, 225);
+  background-color: var(--sky-blue);
   color: white;
   font-size: 1.3em;
   font-weight: 300;

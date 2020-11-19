@@ -6,7 +6,7 @@ export default function SummaryTable ({headers, userValues, tableName, currencyC
   return (
     <table className="summary-table">
       <thead>
-          <tr>
+          <tr className="summary-table-header">
             {headers.map(header => <TokenCell key={`${tableName}-${header}`} content={header} header={true}/>)}
           </tr>
       </thead>
