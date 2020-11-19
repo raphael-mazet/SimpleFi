@@ -1,7 +1,10 @@
 import React from 'react';
+import './DropdownButton.css';
 
-export default function DropdownButton({handleDropdown, tableClass}) {
+export default function DropdownButton({handleDropdown, tableRef}) {
   return (
-    <button onClick={(e) => handleDropdown(e, tableClass)}>drop</button>
+    <div className="dropdown-wrapper">
+      <button className="dropdown" onClick={(e) => handleDropdown(e, tableRef)}></button>
+    </div>
   )
 }

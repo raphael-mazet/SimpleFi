@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './MyAssets.css';
 import OverviewCard from '../../components/OverViewCard/OverviewCard';
 import SummaryTable from '../../components/SummaryTable/SummaryTable';
@@ -12,7 +12,9 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices}) {
   const [earningValues, setEarningValues] = useState([]);
   const [totalAssets, setTotalAssets] = useState(25423);
   const [totalInvested, setTotalInvested] = useState(15200);
-  const [dropdown, setDropdown] = [];
+  const holdingTable = useRef(null);
+  const farmingTable = useRef(null);
+  const earningTable = useRef(null);
 
   // combine available & locked token balances and add prices from coinGecko
   useEffect(() => {
@@ -30,27 +32,6 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices}) {
     setEarningValues(earningFields);
   }, [userFields])
 
-  function handleDropdown(e, className) {
-    e.preventDefault();
-    console.log(' ---> e', e);
-    // setDropdown(prev => [...prev, className]);
-    const targetTable = document.getElementById(className);
-    targetTable.style.display = 'none';
-    console.log(' ---> targetTable', targetTable);
-    console.log(' ---> targetTable.style', targetTable.style);
-    if (targetTable.style.display === 'none') {
-      console.log('hi');
-      targetTable.style.display = 'block';
-      targetTable.style.animation = 'growDown 300ms ease-in-out forwards';
-    }
-    console.log('hi out');
-    // } else {
-    //   targetTable.style.animation = 'shrinkUp 300ms ease-in-out forwards';
-    //   // targetTable.style.display = 'none';
-    // //   targetTable.style.opacity = 0;
-    // }
-  }
-
   return (
     <div className="myassets-summary">
       <div className="summary-overview-cards-container">
@@ -59,11 +40,13 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices}) {
       </div>
 
       <div className="summary-container summary-holding">
-        <div className="summary-container-header">
-          <h2>Holding: {holdingValues.reduce((acc, curr) => acc + Math.floor(Number(curr[4])), 0)}</h2>
-          <DropdownButton handleDropdown={handleDropdown} tableClass='holding-table'/>
+        <div className="container-header">
+          <h2>Holding</h2>
+          <div className="dropdown-button-wrapper">
+            <DropdownButton handleDropdown={helpers.toggleDropdown} tableRef={holdingTable}/>
+          </div>
         </div>
-        <div id='holding-table' className="summary-container-table">
+        <div ref={holdingTable} className="summary-table-container">
           <SummaryTable headers={holdingHeaders} userValues={holdingValues} tableName={'holding'} currencyCells={holdingCurrencyCells}/>
         </div>
       </div>
@@ -71,15 +54,25 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices}) {
       <div className="summary-container summary-farming">
         <div className="container-header">
           <h2>Farming</h2>
+          <div className="dropdown-button-wrapper">
+            <DropdownButton handleDropdown={helpers.toggleDropdown} tableRef={farmingTable}/>
+          </div>
         </div>
-        <SummaryTable headers={farmingHeaders} userValues={farmingValues} tableName={'farming'} currencyCells={[]}/>
+        <div ref={farmingTable} className="summary-table-container">
+          <SummaryTable headers={farmingHeaders} userValues={farmingValues} tableName={'farming'} currencyCells={[]}/>
+        </div>
       </div>
 
       <div className="summary-container summary-earning">
         <div className="container-header">
           <h2>Earning</h2>
+          <div className="dropdown-button-wrapper">
+            <DropdownButton handleDropdown={helpers.toggleDropdown} tableRef={earningTable}/>
+          </div>
         </div>
-        <SummaryTable headers={earningHeaders} userValues={earningValues} tableName={'earning'} currencyCells={[]}/>
+        <div ref={earningTable} className="summary-table-container">
+          <SummaryTable headers={earningHeaders} userValues={earningValues} tableName={'earning'} currencyCells={[]}/>
+        </div>
       </div>
     </div>
   )

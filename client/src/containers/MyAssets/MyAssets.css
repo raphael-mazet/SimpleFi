@@ -1,4 +1,5 @@
 @import '../../CSS/variables.css';
+@import '../../CSS/animations.css';
 
 .summary-overview-cards-container {
   display: flex;
@@ -13,38 +14,31 @@
   border-radius: 10px;
   position: relative;
   margin: 20px 50px;
-  padding: 0px 20px 20px 20px;
+  padding: 0px 20px 0px 20px;
 }
 
 .summary-container h2 {
+  margin-right: 20px;
   color: white;
   display: block;
   font-size: 1.5em;
-  margin-top: 0.83em;
-  margin-bottom: 0.83em;
   margin-left: 0;
   font-weight: 500
 }
 
-.summary-container-header {
+.container-header {
   display: flex;
+  /* margin-top: 0.83em; */
+  margin-bottom: 0.83em;
 }
 
-.summary-container-table {
-  display: block;
+.dropdown-button-wrapper {
+  display: flex;
+  align-items: center;
+  margin-top: 7px;
+}
+
+.summary-table-container {
+  display: none;
   transform-origin: top center;
-  /* opacity: 0; */
-  /* animation-fill-mode: forwards; */
-  /* transition: 1s; */
-  /* animation: fade 1s; */
-  /* animation: growDown 3s ease-in-out forwards; */
-}
-
-@keyframes growDown {
-  0% {
-    transform: scaleY(0)
-  }
-  100% {
-    transform: scaleY(1)
-  }
 }
