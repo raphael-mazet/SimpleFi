@@ -1,7 +1,16 @@
+@import '../../CSS/variables.css';
+
+.summary-overview-cards-container {
+  display: flex;
+  margin: 20px 50px 50px 50px;
+  justify-content: space-around;
+}
+
 .summary-container {
   display: flex;
   flex-direction: column;
-  background-color: #ebecf0;
+  /* background-color: #ebecf0; */
+  background-color: var(--opaque-grey); 
   border-radius: 10px;
   position: relative;
   margin: 20px 50px;
@@ -9,13 +18,15 @@
 }
 
 .summary-container h2 {
-  color: #172B4D;
+  /* color: #172B4D; */
+  color: white;
   display: block;
+  /* font-size: 1.5em; */
   font-size: 1.5em;
   margin-top: 0.83em;
   margin-bottom: 0.83em;
   margin-left: 0;
-  font-weight: bold
+  font-weight: 500
 }
 
 .summary-table-row {

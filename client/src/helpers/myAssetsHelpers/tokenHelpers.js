@@ -37,8 +37,10 @@ function addHoldingPrices(combinedHoldings, userTokenPrices) {
   for (const price in userTokenPrices) {
     const holdingIndex = combinedHoldings.findIndex(el => el[0] === price);
     if (holdingIndex !== -1) {
-      combinedHoldings[holdingIndex][4] = ((userTokenPrices[price].usd * combinedHoldings[holdingIndex][1]).toFixed(2));
-      combinedHoldings[holdingIndex][3] = userTokenPrices[price].usd.toFixed(2);
+      //TODO: check implicit conversion from string to number
+      combinedHoldings[holdingIndex][4] = (Number((userTokenPrices[price].usd * combinedHoldings[holdingIndex][1]).toFixed(2)).toLocaleString());
+      combinedHoldings[holdingIndex][1] = (Number(combinedHoldings[holdingIndex][1]).toLocaleString());
+      combinedHoldings[holdingIndex][3] = Number(userTokenPrices[price].usd.toFixed(2)).toLocaleString();
     }
   }
 

@@ -1,0 +1,9 @@
+:root {
+  /* colours */
+  --lilac: rgb(137, 96, 159);
+  --opaque-grey: hsla(0,0%,100%,.3);
+  --periwinkle: #B7B5E4;
+  --light-grey-font: #b4b4b4;
+  --dark-grey-font: #707070;
+  --darkest-grey-font: #333333;
+}

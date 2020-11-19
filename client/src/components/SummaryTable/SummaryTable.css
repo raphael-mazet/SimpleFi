@@ -1,9 +1,9 @@
 .summary-table {
   background-color: white;
-    border-collapse: separate;
-    border-spacing: 0px 15px;
-    padding: 20px;
-    border-radius: 10px;
+  border-collapse: separate;
+  border-spacing: 0px 15px;
+  padding: 20px;
+  border-radius: 10px;
 }
 
 .summary-table-row {

@@ -1,12 +1,23 @@
+@import "./CSS/variables.css";
+
 * {
   box-sizing: border-box;
 }
 
 body {
-  background-color: rgb(137, 96, 159);
+  /* background-color: rgb(137, 96, 159); */
+  background-color: var(--lilac);
   font-family: -apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
 }
 
 a, button {
   all: unset;
+}
+
+h1 {
+  all: unset;
+}
+
+h2 {
+  all:unset;
 }
