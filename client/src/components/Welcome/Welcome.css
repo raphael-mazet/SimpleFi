@@ -1,3 +1,5 @@
+@import '../../CSS/variables.css';
+
 .welcome {
   display: flex;
   position: relative;
@@ -9,12 +11,23 @@
   flex-direction: column;
 }
 
-.splash-text {
+.splash-main {
   display: flex;
   flex-direction: column;
 }
 
-.welcome-splash h1, h2 {
+.splash-image {
+  height: 100px;
+  margin-left: 115px;
+  max-height: 65px;
+  margin-bottom: 50px;
+}
+
+.welcome-splash-image {
+  height: 100%;
+}
+
+.welcome-splash h2 {
   all: unset;
   color: white;
   margin-left: 120px;
@@ -29,12 +42,12 @@
 }
 
 .welcome-splash h2 {
-  font-size: 1.5em;
-  font-weight: 700;
+  font-size: 1.8em;
+  line-height: 2em;
 }
 
 .splash-connect {
-  align-self: center;
+  margin-left: 120px;
 }
 
 .welcome-media {
@@ -44,7 +57,7 @@
 }
 
 .welcome-media-image {
-  max-width: 85%;
+  width: 85%;
 }
 
 Link {
@@ -54,11 +67,11 @@ Link {
 .welcome-button {
   display: flex;
   justify-content: center;
-  background-color: rgb(87, 195, 225);
+  background-color: var(--sky-blue);
   color: white;
   font-size: 1.3em;
   font-weight: 300;
-  margin: 45px 50px 50px 50px;;
+  margin: 45px 50px 50px 0px;;
   padding: 12px 20px;
   border-radius: 8px;
   box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.5);

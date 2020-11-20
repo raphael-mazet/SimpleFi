@@ -1,0 +1,50 @@
+.dropdown-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.dropdown, .dropdown-active {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  position: relative;
+  text-align: left;
+}
+
+.dropdown {
+  transform: rotate(45deg);
+}
+
+.dropdown:before, .dropdown:after, .dropdown-active:before, .dropdown-active:after {
+  position: absolute;
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 3px;
+  background-color: #fff;
+}
+
+.dropdown:after {
+  position: absolute;
+  transform: rotate(90deg);
+  top: 5px;
+  left: 4.5px;
+}
+
+.dropdown-active {
+  transform: rotate(45deg) translate(-5px,-5px);
+}
+
+.dropdown-active:before {
+  transform: translate(10px,0);
+}
+
+.dropdown-active:after {
+  transform: rotate(90deg) translate(4.5px,-5.5px);
+}
+ 
+.dropdown-wrapper:hover {
+  cursor: pointer;
+}

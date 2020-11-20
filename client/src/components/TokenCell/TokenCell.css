@@ -1,20 +1,21 @@
+@import '../../CSS/variables.css';
+
 .cell {
   padding-left: 10px;
 }
 
 .cell-header {
-  color: #b4b4b4;
+  color: var(--light-grey-font);
   font-size: 14px;
   text-align: left;
 }
 
 .cell-value {
-  color: #707070;
-  font-size: 14px;
+  color: var(--dark-grey-font);
+  font-size: 16px;
   font-weight: 700;
 }
 
 .cell-currency:before {
   content: '$';
-
 }

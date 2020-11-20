@@ -1,0 +1,22 @@
+:root {
+  /* colours */
+  --lilac: #8B5D9D;
+  --bright-lilac: #9953A3;
+  --transp-bright-lilac: #9953A3AE;
+
+  
+  --periwinkle: #BBB3E8;
+  --bright-periwinkle: #CCCCFF;
+  --sky-blue: rgb(87, 195, 225);
+
+  --offwhite: #FFF0F5;
+  --transp-offwhite: #FFF0F5CE;
+  --almost-white: #FFFAFA;
+
+  --opaque-grey: hsla(0,0%,100%,.3);
+  --light-grey-font: #b4b4b4;
+  --dark-grey-font: #707070;
+  --darkest-grey-font: #333333;
+
+  --performance-green: #00FF66;
+}

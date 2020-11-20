@@ -28,12 +28,17 @@ function fieldSeparator (userFields){
   const farmingFields = [];
   const earningFields = [];
   const formatter = new Intl.NumberFormat("en-US", {style: 'percent'});
-  
+  let totalInvested = 0;
+
   userFields.forEach(field => {
 
     const { combinedBalance, stakedPercent } = combineFieldBalances(field);
     const { name, userBalance, cropTokens, isEarning } = field;
-      
+
+    totalInvested += userBalance;
+    console.log(' ---> field.name, field.balance', field.name, field.balance);
+    console.log(' ---> totalInvested', totalInvested);
+    
     //NOTE: currently not adding combined balance to farming- must check
     //NOTE: on case by case if staking voids rewards on Curve in particular
     if (cropTokens.length) {
@@ -52,7 +57,7 @@ function fieldSeparator (userFields){
     }
   })
 
-  return {farmingFields, earningFields}
+  return {farmingFields, earningFields, totalInvested}
 }
 
 export {
