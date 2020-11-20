@@ -36,8 +36,6 @@ function fieldSeparator (userFields){
     const { name, userBalance, cropTokens, isEarning } = field;
 
     totalInvested += userBalance;
-    console.log(' ---> field.name, field.balance', field.name, field.balance);
-    console.log(' ---> totalInvested', totalInvested);
     
     //NOTE: currently not adding combined balance to farming- must check
     //NOTE: on case by case if staking voids rewards on Curve in particular

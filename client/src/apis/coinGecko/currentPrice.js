@@ -16,6 +16,7 @@ function manyPrices (tokenIds) {
   return fetchRequest(baseUrl + manyPriceEP + tokenIds + currencyString);
 }
 
+//eslint-disable-next-line import/no-anonymous-default-export
 export default {
   currentPrice,
   manyPrices

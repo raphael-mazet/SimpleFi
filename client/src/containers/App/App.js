@@ -7,6 +7,7 @@ import './App.css';
 import Nav from '../../components/Nav/Nav';
 import Welcome from '../../components/Welcome/Welcome';
 import MyAssets from '../MyAssets/MyAssets';
+import FieldDetails from '../FieldDetails/FieldDetails';
 
 function App() {
   const [trackedTokens, setTrackedTokens] = useState([]);
@@ -21,6 +22,8 @@ function App() {
   const [userTokenPrices, setUserTokenPrices] = useState({});
   const [rewoundFlag, setRewoundFlag] = useState(false);
   const [splash, setSplash] = useState(false);
+
+  const [currentDetail, setCurrentDetail] = useState('');
   const history = useHistory();
 
   async function connectWallet () {
@@ -40,7 +43,6 @@ function App() {
       alert('Please install Metamask to use SimpleFi (https://metamask.io/)')
     }
   }
-
 
   //Get tracked tokens and fields from SimpleFi db and attach contracts
   useEffect(() => {
@@ -108,13 +110,14 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [rewoundFlag])
 
+  //TODO: setcontext around this
   return (
     <div>
       <Nav connect={connectWallet} splash={splash}/>
       <Switch>
         <Route path='/' exact render={() => <Welcome connect={connectWallet} setSplash={setSplash}/>}/>
-        <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} userTokenPrices={userTokenPrices} setSplash={setSplash}/>}/>
-        {/*TODO: add new holding details routes*/}
+        <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} userTokenPrices={userTokenPrices} setSplash={setSplash} setCurrentDetail={setCurrentDetail}/>}/>
+        <Route path='/:fieldName' exact render={() => <FieldDetails name={currentDetail} userTokens={userTokens} userFields={userFields}/>}/>
         {/* <Route path='/dashboard/:tokenName' render={() => <HoldingDetails userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
         {/* <Route path='/chart' exact render={() => <HoldingChart userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
       </Switch>
