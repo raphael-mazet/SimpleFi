@@ -1,18 +1,12 @@
 .summary-table {
   width: 100%;
-  background-color: var(--opaque-grey);
   border-collapse: separate;
   border-spacing: 0px 15px;
-  padding: 10px 20px 20px 20px;
   border-radius: 10px;
 }
 
 .summary-table-header .cell-header {
   color: var(--offwhite);
-}
-
-summary-table tbody {
-  position: relative;
 }
 
 .summary-table-row {

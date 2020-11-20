@@ -29,7 +29,6 @@ function App() {
       const newAccount = await metamaskConnect();
       if(!userAccount[0]) {setUserAccount(newAccount);
       history.push('/dashboard');
-      setSplash(true);
     } else if (newAccount[0] !== userAccount[0]) {
         const resetUserTokens = setUserTokens([]);
         const resetUserFields = setUserFields([]);
@@ -53,7 +52,7 @@ function App() {
         setTrackedFields(apis.createBalanceContracts(fields));
         setBalanceContractsLoaded(true);
     })
-
+    setSplash(true);
   }, [])
 
   // Create first set of userTokens with token balances
