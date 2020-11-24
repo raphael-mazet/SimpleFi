@@ -12,9 +12,12 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
   for (const mainField of userFields) {
     
     const { contract, decimals } = mainField.fieldContracts.balanceContract;
+    //@dev: total supply indicates either 1) how many receipt tokens have been minted by the field
+    // or 2) how many input tokens the field holds (in cases where it issues no receipts)
     const totalMainFieldSupply = await getTotalFieldSupply(mainField.name, contract, decimals, totalFieldSupplyCache);
     const userShareOfMainField = mainField.userBalance / totalMainFieldSupply;
  
+    //@dev: will extract the balance of underlying seed tokens owned by the user
     for (const token of mainField.seedTokens) {
       await tokenBalanceExtractor(token, mainField, userShareOfMainField)
     }
@@ -32,6 +35,7 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
   async function tokenBalanceExtractor (token, field, share) {
     const { tokenId, isBase, tokenContract } = token;
 
+    //@dev: field seed reserves are the number of underlying tokens held by the field
     let fieldSeedReserve = await getFieldSeedReserves(field, token, tokenContract, fieldSeedReserveCache);
   
     if (isBase) {

@@ -1,3 +1,10 @@
+/**
+ * 
+ * @param {Array} suppliesAndBalances - contains each fields totoal supply and underlying token reserves. Set during rewind
+ * @param {Array} userFields - all fields a user has invested in
+ * @return {Array} - a new userField array containing a total supply property, and a new fieldReserve property on each seed token
+ */
+
 function addFieldSuppliesAndReserves (suppliesAndBalances, userFields) {
 
     const updatedUserFields = [...userFields];
@@ -15,6 +22,3 @@ function addFieldSuppliesAndReserves (suppliesAndBalances, userFields) {
 }
 
 export default addFieldSuppliesAndReserves;
-
-// { fieldName, totalFieldSupply }
-// { fieldName, seedReserves: [{tokenName, fieldReserve}] }

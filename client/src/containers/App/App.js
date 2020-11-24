@@ -104,7 +104,8 @@ function App() {
       apis.getTokenPrices(updatedUserTokens, fieldsWithSuppliesAndReserves, trackedTokens)
         .then(tokenPrices => {
           setUserTokenPrices(tokenPrices);
-          apis.getAPYs(fieldsWithSuppliesAndReserves, updatedUserTokens, tokenPrices)
+          const fieldsWithInvestmentValues = helpers.addFieldInvestmentValues(fieldsWithSuppliesAndReserves, tokenPrices)
+          apis.getAPYs(fieldsWithInvestmentValues, updatedUserTokens, tokenPrices)
             .then(fieldsWithAPYs => setUserFields(fieldsWithAPYs))
         })
     }

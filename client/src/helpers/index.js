@@ -3,6 +3,7 @@ import {
   addLockedTokenBalances,
   addFieldSuppliesAndReserves,
   addStakedFieldBalances,
+  addFieldInvestmentValues
 } from './appHelpers'
 import { combineTokenHoldings, addHoldingPrices } from './myAssetsHelpers/tokenHelpers';
 import { fieldSeparator } from './myAssetsHelpers/fieldHelpers';
@@ -16,10 +17,11 @@ export default {
   addLockedTokenBalances,
   addFieldSuppliesAndReserves,
   addStakedFieldBalances,
+  addFieldInvestmentValues,
   combineTokenHoldings,
   addHoldingPrices,
   fieldSeparator,
   toggleDropdown,
   findFieldAddressType,
-  combineFieldSuppliesAndReserves
+  combineFieldSuppliesAndReserves,
 }

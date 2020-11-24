@@ -7,7 +7,7 @@ import { gql } from '@apollo/client';
 
 export default function FieldDetails ({name, userTokens, userFields, userAccount}) {
   const [fullHistory, setFullHistory] = useState([]);
-  const [roi, setRoi] = useState = (0);
+  const [roi, setRoi] = useState (0);
 
   //TODO: need current FIeld investment value
   //TODO: derive ROI from that and tx history
