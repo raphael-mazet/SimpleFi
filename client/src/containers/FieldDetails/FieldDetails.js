@@ -3,10 +3,12 @@ import './FieldDetails.css';
 import { useEffect } from 'react';
 import apollo from '../../apollo/index';
 import { gql } from '@apollo/client';
+import apis from '../../apis';
 
 export default function FieldDetails ({name, userTokens, userFields, userAccount}) {
   const [fullHistory, setFullHistory] = useState([]);
   const [roi, setRoi] = useState (0);
+  const [balanceHistoryFlag, setBalanceHistoryFlag] = useState(false);
 
   //TODO: need current FIeld investment value
   //TODO: derive ROI from that and tx history
@@ -19,7 +21,7 @@ export default function FieldDetails ({name, userTokens, userFields, userAccount
 
 
 
-  function formatUniData(txHistory) {
+  function formatUniData(txHistory, whitelist) {
     const fieldHistory = txHistory.data.liquidityPositionSnapshots.filter(snapshot => snapshot.pair.id === currentField.contractAddresses[0].address.toLowerCase());
     let cumBal = 0;
     const formattedHistory = fieldHistory.map(snapshot => {
@@ -54,6 +56,8 @@ export default function FieldDetails ({name, userTokens, userFields, userAccount
             pair {
               id
             }
+            # add block to retrieve token whitelist info
+            block
             liquidityTokenBalance
             liquidityTokenTotalSupply
             reserveUSD
@@ -64,14 +68,34 @@ export default function FieldDetails ({name, userTokens, userFields, userAccount
     }
   )
     .then(res => {
-      //not really formatted but categorised by in/out flow
-      const formattedData = formatUniData(res);
-      setRoi(calcROI(investmentValue, formattedData));
-      setFullHistory(formattedData);
+      setFullHistory(res);
+      setBalanceHistoryFlag(true);
+
     })
+    //TODO: get all token transactions
+    //TODO: match these against the white list at the right block number
+    fetch("https://api.etherscan.io/api\?module\=account\&action\=tokentx\&address\=0x6A634f1Bec0E530C41cb81241aCC74fD0E3acB11\&apikey\=8S7WE8GJ1UIKKI38H1V5GFNV7IXT5M9MZE")
+    
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // set tx history
+  useEffect(() => {
+    if (balanceHistoryFlag) {
+      //ensure restakes are excluded from txIn/out
+      //TODO: build this API!
+      apis.getRestakeAddressWhitelist()
+        .then(list => {
+          //not really formatted but categorised by in/out flow
+          const formattedData = formatUniData(fullHistory, list);
+          setRoi(calcROI(investmentValue, formattedData));
+          setFullHistory(formattedData);
+        })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [balanceHistoryFlag])
+
 
   //ROI definition: ((currVal of investment + amount realised) / amount invested) -1
   function calcROI (investmentValue, txHistory) {
