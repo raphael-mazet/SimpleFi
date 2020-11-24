@@ -38,7 +38,7 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
     <div className="myassets-summary">
       <div className="summary-overview-cards-container">
         <OverviewCard title='Total assets' amount={totalAssets.toLocaleString()} performance={{daily:'plus 2', annual:'plus 3'}}/>
-        <OverviewCard title='Total invested' amount={totalInvested.toLocaleString()} performance={{daily:'plus 2', annual:'plus 3'}}/>
+        <OverviewCard title='Cumulative investments' amount={totalInvested.toLocaleString()} performance={{daily:'plus 2', annual:'plus 3'}}/>
       </div>
 
       <div className="account-overview">
