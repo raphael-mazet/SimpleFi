@@ -6,7 +6,9 @@ import {
   getAllUserBalances,
   createBalanceContracts,
   rewinder,
-  getAPYs
+  getAPYs,
+  getUserTokenTransactions,
+  getROIs
 } from './ethereum/index';
 
 //eslint-disable-next-line import/no-anonymous-default-export
@@ -19,5 +21,7 @@ export default {
   getUserBalance,
   getAllUserBalances,
   rewinder,
-  getAPYs
+  getAPYs,
+  getUserTokenTransactions,
+  getROIs
 }

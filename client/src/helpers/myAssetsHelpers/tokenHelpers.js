@@ -1,5 +1,3 @@
-import apis from '../../apis/index';
-
 function combineTokenHoldings (userTokens) {
   
   const combinedHoldings = [];

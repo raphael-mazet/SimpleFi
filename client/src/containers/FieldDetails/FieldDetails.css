@@ -1,0 +1,29 @@
+@import '../../CSS/variables.css';
+
+
+.field-details h2, p {
+  color: var(--almost-white);
+}
+
+.field-details-titles {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.field-details-numbers {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.field-roi, .field-invested {
+  display: flex;
+  flex-direction: column;
+}
+
+.tx-date {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}

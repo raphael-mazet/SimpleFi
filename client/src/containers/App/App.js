@@ -7,6 +7,8 @@ import './App.css';
 import Nav from '../../components/Nav/Nav';
 import Welcome from '../../components/Welcome/Welcome';
 import MyAssets from '../MyAssets/MyAssets';
+import FieldDetails from '../FieldDetails/FieldDetails';
+// import { AppProvider } from './AppContext';
 
 function App() {
   const [trackedTokens, setTrackedTokens] = useState([]);
@@ -15,12 +17,15 @@ function App() {
   const [userAccount, setUserAccount] = useState([]);
   const [userTokens, setUserTokens] = useState([]);
   const [userFields, setUserFields] = useState([]);
+  const [userTokenTransactions, setUserTokenTransactions] = useState([]);
   const [rewoundTokenBalances, setRewoundTokenBalances] = useState([]);
   const [rewoundFieldBalances, setRewoundFieldBalances] = useState([]);
   const [fieldSuppliesAndReserves, setFieldSuppliesAndReserves] = useState([]);
   const [userTokenPrices, setUserTokenPrices] = useState({});
   const [rewoundFlag, setRewoundFlag] = useState(false);
   const [splash, setSplash] = useState(false);
+
+  const [currentDetail, setCurrentDetail] = useState('');
   const history = useHistory();
 
   async function connectWallet () {
@@ -41,7 +46,6 @@ function App() {
     }
   }
 
-
   //Get tracked tokens and fields from SimpleFi db and attach contracts
   useEffect(() => {
     const getTokens = apis.getTokens();
@@ -55,13 +59,16 @@ function App() {
     setSplash(true);
   }, [])
 
-  // Create first set of userTokens with token balances
+  //Create first set of userTokens with token balances
+  //Get all user token transactions
   useEffect(() => {
     if (userAccount.length && balanceContractsLoaded) {
-  
+      
+      apis.getUserTokenTransactions(userAccount[0])
+        .then(txArr => setUserTokenTransactions(txArr.result));
+
       const getTokenBalances = apis.getAllUserBalances(userAccount[0], trackedTokens);
       const getFieldBalances = apis.getAllUserBalances(userAccount[0], trackedFields);
-
       Promise.all([getTokenBalances, getFieldBalances])
         .then(([tokensWithBalance, fieldsWithBalance]) => {
           setUserTokens(tokensWithBalance);
@@ -79,11 +86,11 @@ function App() {
   useEffect(() => {
     if (userFields.length && userTokens.length && !rewoundFlag) {
         apis.rewinder(userFields, trackedTokens, trackedFields)
-        .then(rewound => {
-            setRewoundTokenBalances (rewound.userTokenBalances)
-            setRewoundFieldBalances (rewound.userFeederFieldBalances)
-            setFieldSuppliesAndReserves(rewound.fieldBalances)
-            setRewoundFlag(true);
+          .then(rewound => {
+              setRewoundTokenBalances (rewound.userTokenBalances);
+              setRewoundFieldBalances (rewound.userFeederFieldBalances);
+              setFieldSuppliesAndReserves(rewound.fieldBalances);
+              setRewoundFlag(true);
           })
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps  
@@ -101,23 +108,30 @@ function App() {
       apis.getTokenPrices(updatedUserTokens, fieldsWithSuppliesAndReserves, trackedTokens)
         .then(tokenPrices => {
           setUserTokenPrices(tokenPrices);
-          apis.getAPYs(fieldsWithSuppliesAndReserves, updatedUserTokens, tokenPrices)
-            .then(fieldsWithAPYs => setUserFields(fieldsWithAPYs))
+          const fieldsWithInvestmentValues = helpers.addFieldInvestmentValues(fieldsWithSuppliesAndReserves, tokenPrices)
+          apis.getAPYs(fieldsWithInvestmentValues, updatedUserTokens, tokenPrices)
+            .then(fieldsWithAPYs => {
+              apis.getROIs(userAccount[0], fieldsWithAPYs, trackedFields, userTokenTransactions)
+                .then(fieldsWithROIs => setUserFields(fieldsWithROIs))
+            })
         })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [rewoundFlag])
 
+  //TODO: setcontext around this
   return (
     <div>
       <Nav connect={connectWallet} splash={splash}/>
-      <Switch>
-        <Route path='/' exact render={() => <Welcome connect={connectWallet} setSplash={setSplash}/>}/>
-        <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} userTokenPrices={userTokenPrices} setSplash={setSplash}/>}/>
-        {/*TODO: add new holding details routes*/}
-        {/* <Route path='/dashboard/:tokenName' render={() => <HoldingDetails userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
-        {/* <Route path='/chart' exact render={() => <HoldingChart userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
-      </Switch>
+      {/* <AppProvider value={balanceContractsLoaded}> */}
+        <Switch>
+          <Route path='/' exact render={() => <Welcome connect={connectWallet} setSplash={setSplash}/>}/>
+          <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} userTokenPrices={userTokenPrices} setSplash={setSplash} setCurrentDetail={setCurrentDetail}/>}/>
+          <Route path='/:fieldName' exact render={() => <FieldDetails name={currentDetail} userTokens={userTokens} userFields={userFields} />}/>
+          {/* <Route path='/dashboard/:tokenName' render={() => <HoldingDetails userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
+          {/* <Route path='/chart' exact render={() => <HoldingChart userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
+        </Switch>
+      {/* </AppProvider> */}
     </div>
   );
 }

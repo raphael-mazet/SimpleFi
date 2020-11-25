@@ -5,9 +5,8 @@ import SummaryTable from '../../components/SummaryTable/SummaryTable';
 import DropdownButton from '../../components/DropdownButton/DropdownButton';
 import helpers from '../../helpers/index';
 import { holdingHeaders, holdingCurrencyCells, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
-import caretUp from '../../assets/icons/caret-up-solid.svg';
 
-export default function MyAssets ({userTokens, userFields, userTokenPrices}) {
+export default function MyAssets ({userTokens, userFields, userTokenPrices, setCurrentDetail}) {
   const [holdingValues, setHoldingValues] = useState([]);
   const [farmingValues, setFarmingValues] = useState([]);
   const [earningValues, setEarningValues] = useState([]);
@@ -39,7 +38,7 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices}) {
     <div className="myassets-summary">
       <div className="summary-overview-cards-container">
         <OverviewCard title='Total assets' amount={totalAssets.toLocaleString()} performance={{daily:'plus 2', annual:'plus 3'}}/>
-        <OverviewCard title='Total invested' amount={totalInvested.toLocaleString()} performance={{daily:'plus 2', annual:'plus 3'}}/>
+        <OverviewCard title='Cumulative investments' amount={totalInvested.toLocaleString()} performance={{daily:'plus 2', annual:'plus 3'}}/>
       </div>
 
       <div className="account-overview">
@@ -59,7 +58,7 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices}) {
           </div>
         </div>
         <div ref={holdingTable} className="summary-table-container">
-          <SummaryTable headers={holdingHeaders} userValues={holdingValues} tableName={'holding'} currencyCells={holdingCurrencyCells}/>
+          <SummaryTable headers={holdingHeaders} userValues={holdingValues} tableName={'holding'} currencyCells={holdingCurrencyCells} setCurrentDetail={setCurrentDetail}/>
         </div>
       </div>
 
@@ -76,7 +75,7 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices}) {
           </div>
         </div>
         <div ref={farmingTable} className="summary-table-container">
-          <SummaryTable headers={farmingHeaders} userValues={farmingValues} tableName={'farming'} currencyCells={[]}/>
+          <SummaryTable headers={farmingHeaders} userValues={farmingValues} tableName={'farming'} currencyCells={[]} setCurrentDetail={setCurrentDetail}/>
         </div>
       </div>
 
@@ -93,7 +92,7 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices}) {
           </div>
         </div>
         <div ref={earningTable} className="summary-table-container">
-          <SummaryTable headers={earningHeaders} userValues={earningValues} tableName={'earning'} currencyCells={[]}/>
+          <SummaryTable headers={earningHeaders} userValues={earningValues} tableName={'earning'} currencyCells={[]} setCurrentDetail={setCurrentDetail}/>
         </div>
       </div>
     </div>
