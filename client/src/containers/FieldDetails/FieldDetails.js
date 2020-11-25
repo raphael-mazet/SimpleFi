@@ -5,7 +5,7 @@ import apollo from '../../apollo/index';
 import { gql } from '@apollo/client';
 import apis from '../../apis';
 
-export default function FieldDetails ({name, userTokens, userFields, userAccount}) {
+export default function FieldDetails ({name, userTokens, userFields, trackedFields, userAccount}) {
   const [fullHistory, setFullHistory] = useState([]);
   const [roi, setRoi] = useState (0);
   const [balanceHistoryFlag, setBalanceHistoryFlag] = useState(false);
@@ -20,14 +20,23 @@ export default function FieldDetails ({name, userTokens, userFields, userAccount
   if (currentField.stakedBalance) investmentValue += currentField.stakedBalance.reduce((acc, curr) => acc + curr.userInvestmentValue, 0);
 
 
+  function formatUniData(txHistory) {
+    let whitelist = [];
+    trackedFields.forEach(field => {  
+      field.seedTokens.forEach(token => {
+        if (token.tokenId = currentField.receiptToken) {
+          whitelist.push(token.contractAddresses[0])
+        }
+      })
+    })
 
-  function formatUniData(txHistory, whitelist) {
     const fieldHistory = txHistory.data.liquidityPositionSnapshots.filter(snapshot => snapshot.pair.id === currentField.contractAddresses[0].address.toLowerCase());
     let cumBal = 0;
     const formattedHistory = fieldHistory.map(snapshot => {
       const txDate = new Date(snapshot.timestamp * 1000);
       const pricePerToken = Number(snapshot.reserveUSD) / Number(snapshot.liquidityTokenTotalSupply);
       let txIn, txOut;
+      //TODO: usewhitelist
       let staked, unstaked;
       const newBal = Number(snapshot.liquidityTokenBalance);
       if (cumBal < newBal) {
@@ -74,27 +83,27 @@ export default function FieldDetails ({name, userTokens, userFields, userAccount
     })
     //TODO: get all token transactions
     //TODO: match these against the white list at the right block number
-    fetch("https://api.etherscan.io/api\?module\=account\&action\=tokentx\&address\=0x6A634f1Bec0E530C41cb81241aCC74fD0E3acB11\&apikey\=8S7WE8GJ1UIKKI38H1V5GFNV7IXT5M9MZE")
+    // fetch("https://api.etherscan.io/api\?module\=account\&action\=tokentx\&address\=0x6A634f1Bec0E530C41cb81241aCC74fD0E3acB11\&apikey\=8S7WE8GJ1UIKKI38H1V5GFNV7IXT5M9MZE")
     
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // set tx history
-  useEffect(() => {
-    if (balanceHistoryFlag) {
-      //ensure restakes are excluded from txIn/out
-      //TODO: build this API!
-      apis.getRestakeAddressWhitelist()
-        .then(list => {
-          //not really formatted but categorised by in/out flow
-          const formattedData = formatUniData(fullHistory, list);
-          setRoi(calcROI(investmentValue, formattedData));
-          setFullHistory(formattedData);
-        })
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [balanceHistoryFlag])
+  // useEffect(() => {
+  //   if (balanceHistoryFlag) {
+  //     //ensure restakes are excluded from txIn/out
+  //     //TODO: build this API!
+  //     apis.getRestakeAddressWhitelist()
+  //       .then(list => {
+  //         //not really formatted but categorised by in/out flow
+  //         const formattedData = formatUniData(fullHistory, list);
+  //         setRoi(calcROI(investmentValue, formattedData));
+  //         setFullHistory(formattedData);
+  //       })
+  //   }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [balanceHistoryFlag])
 
 
   //ROI definition: ((currVal of investment + amount realised) / amount invested) -1

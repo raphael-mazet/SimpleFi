@@ -4,6 +4,7 @@ import getTotalFieldSupply from './getTotalFieldSupply';
 import getFieldSeedReserves from './getFieldSeedReserves';
 import rewinder from './rewinder';
 import getAPYs from './getAPYs/getAPYs';
+import getUserTokenTransactions from './getUserTokenTransactions';
 
 export {
   createBalanceContracts,
@@ -12,5 +13,6 @@ export {
   getTotalFieldSupply,
   getFieldSeedReserves,
   rewinder,
-  getAPYs
+  getAPYs,
+  getUserTokenTransactions
 }
