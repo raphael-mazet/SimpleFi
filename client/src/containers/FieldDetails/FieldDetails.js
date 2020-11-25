@@ -5,10 +5,9 @@ import apollo from '../../apollo/index';
 import { gql } from '@apollo/client';
 import apis from '../../apis';
 
-export default function FieldDetails ({name, userTokens, userFields, trackedFields, userAccount}) {
+export default function FieldDetails ({name, userTokens, userFields, trackedFields, userAccount, userTokenTransactions}) {
   const [fullHistory, setFullHistory] = useState([]);
   const [roi, setRoi] = useState (0);
-  const [balanceHistoryFlag, setBalanceHistoryFlag] = useState(false);
 
   //TODO: need current FIeld investment value
   //TODO: derive ROI from that and tx history
@@ -20,17 +19,19 @@ export default function FieldDetails ({name, userTokens, userFields, trackedFiel
   if (currentField.stakedBalance) investmentValue += currentField.stakedBalance.reduce((acc, curr) => acc + curr.userInvestmentValue, 0);
 
 
-  function formatUniData(txHistory) {
+  function formatUniData(balanceHistory) {
     let whitelist = [];
     trackedFields.forEach(field => {  
-      field.seedTokens.forEach(token => {
-        if (token.tokenId = currentField.receiptToken) {
-          whitelist.push(token.contractAddresses[0])
+      field.seedTokens.forEach(seedToken => {
+        if (seedToken.tokenId === currentField.receiptToken) {
+          whitelist.push(field.contractAddresses[0].address.toLowerCase());
         }
       })
     })
 
-    const fieldHistory = txHistory.data.liquidityPositionSnapshots.filter(snapshot => snapshot.pair.id === currentField.contractAddresses[0].address.toLowerCase());
+    //only Uniswap fields
+    //TODO: sanitise all addresses to lowercase
+    const fieldHistory = balanceHistory.data.liquidityPositionSnapshots.filter(snapshot => snapshot.pair.id === currentField.contractAddresses[0].address.toLowerCase());
     let cumBal = 0;
     const formattedHistory = fieldHistory.map(snapshot => {
       const txDate = new Date(snapshot.timestamp * 1000);
@@ -39,15 +40,29 @@ export default function FieldDetails ({name, userTokens, userFields, trackedFiel
       //TODO: usewhitelist
       let staked, unstaked;
       const newBal = Number(snapshot.liquidityTokenBalance);
+      const targetBlock = userTokenTransactions.find(tx => tx.blockNumber === snapshot.block.toString());
+      const {from, to} = targetBlock;
+
       if (cumBal < newBal) {
-        txIn = newBal - cumBal;
-        cumBal += txIn;
+        if (!whitelist.includes(from)) {
+          txIn = newBal - cumBal;
+          cumBal += txIn;
+        } else {
+          unstaked = newBal - cumBal;
+          cumBal += unstaked;
+        }
       } else {
-        txOut = cumBal - newBal;
-        cumBal -= txOut;
+        if (!whitelist.includes(to)){
+          txOut = cumBal - newBal;
+          cumBal -= txOut;
+        } else {
+          staked = cumBal - newBal;
+          cumBal -= staked;
+        }
       }
-      return {...snapshot, txDate, pricePerToken, txIn, txOut}
+      return {...snapshot, txDate, pricePerToken, txIn, txOut, staked, unstaked}
     })
+    console.log(' ---> formattedHistory', formattedHistory);
     return formattedHistory;
   }
 
@@ -77,34 +92,13 @@ export default function FieldDetails ({name, userTokens, userFields, trackedFiel
     }
   )
     .then(res => {
-      setFullHistory(res);
-      setBalanceHistoryFlag(true);
-
+      const formattedData = formatUniData(res);
+      setRoi(calcROI(investmentValue, formattedData));
+      setFullHistory(formattedData);
     })
-    //TODO: get all token transactions
-    //TODO: match these against the white list at the right block number
-    // fetch("https://api.etherscan.io/api\?module\=account\&action\=tokentx\&address\=0x6A634f1Bec0E530C41cb81241aCC74fD0E3acB11\&apikey\=8S7WE8GJ1UIKKI38H1V5GFNV7IXT5M9MZE")
     
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  // set tx history
-  // useEffect(() => {
-  //   if (balanceHistoryFlag) {
-  //     //ensure restakes are excluded from txIn/out
-  //     //TODO: build this API!
-  //     apis.getRestakeAddressWhitelist()
-  //       .then(list => {
-  //         //not really formatted but categorised by in/out flow
-  //         const formattedData = formatUniData(fullHistory, list);
-  //         setRoi(calcROI(investmentValue, formattedData));
-  //         setFullHistory(formattedData);
-  //       })
-  //   }
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [balanceHistoryFlag])
-
 
   //ROI definition: ((currVal of investment + amount realised) / amount invested) -1
   function calcROI (investmentValue, txHistory) {
@@ -113,10 +107,37 @@ export default function FieldDetails ({name, userTokens, userFields, trackedFiel
 
     txHistory.forEach(tx => {
       const { txIn, txOut, pricePerToken } = tx;
-      txIn ? amountInvested += txIn * pricePerToken : amountRealised += txOut * pricePerToken
+      if (txIn || txOut) {
+        txIn ? amountInvested += txIn * pricePerToken : amountRealised += txOut * pricePerToken
+        console.log(' ---> txIn', txIn);
+        console.log(' ---> txOut', txOut);
+        console.log(' ---> pricePerToken', pricePerToken);
+        console.log(' ---> amountInvested', amountInvested);
+        console.log(' ---> amountRealised', amountRealised);
+      }
     })
-
+    console.log(' ---> amountInvested final', amountInvested);
+    console.log(' ---> amountRealised final', amountRealised);
     return ((investmentValue + amountRealised) / amountInvested) - 1;    
+  }
+
+  function txSorter (tx) {
+    const { txIn, txOut, staked, unstaked} = tx;
+    const display = {type: '', amount: 0};
+    if (txIn) {
+      display.type = 'accumulated';
+      display.amount = txIn;
+    } else if (txOut) {
+      display.type = 'exited';
+      display.amount = txOut;
+    } else if (staked) {
+      display.type = 'staked';
+      display.amount = staked;
+    } else if (unstaked) {
+      display.type = 'unstaked';
+      display.amount = unstaked;
+    }
+    return display;
   }
 
 
@@ -145,9 +166,10 @@ export default function FieldDetails ({name, userTokens, userFields, trackedFiel
 
       <div className="field-transactions">
         {fullHistory.map(tx => {
+          const txType = txSorter(tx)
           return (
             <div className="tx-date">
-              <p> on {tx.txDate.toLocaleDateString()} you {tx.txIn ? `bought ${tx.txIn.toFixed()}` : `sold ${tx.txOut.toFixed()}`} at ${tx.pricePerToken.toFixed()} </p>
+              <p> on {tx.txDate.toLocaleDateString()} you {txType.type} {txType.amount.toFixed()} at ${tx.pricePerToken.toFixed()} </p>
             </div>
           )
         })}
