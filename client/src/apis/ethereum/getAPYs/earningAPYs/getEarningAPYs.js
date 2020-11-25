@@ -1,5 +1,4 @@
 import apollo from '../../../../apollo';
-import { gql } from '@apollo/client';
 import getCurveEarningAPY from './curveEarningAPY/getCurveEarningAPY';
  
  async function getEarningAPYs (field, userTokens, userTokenPrices) {
@@ -19,18 +18,7 @@ import getCurveEarningAPY from './curveEarningAPY/getCurveEarningAPY';
 
     const dailyVolumeArr = await apollo.uniswapClient.query(
       {
-        query: gql`
-          query getUniswapPoolVolume ($pairAddress: String! $first: Int!) {
-            pairDayDatas (
-              where: {pairAddress: $pairAddress}
-              orderBy: date
-              orderDirection: desc
-              first: $first
-            ) {
-              dailyVolumeUSD
-            }
-          }
-        `,
+        query: apollo.uniswapQueries.getUniswapPoolVolume,
         variables: { pairAddress, first }
       }
     )

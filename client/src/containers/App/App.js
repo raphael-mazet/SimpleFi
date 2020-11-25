@@ -59,7 +59,8 @@ function App() {
     setSplash(true);
   }, [])
 
-  // Create first set of userTokens with token balances
+  //Create first set of userTokens with token balances
+  //Get all user token transactions
   useEffect(() => {
     if (userAccount.length && balanceContractsLoaded) {
       
@@ -85,11 +86,11 @@ function App() {
   useEffect(() => {
     if (userFields.length && userTokens.length && !rewoundFlag) {
         apis.rewinder(userFields, trackedTokens, trackedFields)
-        .then(rewound => {
-            setRewoundTokenBalances (rewound.userTokenBalances)
-            setRewoundFieldBalances (rewound.userFeederFieldBalances)
-            setFieldSuppliesAndReserves(rewound.fieldBalances)
-            setRewoundFlag(true);
+          .then(rewound => {
+              setRewoundTokenBalances (rewound.userTokenBalances);
+              setRewoundFieldBalances (rewound.userFeederFieldBalances);
+              setFieldSuppliesAndReserves(rewound.fieldBalances);
+              setRewoundFlag(true);
           })
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps  
@@ -109,7 +110,10 @@ function App() {
           setUserTokenPrices(tokenPrices);
           const fieldsWithInvestmentValues = helpers.addFieldInvestmentValues(fieldsWithSuppliesAndReserves, tokenPrices)
           apis.getAPYs(fieldsWithInvestmentValues, updatedUserTokens, tokenPrices)
-            .then(fieldsWithAPYs => setUserFields(fieldsWithAPYs))
+            .then(fieldsWithAPYs => {
+              apis.getROIs(userAccount[0], fieldsWithAPYs, trackedFields, userTokenTransactions)
+                .then(fieldsWithROIs => setUserFields(fieldsWithROIs))
+            })
         })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps  
@@ -123,7 +127,7 @@ function App() {
         <Switch>
           <Route path='/' exact render={() => <Welcome connect={connectWallet} setSplash={setSplash}/>}/>
           <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} userTokenPrices={userTokenPrices} setSplash={setSplash} setCurrentDetail={setCurrentDetail}/>}/>
-          <Route path='/:fieldName' exact render={() => <FieldDetails name={currentDetail} userTokens={userTokens} userFields={userFields} trackedFields={trackedFields} userAccount={userAccount} userTokenTransactions={userTokenTransactions}/>}/>
+          <Route path='/:fieldName' exact render={() => <FieldDetails name={currentDetail} userTokens={userTokens} userFields={userFields} />}/>
           {/* <Route path='/dashboard/:tokenName' render={() => <HoldingDetails userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
           {/* <Route path='/chart' exact render={() => <HoldingChart userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
         </Switch>
