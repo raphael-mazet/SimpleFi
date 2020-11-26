@@ -6,6 +6,12 @@ import rewinder from './rewinder';
 import getAPYs from './getAPYs/getAPYs';
 import getUserTokenTransactions from './getUserTokenTransactions';
 import getROIs from './getROIs/getROIs';
+import {
+  uniswapQueries,
+  getOneCurvePoolRawData,
+  getAllCurvePoolRawAPY,
+  curveEPs
+} from './protocolQueries';
 
 export {
   createBalanceContracts,
@@ -16,5 +22,9 @@ export {
   rewinder,
   getAPYs,
   getUserTokenTransactions,
-  getROIs
+  getROIs,
+  uniswapQueries,
+  getOneCurvePoolRawData,
+  getAllCurvePoolRawAPY,
+  curveEPs
 }

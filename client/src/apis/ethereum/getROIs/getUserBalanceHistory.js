@@ -1,7 +1,8 @@
 import apollo from '../../../apollo';
+import { getUniswapBalanceHistory } from '../protocolQueries';
 
 //TODO: memoize this
-async function getUserBalanceHistory (userAccount, field, trackedFields) {
+async function getUserBalanceHistory (userAccount, field) {
   
   let fieldBalanceHistory;
   //identify field type
@@ -10,12 +11,7 @@ async function getUserBalanceHistory (userAccount, field, trackedFields) {
   switch (fieldAddress.contractInterface.name) {
 
     case 'uniswap V2 earn':
-      const rawData = await apollo.uniswapClient.query(
-        {
-          query: apollo.uniswapQueries.getUniswapBalanceHistory,
-          variables: { user: userAccount }
-        }
-      )
+      const rawData = await getUniswapBalanceHistory(userAccount);
       fieldBalanceHistory = rawData.data.liquidityPositionSnapshots.filter(snapshot => snapshot.pair.id === field.contractAddresses[0].address.toLowerCase());
       break;
 

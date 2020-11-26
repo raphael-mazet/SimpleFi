@@ -8,7 +8,8 @@ import {
   rewinder,
   getAPYs,
   getUserTokenTransactions,
-  getROIs
+  getROIs,
+  uniswapQueries
 } from './ethereum/index';
 
 //eslint-disable-next-line import/no-anonymous-default-export
@@ -23,5 +24,6 @@ export default {
   rewinder,
   getAPYs,
   getUserTokenTransactions,
-  getROIs
+  getROIs,
+  uniswapQueries
 }
