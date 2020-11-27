@@ -4,6 +4,7 @@ import fetchRequest from '../../../fetchRequest';
 //TODO: add pool cache
 const { curveMainEP, apyEP, indivPoolEPs, indivPoolConcat } = curveEPs
 const apyCache = [];
+const poolCache =[];
 
 //this ep also used to get volume for all pools
 async function getAllCurvePoolRawAPY() {

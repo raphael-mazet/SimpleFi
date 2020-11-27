@@ -1,4 +1,3 @@
-import apollo from '../../../apollo';
 import { getUniswapBalanceHistory } from '../protocolQueries';
 
 //TODO: memoize this
