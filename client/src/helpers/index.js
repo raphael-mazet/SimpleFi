@@ -11,7 +11,8 @@ import toggleDropdown from './myAssetsHelpers/dropdownHelper';
 import {
   findFieldAddressType,
   combineFieldSuppliesAndReserves,
-  extractTxHistory
+  extractTxHistory,
+  sortLiquidityTxs
 } from './ethHelpers';
 
 //eslint-disable-next-line import/no-anonymous-default-export
@@ -27,5 +28,6 @@ export default {
   toggleDropdown,
   findFieldAddressType,
   combineFieldSuppliesAndReserves,
-  extractTxHistory
+  extractTxHistory,
+  sortLiquidityTxs
 }

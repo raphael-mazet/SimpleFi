@@ -9,6 +9,7 @@ async function getUniswapPoolVolume(pairAddress, first) {
     })
 }
 
+//TODO: add cache
 async function getUniswapBalanceHistory(userAccount) {
   return await apollo.uniswapClient.query(
     {
