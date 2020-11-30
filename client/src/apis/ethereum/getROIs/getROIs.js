@@ -1,6 +1,7 @@
 import getUserLiquidityHistory from './getUserLiquidityHistory';
+import helpers from '../../../helpers';
 
-//TODO: double-check everything, indices, decimals, txs, returns, shitty Promise.alls, etc.
+//TODO: uniswap: double-check everything, indices, decimals, txs, returns, shitty Promise.alls, etc.
 //TODO: put calcROI and whitelist in helpers for consistency
 /**
  * 
@@ -32,26 +33,12 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
           .then(liquidityHistory => {
             field.investmentValue = currInvestmentValue;
             field.userTxHistory = liquidityHistory;
-            field.allTimeROI = calcROI(currInvestmentValue, liquidityHistory);
+            field.allTimeROI = helpers.calcROI(currInvestmentValue, liquidityHistory);
           })
       }
     }
   }
   return fieldsWithROI;
-}
-
-
-function calcROI (investmentValue, txHistory) {
-  let amountInvested = 0;
-  let amountRealised = 0;
-
-  txHistory.forEach(tx => {
-    const { txIn, txOut, pricePerToken } = tx;
-    if (txIn || txOut) {
-      txIn ? amountInvested += txIn * pricePerToken : amountRealised += txOut * pricePerToken
-    }
-  })
-  return ((investmentValue + amountRealised) / amountInvested) - 1;    
 }
 
 export default getROIs;

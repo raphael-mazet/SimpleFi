@@ -1,9 +1,6 @@
-//TODO: documentation
-//@dev: tx is take from the Etherscan user erc20 transfer history, filtered by the
-//relevant field receipt token
 /**
  * 
- * @param {Object} tx - currently analysed tx
+ * @param {Object} tx - currently analysed tx (filtered from Etherscan fetch of user ERC20 transfer history)
  * @param {String} userAccount user Ethereum address
  * @param {Array} whitelist - list of seed token staking addresses to or from which
  *                            transactions don't change the user's underlying holding
@@ -33,6 +30,4 @@ function sortLiquidityTxs (tx, userAccount, whitelist) {
   return {txIn, txOut, staked, unstaked}
 }
 
-export {
-  sortLiquidityTxs
-} 
+export default sortLiquidityTxs;

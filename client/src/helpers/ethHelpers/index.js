@@ -1,11 +1,14 @@
 import findFieldAddressType from './findFieldAddressType';
 import combineFieldSuppliesAndReserves from './combineFieldSuppliesAndReserves';
-import extractTxHistory from './extractTxHistory';
-import { sortLiquidityTxs } from './ethROIHelpers';
+import sortLiquidityTxs from './ethROIHelpers/sortLiquidityTxs';
+import createWhitelist from './ethROIHelpers/createWhitelist';
+import calcROI from './ethROIHelpers/calcROI';
+
 
 export {
   findFieldAddressType,
   combineFieldSuppliesAndReserves,
-  extractTxHistory,
-  sortLiquidityTxs
+  sortLiquidityTxs,
+  createWhitelist,
+  calcROI
 }
