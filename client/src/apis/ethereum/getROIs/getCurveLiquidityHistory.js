@@ -2,6 +2,14 @@ import { getOneCurvePoolRawData } from '../protocolQueries';
 import getHistoricalPrice from '../../coinGecko/getHistoricalPrice';
 import helpers from '../../../helpers';
 
+/**
+ * 
+ * @param {Object} field - current Curve earning (liquidity pool) field
+ * @param {Object} receiptToken - fields receipt token, used to track user holding changes
+ * @param {Array} userReceiptTokenTxs - all transactions involving user's receipt token
+ * @param {String} userAccount - user's Ethereum account
+ * @param {Array} whitelist - array of staking addresses, to avoid staking/unstaking receipt tokens being couinted as a realised profit/loss or new investment
+ */
 async function getCurveLiquidityHistory(field, receiptToken, userReceiptTokenTxs, userAccount, whitelist) {
   const timeFormatter = new Intl.DateTimeFormat('en-GB');
   const historicalCurveStats = await getOneCurvePoolRawData(field.name);

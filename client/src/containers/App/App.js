@@ -85,14 +85,14 @@ function App() {
   // Add all underlying token and field balances
   useEffect(() => {
     if (userFields.length && userTokens.length && !rewoundFlag) {
-        apis.rewinder(userFields, trackedTokens, trackedFields)
-          .then(rewound => {
-              setRewoundTokenBalances (rewound.userTokenBalances);
-              setRewoundFieldBalances (rewound.userFeederFieldBalances);
-              setFieldSuppliesAndReserves(rewound.fieldBalances);
-              setRewoundFlag(true);
-          })
-      }
+      apis.rewinder(userFields, trackedTokens, trackedFields)
+        .then(rewound => {
+          setRewoundTokenBalances (rewound.userTokenBalances);
+          setRewoundFieldBalances (rewound.userFeederFieldBalances);
+          setFieldSuppliesAndReserves(rewound.fieldBalances);
+          setRewoundFlag(true);
+        })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [userFields])
 

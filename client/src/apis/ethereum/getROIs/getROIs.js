@@ -3,7 +3,15 @@ import getUserLiquidityHistory from './getUserLiquidityHistory';
 //TODO: double-check everything, indices, decimals, txs, returns, shitty Promise.alls, etc.
 //TODO: add documentation
 //TODO: add sBTC
-
+/**
+ * 
+ * @param {String} userAccount user's Eth account
+ * @param {Array} userFields user's earning and farming fields
+ * @param {Array} trackedFields all tracked fields
+ * @param {Array} userTokenTransactions all user ERC20 transactions (pulled from Etherscan)
+ * @param {Array} trackedTokens all tracked tokens
+ * @return {Array} userFields with added ROI, user transaction history and current value of investment
+ */
 async function getROIs(userAccount, userFields, trackedFields, userTokenTransactions, trackedTokens) {
 
   const fieldsWithROI = [...userFields];
@@ -11,7 +19,9 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
   for (let field of fieldsWithROI) {
 
     let currInvestmentValue = field.unstakedUserInvestmentValue;
-    if (field.stakedBalance) currInvestmentValue += field.stakedBalance.reduce((acc, curr) => acc + curr.userInvestmentValue, 0);
+    if (field.stakedBalance) {
+      currInvestmentValue += field.stakedBalance.reduce((acc, curr) => acc + curr.userInvestmentValue, 0);
+    }
 
     if (field.isEarning) {
       const receiptToken = trackedTokens.find(trackedToken => trackedToken.tokenId === field.receiptToken);
@@ -23,10 +33,9 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
       if (userLiquidityHistory) {
         Promise.all(userLiquidityHistory)
           .then(liquidityHistory => {
-            const fieldROI = calcROI(currInvestmentValue, liquidityHistory);
-            field.allTimeROI = fieldROI;
-            field.userTxHistory = liquidityHistory;
             field.investmentValue = currInvestmentValue;
+            field.userTxHistory = liquidityHistory;
+            field.allTimeROI = calcROI(currInvestmentValue, liquidityHistory);
           })
       }
     }
@@ -53,110 +62,3 @@ function calcROI (investmentValue, txHistory) {
 }
 
 export default getROIs;
-
-
-
-
-//next: do getLiquidityHistory for uniswap
-
-//////////////////////////////////////////////////////////////////////////
-/*
-    //TODO: rename to current investment value
-    let investmentValue = field.unstakedUserInvestmentValue;
-    if (field.stakedBalance) investmentValue += field.stakedBalance.reduce((acc, curr) => acc + curr.userInvestmentValue, 0);
-
-    if (field.name === "Curve: sUSD v2 pool") {
-      console.log(' ---> field.name', field.name);
-      const receiptToken = trackedTokens.find(trackedToken => trackedToken.tokenId === field.receiptToken);
-      const userBalanceChanges = userTokenTransactions.filter(tx => tx.contractAddress === receiptToken.address.toLowerCase());
-      // const historicalBalance
-      console.log(' ---> userBalanceChanges', userBalanceChanges);
-      let whitelist = [];
-      trackedFields.forEach(trackedField => {  
-        trackedField.seedTokens.forEach(seedToken => {
-          if (seedToken.tokenId === field.receiptToken) {
-            //TODO: change DB top add withdraw in enum
-            const depositAddresses = trackedField.contractAddresses.filter(address => address.addressTypes.includes('deposit' || 'withdraw'));
-            depositAddresses.forEach(depositAddress => whitelist.push(depositAddress.address.toLowerCase()))
-          }
-        })
-      })
-
-      const historicalCurveStats = await getOneCurvePoolRawData(field.name);
-      const timeFormatter = new Intl.DateTimeFormat('en-GB');
-
-      const extractedHistory = await userBalanceChanges.map(async tx => {
-        //find day in raw curve stats
-        console.log(' ---> tx', tx);
-        const txDate = new Date(Number(tx.timeStamp) * 1000);
-        const compDate = timeFormatter.format(new Date(Number(tx.timeStamp) * 1000));
-        // console.log(' ---> compDate', compDate);
-        const historicalStat = historicalCurveStats.find(day => compDate === timeFormatter.format(new Date(Number(day.timestamp) * 1000)));
-        // console.log(' ---> historicalStat', historicalStat);
-        const geckoDateformat = compDate.replace(/\//gi, '-')
-        //the full reserve price of each seed token on that date
-        let fieldHistReserveValue = 0;
-        for (let seed of field.seedTokens) {
-          const histSeedValue = await getHistoricalPrice (seed.priceApi, geckoDateformat);
-          //TODO: check getting the right price for seedIndex;
-          // console.log(' ---> histSeedValue', histSeedValue);
-          // console.log(' ---> seed.name', seed.name);
-          // console.log(' ---> seed.decimal', seed.tokenContract.decimals);
-          // console.log(' ---> seed.Index', seed.seedIndex);
-          // console.log(' ---> historicalStat.balances[seed.seedIndex]', historicalStat.balances[seed.seedIndex]);
-          // console.log(' ---> add to histSeedValue', );
-          const decimaledReserve = historicalStat.balances[seed.seedIndex]/Number(`1e${seed.tokenContract.decimals}`);
-          // console.log(' ---> decimaledReserve', decimaledReserve);
-          fieldHistReserveValue += histSeedValue * decimaledReserve;
-        }
-        // console.log(' ---> fieldHistReserveValue', fieldHistReserveValue);
-        const pricePerToken = fieldHistReserveValue / (historicalStat.supply / Number(`1e${receiptToken.tokenContract.decimals}`));
-        // console.log(' ---> pricePerToken', pricePerToken);
-        let txIn, txOut;
-        let staked, unstaked;
-        const txAmount = Number(ethers.utils.formatUnits(tx.value, tx.decimals))
-        if (tx.from === userAccount.toLowerCase()) {
-          if (whitelist.includes(tx.to)) {
-            staked = txAmount;
-          } else {
-            txOut = txAmount;
-          }
-        } else {
-          if (whitelist.includes(tx.from)) {
-            unstaked = txAmount;
-          } else {
-            txIn = txAmount;
-          }
-        }
-
-        return {tx, txDate, pricePerToken, txIn, txOut, staked, unstaked}
-      })
-      Promise.all(extractedHistory)
-        .then(extractedHistory => {
-          const fieldROI = calcROI(investmentValue, extractedHistory);
-          field.allTimeROI = fieldROI;
-          field.userTxHistory = extractedHistory;
-          field.investmentValue = investmentValue;
-        })
-    } else {
-    
-        if (field.isEarning) {
-          //@dev: gets raw historical snapshots of user's balance in field
-          const userBalanceHistory = await getUserBalanceHistory(userAccount, field, trackedFields);
-          if (userBalanceHistory) {
-            //@dev: converts snapshots into tx types (position accumulation/exit, staking/unstaking)
-            const userTxHistory = helpers.extractTxHistory(field, trackedFields, userBalanceHistory, userTokenTransactions);
-            const fieldROI = calcROI(investmentValue, userTxHistory);
-            
-            field.userTxHistory = userTxHistory;
-            field.allTimeROI = fieldROI;
-          }
-    
-          field.investmentValue = investmentValue;
-        }
-      }
-    }
-  console.log(' ---> fieldsWithROI', fieldsWithROI);
-  return fieldsWithROI;
-}
-*/
