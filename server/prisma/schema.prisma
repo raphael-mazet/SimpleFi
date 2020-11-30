@@ -35,7 +35,7 @@ model Field {
 
 model Protocol {
   protocolId                             String  @id @map("protocol_id")
-  name                                   String?
+  name                                   String? @unique
   governanceToken                        String? @map("governance_token")
   links                                  Json?
   token_protocol_governance_tokenTotoken Token?  @relation("protocol_governance_tokenTotoken", fields: [governanceToken], references: [tokenId])

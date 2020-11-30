@@ -5,7 +5,11 @@ async function getFields() {
   try {
     const fields = await prisma.field.findMany({
       include: {
-        // protocol: true,
+        protocol: {
+          select: {
+            name: true
+          }
+        },
         seedTokens: {
           select: {
             tokenId: true,
