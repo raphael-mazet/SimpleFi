@@ -1,8 +1,7 @@
 import getUserLiquidityHistory from './getUserLiquidityHistory';
 
 //TODO: double-check everything, indices, decimals, txs, returns, shitty Promise.alls, etc.
-//TODO: add documentation
-//TODO: add sBTC
+//TODO: put calcROI and whitelist in helpers for consistency
 /**
  * 
  * @param {String} userAccount user's Eth account
@@ -28,8 +27,6 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
       const userReceiptTokenTxs = userTokenTransactions.filter(tx => tx.contractAddress === receiptToken.address.toLowerCase());
       
       const userLiquidityHistory = await getUserLiquidityHistory(trackedFields, field, receiptToken, userReceiptTokenTxs, userAccount);
-      console.log(' ---> field.name', field.name);
-      console.log(' ---> userLiquidityHistory', userLiquidityHistory);
       if (userLiquidityHistory) {
         Promise.all(userLiquidityHistory)
           .then(liquidityHistory => {
@@ -47,7 +44,6 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
 function calcROI (investmentValue, txHistory) {
   let amountInvested = 0;
   let amountRealised = 0;
-  console.log(' ---> txHistory', txHistory);
 
   txHistory.forEach(tx => {
     const { txIn, txOut, pricePerToken } = tx;
@@ -55,9 +51,6 @@ function calcROI (investmentValue, txHistory) {
       txIn ? amountInvested += txIn * pricePerToken : amountRealised += txOut * pricePerToken
     }
   })
-  console.log(' ---> investmentValue', investmentValue);
-  console.log(' ---> amountRealised', amountRealised);
-  console.log(' ---> amountInvested', amountInvested);
   return ((investmentValue + amountRealised) / amountInvested) - 1;    
 }
 

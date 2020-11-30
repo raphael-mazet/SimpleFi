@@ -16,18 +16,19 @@ async function getCurveLiquidityHistory(field, receiptToken, userReceiptTokenTxs
   
   const liquidityHistory = userReceiptTokenTxs.map(async tx => {
     const txDate = new Date(Number(tx.timeStamp) * 1000);
-    //formatted to find corresponding date in curve data dump
+    //@dev: simplify date to just day/month/year (no time) to find corresponding day in curve snapshot data
     const compDate = timeFormatter.format(new Date(Number(tx.timeStamp) * 1000));
     const historicalStat = historicalCurveStats.find(day => compDate === timeFormatter.format(new Date(Number(day.timestamp) * 1000)));
 
     const geckoDateformat = compDate.replace(/\//gi, '-')
     let fieldHistReserveValue = 0;
+
     for (let seed of field.seedTokens) {
       const histSeedValue = await getHistoricalPrice (seed.priceApi, geckoDateformat);
-      //TODO: check getting the right price for seedIndex;
       const decimaledReserve = historicalStat.balances[seed.seedIndex]/Number(`1e${seed.tokenContract.decimals}`);
       fieldHistReserveValue += histSeedValue * decimaledReserve;
     }
+    //TODO: check impact of split admin fees and use of virtual price
     const pricePerToken = fieldHistReserveValue / (historicalStat.supply / Number(`1e${receiptToken.tokenContract.decimals}`));
     const {txIn, txOut, staked, unstaked} = helpers.sortLiquidityTxs(tx, userAccount, whitelist);
 
@@ -38,4 +39,3 @@ async function getCurveLiquidityHistory(field, receiptToken, userReceiptTokenTxs
 }
 
 export default getCurveLiquidityHistory;
-

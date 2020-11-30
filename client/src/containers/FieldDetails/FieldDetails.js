@@ -53,7 +53,7 @@ export default function FieldDetails ({name, userFields}) {
           const txType = txSorter(tx)
           return (
             <div className="tx-date">
-              <p> on {tx.txDate.toLocaleDateString()} you {txType.type} {txType.amount.toFixed()} at ${tx.pricePerToken.toFixed()} </p>
+              <p> on {tx.txDate.toLocaleDateString()} you {txType.type} {txType.amount.toFixed(2)} at ${tx.pricePerToken.toFixed(2)} </p>
             </div>
           )
         })}

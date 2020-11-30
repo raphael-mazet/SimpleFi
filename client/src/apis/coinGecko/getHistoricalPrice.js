@@ -1,20 +1,22 @@
 import fetchRequest from '../fetchRequest';
-import supportedCurrencies from './supportedCurrencies';
 import {baseUrl, priceEP, history} from './geckoEndPoints';
 
-//@dev: same end point can be used for other mhistorical market data
-//TODO: add a cache to this
+/**
+ * @param {uuid} tokenId - db Id of currently analysed token
+ * @param {String} date - date formatted for a historical price query to coingecko
+ * @dev same end point can be used for other historical market data provided by coinGecko
+ * @return {Object} - token price on day specified
+ */
+
 const priceCache = [];
 
 function getHistoricalPrice (tokenId, date) {
   const preExisting = priceCache.find(cached => cached.tokenId === tokenId && cached.date === date);
   if (preExisting) {
-    // console.log(' ---> preExisting', preExisting);
     return preExisting.data;
   }
   else return fetchRequest(baseUrl + priceEP + tokenId + history + date)
     .then(token => {
-      // console.log(' ---> token', token);
       const data = token.market_data.current_price.usd;
       priceCache.push({tokenId, date, data})
       return data;

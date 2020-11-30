@@ -1,20 +1,36 @@
 import curveEPs from './curveRawStatsEPs';
 import fetchRequest from '../../../fetchRequest';
 
-//TODO: add pool cache
-const { curveMainEP, apyEP, indivPoolEPs, indivPoolConcat } = curveEPs
-const apyCache = [];
-const poolCache =[];
 
-//this ep also used to get volume for all pools
+const { curveMainEP, apyEP, indivPoolEPs, indivPoolConcat } = curveEPs
+let apyCache;
+const poolCache ={};
+
+/**
+ * @dev - this ep can also be used to get volume for all pools
+ * @return {array} current nominal daily, monthly, weekly and total APY for all Curve pools
+ */
 async function getAllCurvePoolRawAPY() {
-  return apyCache.length ? apyCache : await fetchRequest(curveMainEP + apyEP)
+  if (!apyCache) {
+    apyCache = await fetchRequest(curveMainEP + apyEP);
+    return apyCache
+  }
+  return apyCache;
 }
 
+/**
+ * 
+ * @param {String} name - name of the curve earning (liquidity) field
+ * @return {Array} - full daily pool data history, including reserves, timestamp, balances, etc. 
+ */
 async function getOneCurvePoolRawData(name) {
-  const path = indivPoolEPs[name] + indivPoolConcat;
-  const allDaysPoolData = await fetchRequest(curveMainEP + path);
-  return allDaysPoolData;
+  if (poolCache[name]) {
+    return poolCache[name]
+  } else {
+    const path = indivPoolEPs[name] + indivPoolConcat;
+    poolCache[name] = await fetchRequest(curveMainEP + path);
+    return poolCache[name];
+  }
 }
 
 export {
