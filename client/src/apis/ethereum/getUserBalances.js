@@ -23,6 +23,7 @@ async function getUserBalance (account, targetContract) {
 }
 
   //TODO: documentation
+  //TODO: consider one call to Etherscan for token balances
   function getAllUserBalances (account, fieldOrTokenArr) {
     const balancePromises = Promise.all(
       fieldOrTokenArr.map(

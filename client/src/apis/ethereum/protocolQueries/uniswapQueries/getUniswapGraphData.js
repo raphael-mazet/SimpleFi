@@ -9,13 +9,19 @@ async function getUniswapPoolVolume(pairAddress, first) {
     })
 }
 
-//TODO: add cache
+const uniswapBalanceCache = {};
+console.log('first log@!')
 async function getUniswapBalanceHistory(userAccount) {
-  return await apollo.uniswapClient.query(
-    {
-      query: uniswapQueries.getUniswapBalanceHistory,
-      variables: { user: userAccount }
-    })
+  if (uniswapBalanceCache[userAccount]) {
+    return uniswapBalanceCache[userAccount];
+  } else {
+    uniswapBalanceCache[userAccount] = await apollo.uniswapClient.query(
+      {
+        query: uniswapQueries.getUniswapBalanceHistory,
+        variables: { user: userAccount }
+      })
+    return uniswapBalanceCache[userAccount];
+  }
 }
 
 export {

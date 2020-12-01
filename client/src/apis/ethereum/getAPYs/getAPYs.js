@@ -11,7 +11,6 @@ async function getAPYs (userFields, userTokens, userTokenPrices) {
       field.farmingAPY = await getFarmingAPYs(field, userTokens, userTokenPrices);
     }
 
-    //TODO: bulkfetch uniswap, etc. volumes from theGraph
     if (field.isEarning) {
       field.earningAPY = await getEarningAPYs(field, userTokens, userTokenPrices);
     }

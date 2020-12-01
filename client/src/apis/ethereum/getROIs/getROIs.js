@@ -2,7 +2,6 @@ import getUserLiquidityHistory from './getUserLiquidityHistory';
 import helpers from '../../../helpers';
 
 //TODO: uniswap: double-check everything, indices, decimals, txs, returns, shitty Promise.alls, etc.
-//TODO: put calcROI and whitelist in helpers for consistency
 /**
  * 
  * @param {String} userAccount user's Eth account
