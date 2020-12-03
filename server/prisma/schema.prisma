@@ -97,10 +97,11 @@ model Transaction {
 }
 
 model FieldCrop {
-  tokenId String @map("token_id")
-  fieldId String @map("field_id")
-  field   Field  @relation("fieldTofieldCrop", fields: [fieldId], references: [fieldId])
-  token   Token  @relation("fieldCropTotoken", fields: [tokenId], references: [tokenId])
+  tokenId                String  @map("token_id")
+  fieldId                String  @map("field_id")
+  unclaimedBalanceMethod String? @map("unclaimed_balance_method")
+  field                  Field   @relation("fieldTofieldCrop", fields: [fieldId], references: [fieldId])
+  token                  Token   @relation("fieldCropTotoken", fields: [tokenId], references: [tokenId])
 
   @@id([tokenId, fieldId])
   @@map("field_crop")
@@ -162,6 +163,8 @@ enum address_type {
   underlying
   earning
   deposit
+  withdraw
   rewardRate
   rewardWeight
+  unclaimedReward
 }
