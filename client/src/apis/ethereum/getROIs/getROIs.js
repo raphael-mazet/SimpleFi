@@ -36,6 +36,11 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
           })
       }
     }
+
+    if (field.cropTokens.length) {
+      
+
+    }
   }
   return fieldsWithROI;
 }

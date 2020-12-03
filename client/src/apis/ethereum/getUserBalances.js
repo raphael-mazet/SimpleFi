@@ -32,6 +32,7 @@ async function getUserBalance (account, targetContract) {
           if (fieldOrToken.tokenId) {
             contract = fieldOrToken.tokenContract;
           } else {
+            //TODO: destructure one further so only contract is passed to getUserBalance and avoid ||
             contract = fieldOrToken.fieldContracts;
           }
           const userBalance = await getUserBalance(account, contract);

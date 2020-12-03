@@ -1,6 +1,12 @@
 import helpers from '../../helpers';
 import { getTotalFieldSupply, getFieldSeedReserves } from './';
 
+/**
+ * 
+ * @param {Array} userFields - all fields the user is currently invested in at a depth of 0 (investment not restaked elsewhere)
+ * @param {Array} trackedTokens - all tokens tracked by SimpleFi
+ * @param {Array} trackedFields - all earning and farming fields tracked by SimpleFi
+ */
 async function rewinder (userFields, trackedTokens, trackedFields) {
 
   const userTokenBalances = [];
@@ -8,14 +14,15 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
   const totalFieldSupplyCache = []; // { fieldName, totalFieldSupply }
   const fieldSeedReserveCache = []; // { fieldName, seedReserves: [{tokenName, fieldReserve}] }
 
-
   for (const mainField of userFields) {
     
     const { contract, decimals } = mainField.fieldContracts.balanceContract;
     //@dev: total supply indicates either 1) how many receipt tokens have been minted by the field
     // or 2) how many input tokens the field holds (in cases where it issues no receipts)
     const totalMainFieldSupply = await getTotalFieldSupply(mainField.name, contract, decimals, totalFieldSupplyCache);
+    // console.log(' ---> mainField.name, totalMainFieldSupply', mainField.name, totalMainFieldSupply);
     const userShareOfMainField = mainField.userBalance / totalMainFieldSupply;
+    // console.log(' ---> userShareOfMainField', userShareOfMainField);
  
     //@dev: will extract the balance of underlying seed tokens owned by the user
     for (const token of mainField.seedTokens) {
@@ -24,6 +31,7 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
   }
 
   const fieldBalances = helpers.combineFieldSuppliesAndReserves(totalFieldSupplyCache, fieldSeedReserveCache);
+
 
   return {
     userTokenBalances,
@@ -34,20 +42,23 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
 
   async function tokenBalanceExtractor (token, field, share) {
     const { tokenId, isBase, tokenContract } = token;
-
+    
     //@dev: field seed reserves are the number of underlying tokens held by the field
     let fieldSeedReserve = await getFieldSeedReserves(field, token, tokenContract, fieldSeedReserveCache);
   
-    if (isBase) {
+    // if (isBase) {
+      // console.log(' ---> cleanup!');
       const userTokenBalance = fieldSeedReserve * share;
       userTokenBalances.push({token, userTokenBalance, field});
   
-    } else {
+    // } else {
+    if (!isBase) {
       let feederField = trackedFields.find(field => field.receiptToken === tokenId);
+
       //TODO: stop this from changing tracked Fields as well as user fields
       //TODO: avoid populating this multiple times (once in App.js)
       [feederField] = helpers.populateFieldTokensFromCache([feederField], trackedTokens);
-      
+
       const { contract, decimals } = feederField.fieldContracts.balanceContract;
       const totalFeederSupply = await getTotalFieldSupply(feederField.name, contract, decimals, totalFieldSupplyCache);
       const userFieldBalance = fieldSeedReserve * share;

@@ -2,6 +2,7 @@ function populateFieldTokensFromCache (fieldsWithBalance, trackedTokens) {
   fieldsWithBalance = fieldsWithBalance.map(field => {
     
     field.cropTokens = field.cropTokens.map(token => {
+      //TODO: do not delete unclaimed blance method
       return trackedTokens.find(trackedToken => token.tokenId === trackedToken.tokenId)
     });
     

@@ -1,6 +1,7 @@
 import {
   populateFieldTokensFromCache,
   addLockedTokenBalances,
+  addUnclaimedBalances,
   addFieldSuppliesAndReserves,
   addStakedFieldBalances,
   addFieldInvestmentValues
@@ -19,6 +20,7 @@ import {
 //eslint-disable-next-line import/no-anonymous-default-export
 export default {
   populateFieldTokensFromCache,
+  addUnclaimedBalances,
   addLockedTokenBalances,
   addFieldSuppliesAndReserves,
   addStakedFieldBalances,

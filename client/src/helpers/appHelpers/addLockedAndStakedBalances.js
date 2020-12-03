@@ -1,3 +1,26 @@
+function addUnclaimedBalances(unclaimedBalances, userTokens, trackedTokens) {
+  //ASK: is this necessary?
+  const updatedUserTokens = [...userTokens];
+
+  unclaimedBalances.forEach(unclaimedToken => {
+    //identify if user already has a balance for curr token
+    const existingUserToken = updatedUserTokens.find(userToken => userToken.tokenId === unclaimedToken.tokenId);
+    //if so, add rewound token balance to thre token's locked balance
+    if (existingUserToken && existingUserToken.unclaimedBalance) {
+      existingUserToken.unclaimedBalance.push({balance: unclaimedToken.unclaimedBalance, field: unclaimedToken.fieldId});
+    }
+    else if (existingUserToken) existingUserToken.unclaimedBalance = [{balance: unclaimedToken.unclaimedBalance, field: unclaimedToken.fieldId}];
+    //otherwise: create a new user Token
+    else {
+      //ASK: check this is necessary
+      const newUserToken = trackedTokens.find(trackedToken => trackedToken.tokenId === unclaimedToken.tokenId)
+      newUserToken.unclaimedBalance = [{balance: unclaimedToken.unclaimedBalance, field: unclaimedToken.fieldId}]
+      updatedUserTokens.push(newUserToken);
+    }
+  })
+  return updatedUserTokens;
+}
+
 function addLockedTokenBalances (rewoundTokens, userTokens) {
   //ASK: is this necessary?
   const updatedUserTokens = [...userTokens];
@@ -45,6 +68,7 @@ function addStakedFieldBalances (rewoundFields, userFields) {
 }
 
 export {
+  addUnclaimedBalances,
   addLockedTokenBalances,
   addStakedFieldBalances
 }

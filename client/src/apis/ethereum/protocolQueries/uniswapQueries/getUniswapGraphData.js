@@ -10,7 +10,6 @@ async function getUniswapPoolVolume(pairAddress, first) {
 }
 
 const uniswapBalanceCache = {};
-console.log('first log@!')
 async function getUniswapBalanceHistory(userAccount) {
   if (uniswapBalanceCache[userAccount]) {
     return uniswapBalanceCache[userAccount];
