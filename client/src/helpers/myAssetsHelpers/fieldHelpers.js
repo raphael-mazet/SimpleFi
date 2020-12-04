@@ -52,7 +52,9 @@ function fieldSeparator (userFields){
       earningFields.push([name, combinedBalance, stakedPercent, APY])
     }
 
-    totalInvested += unstakedUserInvestmentValue;
+    if (unstakedUserInvestmentValue) {
+      totalInvested += unstakedUserInvestmentValue;
+    }
     if (stakedBalance) {
       stakedBalance.forEach(stakedBalance => totalInvested += stakedBalance.userInvestmentValue)
     }

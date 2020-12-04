@@ -17,7 +17,10 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
 
   for (let field of fieldsWithROI) {
 
-    let currInvestmentValue = field.unstakedUserInvestmentValue;
+    let currInvestmentValue = 0;
+    if (field.unstakedUserInvestmentValue) {
+      currInvestmentValue += field.unstakedUserInvestmentValue;
+    }
     if (field.stakedBalance) {
       currInvestmentValue += field.stakedBalance.reduce((acc, curr) => acc + curr.userInvestmentValue, 0);
     }
