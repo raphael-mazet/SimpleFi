@@ -1,4 +1,5 @@
-import getUserLiquidityHistory from './getUserLiquidityHistory';
+import getUserLiquidityHistory from './earningROIs/getUserLiquidityHistory';
+import getUserCropReturnsHistory from './farmingROIs';
 import helpers from '../../../helpers';
 
 //TODO: uniswap: double-check everything, indices, decimals, txs, returns, shitty Promise.alls, etc.
@@ -11,7 +12,7 @@ import helpers from '../../../helpers';
  * @param {Array} trackedTokens all tracked tokens
  * @return {Array} userFields with added ROI, user transaction history and current value of investment
  */
-async function getROIs(userAccount, userFields, trackedFields, userTokenTransactions, trackedTokens) {
+async function getROIs(userAccount, userFields, trackedFields, userTokenTransactions, trackedTokens, userTokens, tokenPrices) {
 
   const fieldsWithROI = [...userFields];
 
@@ -26,6 +27,8 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
     }
 
     if (field.isEarning) {
+
+      //TODO: push these 2 lines to the getUserLiquidityHistory function for consistency & readbility
       const receiptToken = trackedTokens.find(trackedToken => trackedToken.tokenId === field.receiptToken);
       const userReceiptTokenTxs = userTokenTransactions.filter(tx => tx.contractAddress === receiptToken.address.toLowerCase());
       
@@ -41,8 +44,12 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
     }
 
     if (field.cropTokens.length) {
-      
-
+      // want to get: all tokens paid out by field + all unclaimed * price
+      const userCropReturnsHistory = await getUserCropReturnsHistory(field, userTokenTransactions);
+      //{tx, priceApi, rewardValue, pricePerToken}
+      field.investmentValue = currInvestmentValue;
+      field.userReturnsHistory = userCropReturnsHistory;
+      field.allTimeROI = helpers.calcFarmingROI(currInvestmentValue, userCropReturnsHistory, userTokens, tokenPrices, field.cropTokens);
     }
   }
   return fieldsWithROI;

@@ -116,7 +116,7 @@ function App() {
           const fieldsWithInvestmentValues = helpers.addFieldInvestmentValues(fieldsWithSuppliesAndReserves, tokenPrices)
           apis.getAPYs(fieldsWithInvestmentValues, tokensWithUnclaimedBalances, tokenPrices)
             .then(fieldsWithAPYs => {
-              apis.getROIs(userAccount[0], fieldsWithAPYs, trackedFields, userTokenTransactions, trackedTokens)
+              apis.getROIs(userAccount[0], fieldsWithAPYs, trackedFields, userTokenTransactions, trackedTokens, tokensWithUnclaimedBalances, tokenPrices)
                 .then(fieldsWithROIs => setUserFields(fieldsWithROIs))
             })
         })

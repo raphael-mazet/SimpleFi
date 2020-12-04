@@ -1,6 +1,6 @@
-import { getOneCurvePoolRawData } from '../protocolQueries';
-import getHistoricalPrice from '../../coinGecko/getHistoricalPrice';
-import helpers from '../../../helpers';
+import { getOneCurvePoolRawData } from '../../protocolQueries';
+import getHistoricalPrice from '../../../coinGecko/getHistoricalPrice';
+import helpers from '../../../../helpers';
 
 /**
  * 
