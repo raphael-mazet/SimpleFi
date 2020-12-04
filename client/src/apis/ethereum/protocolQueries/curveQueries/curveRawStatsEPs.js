@@ -4,7 +4,8 @@ export default {
   apyEP: 'apys.json',
   indivPoolEPs: {
       'Curve: sUSD v2 pool': 'susd',
-      'Curve: sBTC pool': 'rens'  
+      'Curve: sBTC pool': 'rens',
+      'Curve: hBTC pool': 'hbtc'
     },
   indivPoolConcat: '-1440m.json'
 }
