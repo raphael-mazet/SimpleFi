@@ -1,3 +1,5 @@
+const ethers = require('ethers');
+
 function addUnclaimedBalances(unclaimedBalances, userTokens, trackedTokens) {
   //ASK: is this necessary?
   const updatedUserTokens = [...userTokens];

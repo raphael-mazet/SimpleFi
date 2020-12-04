@@ -18,16 +18,16 @@ async function getCurveFarmingAPY(rewardRateAddress, field, userTokens, userToke
   //TODO: memoize totalWeight
   const totalWeight = await rewardWeightContract.get_total_weight();
   const gaugeWeight = await rewardWeightContract.get_gauge_weight(rewardRateAddress.address);
+  //TODO: use decimals on these 2
   const fieldRewardsPercent = gaugeWeight / (totalWeight / 1e18);
-  //TODO: use decimals
-  const annualPayout = (rewardRate / 1e18) * fieldRewardsPercent * 3.154e7;
+  const annualPayout = (rewardRate / 1e18) * fieldRewardsPercent * 3.154e7;//this constant is the number of seconds in a year
 
   //define APY
   const { totalSupply } = field;
 
-  //seedPrice in this case is the receipt token price
-  const receiptTokenName = userTokens.find(token => token.tokenId === field.receiptToken).name;
-  const seedPrice = userTokenPrices[receiptTokenName].usd;
+  //@dev: this assumes there is just one seed
+  const seedPrice = userTokenPrices[field.seedTokens[0].name].usd;
+  //FIXME: this assumes there is just one crop - not the case for susd
   const cropPrice = userTokenPrices[field.cropTokens[0].name].usd;
 
   return (annualPayout * cropPrice) / (totalSupply * seedPrice);

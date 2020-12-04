@@ -2,6 +2,7 @@ import getSnxFarmingAPY from './snxFarmingAPY';
 import getCurveFarmingAPY from './curveFarmingAPY';
 
 //formula for APY: (yearlyReward * cropPrice) / (totalSupply * seedPrice)
+//TODO: add documentation
 async function getFarmingAPYs (field, userTokens, userTokenPrices) {
   const rewardRateAddress = field.contractAddresses.find(address => address.addressTypes.includes('rewardRate'));
   let APY;
@@ -13,7 +14,7 @@ async function getFarmingAPYs (field, userTokens, userTokenPrices) {
       APY = await getSnxFarmingAPY(rewardRateAddress, field, userTokenPrices);
       break;
 
-    case 'curve pool gauge':
+    case 'curve reward gauge':
       APY = await getCurveFarmingAPY(rewardRateAddress, field, userTokens, userTokenPrices);
       break;
 

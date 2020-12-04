@@ -28,7 +28,10 @@ function fieldSeparator (userFields){
   const farmingFields = [];
   const earningFields = [];
   let totalInvested = 0;
-  const formatter = new Intl.NumberFormat("en-US", {style: 'percent'});
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: 'percent',
+    minimumFractionDigits: 2
+  });
 
   userFields.forEach(field => {
 
