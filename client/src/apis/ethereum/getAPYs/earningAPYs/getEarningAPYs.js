@@ -14,6 +14,7 @@ import getUniswapEarningAPY from './getUniswapEarningAPY'
 
     case "curve swap 4 (sUSD)":
     case "curve swap 3 (sBTC)":
+    case "curve swap 2 (hBTC)":
       APY = await getCurveEarningAPY(field);
       break;
 
