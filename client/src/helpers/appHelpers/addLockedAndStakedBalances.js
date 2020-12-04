@@ -1,5 +1,3 @@
-const ethers = require('ethers');
-
 function addUnclaimedBalances(unclaimedBalances, userTokens, trackedTokens) {
   //ASK: is this necessary?
   const updatedUserTokens = [...userTokens];
@@ -7,7 +5,7 @@ function addUnclaimedBalances(unclaimedBalances, userTokens, trackedTokens) {
   unclaimedBalances.forEach(unclaimedToken => {
     //identify if user already has a balance for curr token
     const existingUserToken = updatedUserTokens.find(userToken => userToken.tokenId === unclaimedToken.tokenId);
-    //if so, add rewound token balance to thre token's locked balance
+    //if so, add rewound token balance to the token's locked balance
     if (existingUserToken && existingUserToken.unclaimedBalance) {
       existingUserToken.unclaimedBalance.push({balance: unclaimedToken.unclaimedBalance, field: unclaimedToken.fieldId});
     }
@@ -30,7 +28,7 @@ function addLockedTokenBalances (rewoundTokens, userTokens) {
   rewoundTokens.forEach(rewoundToken => {
     //identify if user already has a balance for curr token
     const existingUserToken = updatedUserTokens.find(userToken => userToken.tokenId === rewoundToken.token.tokenId);
-    //if so, add rewound token balance to thre token's locked balance
+    //if so, add rewound token balance to the token's locked balance
     if (existingUserToken && existingUserToken.lockedBalance) {
       existingUserToken.lockedBalance.push({balance: rewoundToken.userTokenBalance, field: rewoundToken.field});
     }
