@@ -13,8 +13,10 @@ import {
   findFieldAddressType,
   combineFieldSuppliesAndReserves,
   sortLiquidityTxs,
+  sortFarmingTxs,
   createWhitelist,
-  calcROI
+  calcROI,
+  calcFarmingROI
 } from './ethHelpers';
 
 //eslint-disable-next-line import/no-anonymous-default-export
@@ -32,6 +34,8 @@ export default {
   findFieldAddressType,
   combineFieldSuppliesAndReserves,
   sortLiquidityTxs,
+  sortFarmingTxs,
   createWhitelist,
-  calcROI
+  calcROI,
+  calcFarmingROI
 }

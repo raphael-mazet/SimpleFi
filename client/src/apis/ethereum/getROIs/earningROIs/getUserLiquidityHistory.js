@@ -1,5 +1,5 @@
 import getCurveLiquidityHistory from './getCurveLiquidityHistory';
-import getUniswapLiquidityHistory from '../getUniswapLiquidityHistory';
+import getUniswapLiquidityHistory from './getUniswapLiquidityHistory';
 import helpers from '../../../../helpers';
 
 /**

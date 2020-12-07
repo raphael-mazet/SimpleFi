@@ -1,5 +1,5 @@
 import getUserLiquidityHistory from './earningROIs/getUserLiquidityHistory';
-import getUserCropReturnsHistory from './farmingROIs';
+import getUserFarmingHistory from './farmingROIs/getUserFarmingHistory';
 import helpers from '../../../helpers';
 
 //TODO: uniswap: double-check everything, indices, decimals, txs, returns, shitty Promise.alls, etc.
@@ -44,12 +44,12 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
     }
 
     if (field.cropTokens.length) {
-      // want to get: all tokens paid out by field + all unclaimed * price
-      const userCropReturnsHistory = await getUserCropReturnsHistory(field, userTokenTransactions);
-      //{tx, priceApi, rewardValue, pricePerToken}
+      //@dev: [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value, pricePerToken}]
+      const userFarmingHistory = await getUserFarmingHistory(field, userTokenTransactions, trackedFields);
+
       field.investmentValue = currInvestmentValue;
-      field.userReturnsHistory = userCropReturnsHistory;
-      field.allTimeROI = helpers.calcFarmingROI(currInvestmentValue, userCropReturnsHistory, userTokens, tokenPrices, field.cropTokens);
+      field.userFarmingTxHistory = userFarmingHistory;
+      field.allTimeROI = helpers.calcFarmingROI(currInvestmentValue, userFarmingHistory, userTokens, tokenPrices, field.cropTokens);
     }
   }
   return fieldsWithROI;

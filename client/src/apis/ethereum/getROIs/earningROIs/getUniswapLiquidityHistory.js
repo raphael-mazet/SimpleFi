@@ -1,5 +1,5 @@
-import { getUniswapBalanceHistory } from '../protocolQueries';
-import helpers from '../../../helpers';
+import { getUniswapBalanceHistory } from '../../protocolQueries';
+import helpers from '../../../../helpers';
 
 async function getUniswapLiquidityHistory (field, userReceiptTokenTxs, userAccount, whitelist) {
 
