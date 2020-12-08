@@ -1,6 +1,7 @@
 import {
   populateFieldTokensFromCache,
   addLockedTokenBalances,
+  addUnclaimedBalances,
   addFieldSuppliesAndReserves,
   addStakedFieldBalances,
   addFieldInvestmentValues
@@ -11,12 +12,17 @@ import toggleDropdown from './myAssetsHelpers/dropdownHelper';
 import {
   findFieldAddressType,
   combineFieldSuppliesAndReserves,
-  extractTxHistory
+  sortLiquidityTxs,
+  sortFarmingTxs,
+  createWhitelist,
+  calcROI,
+  calcFarmingROI
 } from './ethHelpers';
 
 //eslint-disable-next-line import/no-anonymous-default-export
 export default {
   populateFieldTokensFromCache,
+  addUnclaimedBalances,
   addLockedTokenBalances,
   addFieldSuppliesAndReserves,
   addStakedFieldBalances,
@@ -27,5 +33,9 @@ export default {
   toggleDropdown,
   findFieldAddressType,
   combineFieldSuppliesAndReserves,
-  extractTxHistory
+  sortLiquidityTxs,
+  sortFarmingTxs,
+  createWhitelist,
+  calcROI,
+  calcFarmingROI
 }

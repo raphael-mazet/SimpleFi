@@ -4,11 +4,14 @@ import getTokenPrices from './coinGecko/getTokenPrices';
 import {
   getUserBalance,
   getAllUserBalances,
+  getAllBasicBalances,
+  getUnclaimedRewards,
   createBalanceContracts,
   rewinder,
   getAPYs,
   getUserTokenTransactions,
-  getROIs
+  getROIs,
+  uniswapQueries
 } from './ethereum/index';
 
 //eslint-disable-next-line import/no-anonymous-default-export
@@ -20,8 +23,11 @@ export default {
   createBalanceContracts,
   getUserBalance,
   getAllUserBalances,
+  getAllBasicBalances,
+  getUnclaimedRewards,
   rewinder,
   getAPYs,
   getUserTokenTransactions,
-  getROIs
+  getROIs,
+  uniswapQueries
 }

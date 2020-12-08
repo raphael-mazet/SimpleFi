@@ -6,7 +6,7 @@ async function getSnxFarmingAPY(rewardRateAddress, field, userTokenPrices) {
   const contract = new ethers.Contract(address, contractInterface.abi, provider);
        
   //TODO: add logic around timeperiod ending
-  const duration = await contract.DURATION();
+  // const duration = await contract.DURATION();
         
   //define annual reward
   const rewardRate = await contract.rewardRate();

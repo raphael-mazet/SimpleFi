@@ -18,6 +18,7 @@ function App() {
   const [userTokens, setUserTokens] = useState([]);
   const [userFields, setUserFields] = useState([]);
   const [userTokenTransactions, setUserTokenTransactions] = useState([]);
+  const [unclaimedRewards, setUnclaimedRewards] = useState([]);
   const [rewoundTokenBalances, setRewoundTokenBalances] = useState([]);
   const [rewoundFieldBalances, setRewoundFieldBalances] = useState([]);
   const [fieldSuppliesAndReserves, setFieldSuppliesAndReserves] = useState([]);
@@ -67,6 +68,9 @@ function App() {
       apis.getUserTokenTransactions(userAccount[0])
         .then(txArr => setUserTokenTransactions(txArr.result));
 
+      apis.getUnclaimedRewards(userAccount[0], trackedFields, trackedTokens)
+        .then(unclaimedArr => setUnclaimedRewards(unclaimedArr))
+
       const getTokenBalances = apis.getAllUserBalances(userAccount[0], trackedTokens);
       const getFieldBalances = apis.getAllUserBalances(userAccount[0], trackedFields);
       Promise.all([getTokenBalances, getFieldBalances])
@@ -85,33 +89,34 @@ function App() {
   // Add all underlying token and field balances
   useEffect(() => {
     if (userFields.length && userTokens.length && !rewoundFlag) {
-        apis.rewinder(userFields, trackedTokens, trackedFields)
-          .then(rewound => {
-              setRewoundTokenBalances (rewound.userTokenBalances);
-              setRewoundFieldBalances (rewound.userFeederFieldBalances);
-              setFieldSuppliesAndReserves(rewound.fieldBalances);
-              setRewoundFlag(true);
-          })
-      }
+      apis.rewinder(userFields, trackedTokens, trackedFields)
+        .then(rewound => {
+          setRewoundTokenBalances (rewound.userTokenBalances);
+          setRewoundFieldBalances (rewound.userFeederFieldBalances);
+          setFieldSuppliesAndReserves(rewound.fieldBalances);
+          setRewoundFlag(true);
+        })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [userFields])
 
   useEffect(() => {
 
     if (rewoundFlag) {
-      const updatedUserTokens = helpers.addLockedTokenBalances(rewoundTokenBalances, userTokens);
-      setUserTokens(updatedUserTokens);
-      
+      const tokensWithLockedBalances = helpers.addLockedTokenBalances(rewoundTokenBalances, userTokens);
+      const tokensWithUnclaimedBalances = helpers.addUnclaimedBalances(unclaimedRewards, tokensWithLockedBalances)
+      setUserTokens(tokensWithUnclaimedBalances);
+
       const fieldsWithStakedBalances = helpers.addStakedFieldBalances(rewoundFieldBalances, userFields);
       const fieldsWithSuppliesAndReserves = helpers.addFieldSuppliesAndReserves(fieldSuppliesAndReserves, fieldsWithStakedBalances);
       
-      apis.getTokenPrices(updatedUserTokens, fieldsWithSuppliesAndReserves, trackedTokens)
+      apis.getTokenPrices(tokensWithUnclaimedBalances, fieldsWithSuppliesAndReserves, trackedTokens)
         .then(tokenPrices => {
           setUserTokenPrices(tokenPrices);
           const fieldsWithInvestmentValues = helpers.addFieldInvestmentValues(fieldsWithSuppliesAndReserves, tokenPrices)
-          apis.getAPYs(fieldsWithInvestmentValues, updatedUserTokens, tokenPrices)
+          apis.getAPYs(fieldsWithInvestmentValues, tokensWithUnclaimedBalances, tokenPrices)
             .then(fieldsWithAPYs => {
-              apis.getROIs(userAccount[0], fieldsWithAPYs, trackedFields, userTokenTransactions)
+              apis.getROIs(userAccount[0], fieldsWithAPYs, trackedFields, userTokenTransactions, trackedTokens, tokensWithUnclaimedBalances, tokenPrices)
                 .then(fieldsWithROIs => setUserFields(fieldsWithROIs))
             })
         })

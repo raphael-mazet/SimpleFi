@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import provider from './ethProvider';
 import helpers from '../../helpers'
 
+//TODO: add cache here once fixed istead of parent function
 async function getFieldSeedReserves (field, token, tokenContract, cache) {
 
   //Check in cache if reserves already fetched
@@ -13,16 +14,14 @@ async function getFieldSeedReserves (field, token, tokenContract, cache) {
     }
   }
 
-  //NOTE: 'underlying' currently denotes both the address that holds seed reserves, 
-  //NOTE: and the address whose ABI contains a balance reserve query function
   const reserveAddress = helpers.findFieldAddressType(field, 'underlying');
-  const { type, address, abi } = reserveAddress;
+  const { addressType, address, abi } = reserveAddress;
   const { decimals } = token.contractInterface;
   const tokenIndex = token.seedIndex;
 
   let fieldReserve;
 
-  switch (type) {
+  switch (addressType) {
 
     case "curveSwap":
 
@@ -31,6 +30,16 @@ async function getFieldSeedReserves (field, token, tokenContract, cache) {
       }
 
       fieldReserve = await field.fieldContracts.underlyingContract.balances(tokenIndex);
+      fieldReserve = ethers.utils.formatUnits(fieldReserve, decimals)
+      break;
+
+    case "curveSNX":
+
+      if (!field.fieldContracts.underlyingContract) {
+        field.fieldContracts.underlyingContract = new ethers.Contract(address, abi, provider);
+      }
+      const fieldDepositContract = field.contractAddresses.find(contractAddress => contractAddress.addressTypes.includes('deposit'));
+      fieldReserve = await field.fieldContracts.underlyingContract.balanceOf(fieldDepositContract.address);
       fieldReserve = ethers.utils.formatUnits(fieldReserve, decimals)
       break;
 
@@ -44,7 +53,6 @@ async function getFieldSeedReserves (field, token, tokenContract, cache) {
     fieldReserve = await tokenContract.contract.balanceOf(address);
     fieldReserve = Number(ethers.utils.formatUnits(fieldReserve, decimals));
   }
-  // { fieldName, seedReserves: [{tokenName, fieldReserve}] }
   
   if (findFieldinCache) {
     findFieldinCache.seedReserves.push({

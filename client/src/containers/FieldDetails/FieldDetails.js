@@ -42,7 +42,7 @@ export default function FieldDetails ({name, userFields}) {
         </div>
 
         <div className="field-invested">
-          <h2>Total invested</h2>
+          <h2>Current value</h2>
           <p>${Number(currentField.investmentValue.toFixed()).toLocaleString()}</p>
           <div className="field-invested-graph">Pie chart and path</div>
         </div>
@@ -53,7 +53,7 @@ export default function FieldDetails ({name, userFields}) {
           const txType = txSorter(tx)
           return (
             <div className="tx-date">
-              <p> on {tx.txDate.toLocaleDateString()} you {txType.type} {txType.amount.toFixed()} at ${tx.pricePerToken.toFixed()} </p>
+              <p> on {tx.txDate.toLocaleDateString()} you {txType.type} {txType.amount.toFixed(2)} at ${tx.pricePerToken.toFixed(2)} </p>
             </div>
           )
         })}

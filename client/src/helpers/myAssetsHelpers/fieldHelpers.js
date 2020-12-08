@@ -28,7 +28,10 @@ function fieldSeparator (userFields){
   const farmingFields = [];
   const earningFields = [];
   let totalInvested = 0;
-  const formatter = new Intl.NumberFormat("en-US", {style: 'percent'});
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: 'percent',
+    minimumFractionDigits: 2
+  });
 
   userFields.forEach(field => {
 
@@ -52,7 +55,9 @@ function fieldSeparator (userFields){
       earningFields.push([name, combinedBalance, stakedPercent, APY])
     }
 
-    totalInvested += unstakedUserInvestmentValue;
+    if (unstakedUserInvestmentValue) {
+      totalInvested += unstakedUserInvestmentValue;
+    }
     if (stakedBalance) {
       stakedBalance.forEach(stakedBalance => totalInvested += stakedBalance.userInvestmentValue)
     }

@@ -17,6 +17,7 @@ async function getTokenPrices(userTokens, userFields, trackedTokens) {
     }
   })
 
+  //@dev: assumption that all crop tokens are base tokens
   userFields.forEach(userField => {
     if (userField.cropTokens.length) {
       userField.cropTokens.forEach(token => {
@@ -27,7 +28,7 @@ async function getTokenPrices(userTokens, userFields, trackedTokens) {
 
   const baseTokenPrices = await gecko.manyPrices(apiList.join());
 
-  // change api response to token name, not priceApi
+  // change api response to token name, not priceApi for easy look-up in addFieldInvestmentValues
   const revertToName = Object.entries(baseTokenPrices).map(token => {
     const targetToken = trackedTokens.find(trackedToken => trackedToken.priceApi === token[0]);
     token[0] = targetToken.name;

@@ -11,8 +11,13 @@ function findFieldAddressType (field, dataType) {
   let addressType;
 
   for (let type in fieldInterfaceTypes) {
-    if (fieldInterfaceTypes[type].filter(el => el.ciId === ciId).length) addressType = type;
-    else addressType = 'default';
+    if (fieldInterfaceTypes[type].filter(el => el.ciId === ciId).length) {
+      addressType = type;
+      break
+    }
+  }
+  if (!addressType) {
+    addressType = 'default';
   }
 
   return {address, abi, addressType};

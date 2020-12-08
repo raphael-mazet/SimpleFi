@@ -35,7 +35,7 @@ model Field {
 
 model Protocol {
   protocolId                             String  @id @map("protocol_id")
-  name                                   String?
+  name                                   String? @unique
   governanceToken                        String? @map("governance_token")
   links                                  Json?
   token_protocol_governance_tokenTotoken Token?  @relation("protocol_governance_tokenTotoken", fields: [governanceToken], references: [tokenId])
@@ -54,7 +54,7 @@ model Token {
   isBase                                        Boolean            @map("is_base")
   contractInterfaceId                           String?            @map("contract_interface")
   contractInterface                             ContractInterface? @relation("contract_interfaceTotoken", fields: [contractInterfaceId], references: [ciId])
-  protocol_protocolTotoken_protocol_id          Protocol?          @relation("protocolTotoken_protocol_id", fields: [protocolId], references: [protocolId])
+  protocol                                      Protocol?          @relation("protocolTotoken_protocol_id", fields: [protocolId], references: [protocolId])
   field_field_receipt_tokenTotoken              Field?             @relation("field_receipt_tokenTotoken")
   fieldCrop                                     FieldCrop[]        @relation("fieldCropTotoken")
   fieldSeed                                     FieldSeed[]        @relation("fieldSeedTotoken")
@@ -97,10 +97,11 @@ model Transaction {
 }
 
 model FieldCrop {
-  tokenId String @map("token_id")
-  fieldId String @map("field_id")
-  field   Field  @relation("fieldTofieldCrop", fields: [fieldId], references: [fieldId])
-  token   Token  @relation("fieldCropTotoken", fields: [tokenId], references: [tokenId])
+  tokenId                String  @map("token_id")
+  fieldId                String  @map("field_id")
+  unclaimedBalanceMethod String? @map("unclaimed_balance_method")
+  field                  Field   @relation("fieldTofieldCrop", fields: [fieldId], references: [fieldId])
+  token                  Token   @relation("fieldCropTotoken", fields: [tokenId], references: [tokenId])
 
   @@id([tokenId, fieldId])
   @@map("field_crop")
@@ -162,6 +163,8 @@ enum address_type {
   underlying
   earning
   deposit
+  withdraw
   rewardRate
   rewardWeight
+  unclaimedReward
 }

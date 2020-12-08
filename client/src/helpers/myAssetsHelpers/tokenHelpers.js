@@ -7,6 +7,7 @@ function combineTokenHoldings (userTokens) {
     if (token.isBase) {
       //TODO: create as object in RQ and only then extract to array for reuse in holding details
       let lockedBalance = 0;
+      let unclaimedBalance = 0;
       let combinedBalance = 0;
       let lockedPercent = 0;
       const formatter = new Intl.NumberFormat("en-US", {style: 'percent'});
@@ -14,12 +15,15 @@ function combineTokenHoldings (userTokens) {
       if (token.lockedBalance) {
         lockedBalance = token.lockedBalance.reduce((acc, curr) => acc + curr.balance, 0);
       }
+      if (token.unclaimedBalance) {
+        unclaimedBalance = token.unclaimedBalance.reduce((acc, curr) => acc + curr.balance, 0);
+      }
 
       if (token.userBalance) {
-        combinedBalance = token.userBalance + lockedBalance;
+        combinedBalance = token.userBalance + lockedBalance + unclaimedBalance;
         lockedPercent = formatter.format(lockedBalance / combinedBalance);
       } else {
-        combinedBalance = lockedBalance;
+        combinedBalance = lockedBalance + unclaimedBalance;
         lockedPercent = formatter.format(1);
       }
 
