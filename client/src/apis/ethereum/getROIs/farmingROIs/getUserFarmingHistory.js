@@ -1,4 +1,5 @@
 import { getOneCurveHistReceiptPrice } from './getCurveFarmingPriceHistory';
+import getOneUniswapHistReceiptPrice from './getUniswapFarmingPriceHistory';
 import getHistoricalPrice from '../../../coinGecko/getHistoricalPrice';
 import helpers from '../../../../helpers';
 
@@ -13,7 +14,7 @@ import helpers from '../../../../helpers';
  *          Presence of a cropToken means that the user claimed a reward and corresponds to the presence of a rewardValue property)
  *      - in getHistoricalPrice(): assumes all crop tokens are base (and have a coinGecko price api code)
  */
-async function getUserFarmingHistory(field, userTokenTransactions, trackedTokens, trackedFields) {
+async function getUserFarmingHistory(field, userTokenTransactions, trackedFields, userAccount) {
   const timeFormatter = new Intl.DateTimeFormat('en-GB');
 
   // @dev: farmingTxs = [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value}]
@@ -28,15 +29,16 @@ async function getUserFarmingHistory(field, userTokenTransactions, trackedTokens
     }
     //add historical prices of (un)staking transactions based on field issuing the receipt token used as this farming field's seed
     else {
-      console.log(' ---> field', field);
-      console.log(' ---> tx', tx);
-      console.log(' ---> tx.receiptToken.protocol.name', tx.receiptToken.protocol.name);
       switch (tx.receiptToken.protocol.name) {
+        //TODO: check if this works properly with pure SNX staking
         case 'Curve':
           tx.pricePerToken = await getOneCurveHistReceiptPrice(tx, trackedFields);
           break;
+
+          case 'Uniswap':
+            tx.pricePerToken = await getOneUniswapHistReceiptPrice(tx, userAccount);
+            break;
     
-        //TODO: SNX staking field and Meta staking field
         default: 
       }
     }
