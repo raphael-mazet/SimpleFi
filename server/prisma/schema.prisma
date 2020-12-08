@@ -54,7 +54,7 @@ model Token {
   isBase                                        Boolean            @map("is_base")
   contractInterfaceId                           String?            @map("contract_interface")
   contractInterface                             ContractInterface? @relation("contract_interfaceTotoken", fields: [contractInterfaceId], references: [ciId])
-  protocol_protocolTotoken_protocol_id          Protocol?          @relation("protocolTotoken_protocol_id", fields: [protocolId], references: [protocolId])
+  protocol                                      Protocol?          @relation("protocolTotoken_protocol_id", fields: [protocolId], references: [protocolId])
   field_field_receipt_tokenTotoken              Field?             @relation("field_receipt_tokenTotoken")
   fieldCrop                                     FieldCrop[]        @relation("fieldCropTotoken")
   fieldSeed                                     FieldSeed[]        @relation("fieldSeedTotoken")

@@ -2,10 +2,18 @@ import { getOneCurveHistReceiptPrice } from './getCurveFarmingPriceHistory';
 import getHistoricalPrice from '../../../coinGecko/getHistoricalPrice';
 import helpers from '../../../../helpers';
 
-
-//@dev: assumes there is one deposit and one withdrawal address for all cropTokens
-//@dev: assume that there is never a receipt token for staking
-async function getUserFarmingHistory(field, userTokenTransactions, trackedFields) {
+/**
+ * 
+ * @param {Object} field - currently analysed farming field
+ * @param {Array} userTokenTransactions - all user ERC20 transactions
+ * @param {Array} trackedFields - all fields tracked by SimpleFi
+ * @return {Array} - an array of objects containing :{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value, pricePerToken}
+ * @dev - in sortFarmingTxs():
+ *          Presence of a receipt token indicates that the tx is a staking or unstaking transaction, and corresponds to the presence of an (un)stakingValue property
+ *          Presence of a cropToken means that the user claimed a reward and corresponds to the presence of a rewardValue property)
+ *      - in getHistoricalPrice(): assumes all crop tokens are base (and have a coinGecko price api code)
+ */
+async function getUserFarmingHistory(field, userTokenTransactions, trackedTokens, trackedFields) {
   const timeFormatter = new Intl.DateTimeFormat('en-GB');
 
   // @dev: farmingTxs = [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value}]
@@ -18,9 +26,12 @@ async function getUserFarmingHistory(field, userTokenTransactions, trackedFields
       const histTokenPrice = await getHistoricalPrice (tx.priceApi, geckoDateFormat);
       tx.pricePerToken = histTokenPrice;
     }
-    //add historical prices of (un)staking transactions
+    //add historical prices of (un)staking transactions based on field issuing the receipt token used as this farming field's seed
     else {
-      switch (field.protocol.name) {
+      console.log(' ---> field', field);
+      console.log(' ---> tx', tx);
+      console.log(' ---> tx.receiptToken.protocol.name', tx.receiptToken.protocol.name);
+      switch (tx.receiptToken.protocol.name) {
         case 'Curve':
           tx.pricePerToken = await getOneCurveHistReceiptPrice(tx, trackedFields);
           break;

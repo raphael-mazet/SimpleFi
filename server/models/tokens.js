@@ -12,6 +12,11 @@ async function getTokens() {
             isErc: true,
             decimals: true
           }
+        },
+        protocol: {
+          select: {
+            name: true
+          }
         }
       }
     });
