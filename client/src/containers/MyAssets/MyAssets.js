@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './MyAssets.css';
 import OverviewCard from '../../components/OverViewCard/OverviewCard';
-import SummaryTable from '../../components/SummaryTable/SummaryTable';
-import DropdownButton from '../../components/DropdownButton/DropdownButton';
+import SummaryBox from '../../components/SummaryBox/SummaryBox';
 import helpers from '../../helpers/index';
 import { holdingHeaders, holdingCurrencyCells, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
 
@@ -11,10 +10,7 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
   const [farmingValues, setFarmingValues] = useState([]);
   const [earningValues, setEarningValues] = useState([]);
   const [totalAssets, setTotalAssets] = useState('Loading');
-  const [totalInvested, setTotalInvested] = useState(15200);
-  const holdingTable = useRef(null);
-  const farmingTable = useRef(null);
-  const earningTable = useRef(null);
+  const [totalInvested, setTotalInvested] = useState('Loading');
 
   // combine available & locked token balances and add prices from coinGecko
   useEffect(() => {
@@ -46,54 +42,15 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
       </div>
 
       <div className="summary-container summary-holding">
-        <div className="container-header">
-          <h2>Holding</h2>
-          <div className="container-header-data">
-            <h3 className="header-total-token">{`${holdingValues.length} tokens`}</h3>
-            <h3 className="header-performance">+20%</h3>
-            <h3 className="header-locked">15% locked</h3>
-          </div>
-          <div className="dropdown-button-wrapper">
-            <DropdownButton handleDropdown={helpers.toggleDropdown} tableRef={holdingTable}/>
-          </div>
-        </div>
-        <div ref={holdingTable} className="summary-table-container">
-          <SummaryTable headers={holdingHeaders} userValues={holdingValues} tableName={'holding'} currencyCells={holdingCurrencyCells} setCurrentDetail={setCurrentDetail}/>
-        </div>
+        <SummaryBox userValues={holdingValues} headers={holdingHeaders} tableName='holding' currencyCells={holdingCurrencyCells} setCurrentDetail={setCurrentDetail}/>
       </div>
 
       <div className="summary-container summary-farming">
-        <div className="container-header">
-          <h2>Farming</h2>
-          <div className="container-header-data">
-            <h3 className="header-total-farming">{`${farmingValues.length} investments`}</h3>
-            <h3 className="header-performance">+2%</h3>
-            <h3 className="header-locked">15% locked</h3>
-          </div>
-          <div className="dropdown-button-wrapper">
-            <DropdownButton handleDropdown={helpers.toggleDropdown} tableRef={farmingTable}/>
-          </div>
-        </div>
-        <div ref={farmingTable} className="summary-table-container">
-          <SummaryTable headers={farmingHeaders} userValues={farmingValues} tableName={'farming'} currencyCells={[]} setCurrentDetail={setCurrentDetail}/>
-        </div>
+        <SummaryBox userValues={farmingValues} headers={farmingHeaders} tableName='farming' currencyCells={[]} setCurrentDetail={setCurrentDetail}/>
       </div>
 
       <div className="summary-container summary-earning">
-        <div className="container-header">
-          <h2>Earning</h2>
-          <div className="container-header-data">
-            <h3 className="total-earning">{`${earningValues.length} investments`}</h3>
-            <h3 className="header-performance">+2%</h3>
-            <h3 className="header-locked">15% locked</h3>
-          </div>
-          <div className="dropdown-button-wrapper">
-            <DropdownButton handleDropdown={helpers.toggleDropdown} tableRef={earningTable}/>
-          </div>
-        </div>
-        <div ref={earningTable} className="summary-table-container">
-          <SummaryTable headers={earningHeaders} userValues={earningValues} tableName={'earning'} currencyCells={[]} setCurrentDetail={setCurrentDetail}/>
-        </div>
+      <SummaryBox userValues={earningValues} headers={earningHeaders} tableName='earning' currencyCells={[]} setCurrentDetail={setCurrentDetail}/>  
       </div>
     </div>
   )
