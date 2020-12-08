@@ -20,7 +20,7 @@ export default function SummaryBox({userValues, headers, tableName, currencyCell
       <div className="container-header">
         <h2>{tableName.charAt(0).toUpperCase() + tableName.slice(1)}</h2>
         <div className="container-header-data">
-          <h3 className={`header-total-${tableName}`}>{`${userValues.length} tokens`}</h3>
+          <h3 className={`header-total-${tableName}`}>{`${userValues.length} ${tableName === 'holding' ? 'tokens' : 'investments'}`}</h3>
           <h3 className="header-performance">+20%</h3>
           <h3 className="header-locked">15% locked</h3>
         </div>

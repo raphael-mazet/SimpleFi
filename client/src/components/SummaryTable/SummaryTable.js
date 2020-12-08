@@ -10,8 +10,10 @@ export default function SummaryTable ({headers, userValues, tableName, currencyC
   function handleClick(e, rowValues) {
     setCurrentDetail(rowValues[0]);
     //TODO: create full url sanitisation function
-    const sanitisedString = rowValues[0].replace(/\//gi, '%2F');
-    history.push(`/field:${sanitisedString}`);
+    const sanitisedString = rowValues[0].replace(/\//gi, '%2F').toLowerCase();
+    if (tableName === 'holding') history.push(`/token/${sanitisedString}`);
+    if (tableName === 'farming') history.push(`/farming/${sanitisedString}`);
+    if (tableName === 'earning') history.push(`/earning/${sanitisedString}`);
   }
 
   return (

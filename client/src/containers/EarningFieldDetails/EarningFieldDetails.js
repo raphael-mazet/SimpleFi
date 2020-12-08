@@ -1,7 +1,7 @@
 import React from 'react';
-import './FieldDetails.css';
+import './EarningFieldDetails.css';
 
-export default function FieldDetails ({name, userFields}) {
+export default function EarningFieldDetails ({name, userFields}) {
   
   const currentField = userFields.find(field => field.name === name);
 
