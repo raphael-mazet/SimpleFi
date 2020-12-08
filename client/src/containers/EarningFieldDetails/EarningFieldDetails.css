@@ -1,5 +1,8 @@
 @import '../../CSS/variables.css';
 
+.field-details {
+  margin: 20px 50px;
+}
 
 .field-details h2, p {
   color: var(--almost-white);
@@ -11,15 +14,41 @@
   margin-bottom: 20px;
 }
 
-.field-details-numbers {
-  display: flex;
-  justify-content: space-around;
+.field-details-titles h2 {
+  font-size: 1.5em;
   margin-bottom: 20px;
 }
 
-.field-roi, .field-invested {
+.field-details-titles p {
+  line-height: 1.8em;
+}
+
+.field-title-header {
+  font-weight: 500;
+}
+
+.field-details-numbers {
   display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.field-overview {
+  display: flex;
+  margin: 15px 20px;
+  padding: 15px;
   flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 10px;
+  box-shadow: 0 0px 2px 0px var(--periwinkle);
+  border-width: 1px;;
+  min-width: 150px;
+  min-height: 100px;
+}
+
+.field-overview h2 {
+  font-size: 1.2em;
 }
 
 .tx-date {
