@@ -1,5 +1,9 @@
 @import '../../CSS/variables.css';
 
+:root {
+  --field-details-margin-right: 50px;
+}
+
 .field-details {
   margin: 20px 50px;
 }
@@ -31,6 +35,7 @@
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
+  margin-right: var(--field-details-margin-right);
 }
 
 .field-overview {
@@ -51,8 +56,8 @@
   font-size: 1.2em;
 }
 
-.tx-date {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 15px;
+.field-transactions-table {
+  margin: 10px var(--field-details-margin-right) 0 20px;
+  border-width: 1px;
+  border-radius: 10px;
 }

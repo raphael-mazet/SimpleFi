@@ -1,29 +1,10 @@
 import React from 'react';
 import './EarningFieldDetails.css';
+import DetailsTable from '../../components/DetailsTable/DetailsTable';
 
 export default function EarningFieldDetails ({name, userFields}) {
   
   const currentField = userFields.find(field => field.name === name);
-
-  function txSorter (tx) {
-    const { txIn, txOut, staked, unstaked} = tx;
-    const display = {type: '', amount: 0};
-    if (txIn) {
-      display.type = 'accumulated';
-      display.amount = txIn;
-    } else if (txOut) {
-      display.type = 'exited';
-      display.amount = txOut;
-    } else if (staked) {
-      display.type = 'staked';
-      display.amount = staked;
-    } else if (unstaked) {
-      display.type = 'unstaked';
-      display.amount = unstaked;
-    }
-    return display;
-  }
-
 
   return (
     <div className="field-details">
@@ -51,14 +32,9 @@ export default function EarningFieldDetails ({name, userFields}) {
 
       <div className="field-transactions">
         <h2>Transaction history</h2>
-        {currentField.userTxHistory.map(tx => {
-          const txType = txSorter(tx)
-          return (
-            <div className="tx-date">
-              <p> on {tx.txDate.toLocaleDateString()} you {txType.type} {txType.amount.toFixed(2)} at ${tx.pricePerToken.toFixed(2)} </p>
-            </div>
-          )
-        })}
+        <div className="field-transactions-table">
+          <DetailsTable txHistory={currentField.userTxHistory}/>
+        </div>
       </div>
     </div>
   )

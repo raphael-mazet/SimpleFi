@@ -1,0 +1,72 @@
+@import '../../CSS/variables.css';
+
+.field-details-tx-table {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "headers"
+    "tx-rows"
+}
+
+.details-tx-table-rows {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.details-tx-table-headers, .tx-table-single-row {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr 1.3fr 0.7fr 0.2fr;
+  grid-template-rows: auto;
+  justify-content: start;
+  padding: 10px 20px;
+}
+
+.details-tx-table-headers {
+  color: var(--transp-offwhite);
+  font-size: 0.8em;
+}
+
+.tx-table-single-row {
+  background-color: var(--almost-white);
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+.tx-table-single-row p {
+  font-size: 0.8em;
+  color: var(--dark-grey-font);
+}
+
+.transaction-details-value:before,
+.transaction-details-balance-value:before {
+  color: var(--dark-grey-font);
+  font-size: 0.8em;
+  content: '$';
+}
+
+.transaction-details-link {
+  justify-self: end;
+  align-self: end;
+  margin-top: 1.5px;
+}
+
+.transaction-details-link img {
+  max-height: 13px;
+  cursor: pointer;
+}
+
+
+.bloop {
+  overflow: hidden;
+  margin-bottom: 5px;
+  line-height: 60px;
+}
+.bloop-cell-header {
+  text-align: left;
+}
+
+.bloop-cell-value {
+  font-size: 16px;
+  font-weight: 700;
+}
