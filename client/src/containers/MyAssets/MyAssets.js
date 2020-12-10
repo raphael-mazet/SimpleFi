@@ -12,6 +12,10 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
   const [totalAssets, setTotalAssets] = useState('Loading');
   const [totalInvested, setTotalInvested] = useState('Loading');
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  },[])
+
   // combine available & locked token balances and add prices from coinGecko
   useEffect(() => {
     // if setSplash

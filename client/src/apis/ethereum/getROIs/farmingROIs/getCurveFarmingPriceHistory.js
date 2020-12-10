@@ -21,7 +21,7 @@ async function getOneCurveHistReceiptPrice(tx, trackedFields) {
   }
 
   const pricePerToken = fieldHistReserveValue / (historicalStat.supply / Number(`1e${tx.receiptToken.tokenContract.decimals}`));
-  return pricePerToken;
+  return {pricePerToken, txDate};
 }
 
 
@@ -44,7 +44,7 @@ async function getCurveHistReceiptPrices (field, receiptToken, userReceiptTokenT
     }
        //TODO: check impact of split admin fees and use of virtual price
     const pricePerToken = fieldHistReserveValue / (historicalStat.supply / Number(`1e${receiptToken.tokenContract.decimals}`));
-    return {tx, receiptToken, pricePerToken}
+    return {tx, receiptToken, pricePerToken, txDate}
   })
 
   return txHistoryWithPrices;

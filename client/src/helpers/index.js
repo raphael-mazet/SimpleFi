@@ -19,6 +19,8 @@ import {
   calcFarmingROI
 } from './ethHelpers';
 import extractTempFieldDetailsCells from './detailsTableHelper';
+import urlStringSanitiser from './urlStringSanitiser';
+
 
 //eslint-disable-next-line import/no-anonymous-default-export
 export default {
@@ -39,5 +41,6 @@ export default {
   createWhitelist,
   calcROI,
   calcFarmingROI,
-  extractTempFieldDetailsCells
+  extractTempFieldDetailsCells,
+  urlStringSanitiser
 }

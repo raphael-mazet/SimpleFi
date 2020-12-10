@@ -1,4 +1,4 @@
-export default function extractTempFieldDetailsCells(tx, balance) {
+export default function extractTempFieldDetailsCells(tx) {
   //@dev: [date, action, amount, effect-on-balance, pricePerToken]
   const cellValues = [];
   const {action, amount, balEffect} = addTxTypeAndAmount(tx);

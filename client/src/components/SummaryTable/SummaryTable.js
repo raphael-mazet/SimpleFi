@@ -2,6 +2,7 @@ import React from 'react';
 import './SummaryTable.css';
 import TokenCell from '../TokenCell/TokenCell';
 import { useHistory } from 'react-router-dom';
+import helpers from '../../helpers';
 
 
 export default function SummaryTable ({headers, userValues, tableName, currencyCells, setCurrentDetail}) {
@@ -9,8 +10,8 @@ export default function SummaryTable ({headers, userValues, tableName, currencyC
 
   function handleClick(e, rowValues) {
     setCurrentDetail(rowValues[0]);
-    //TODO: create full url sanitisation function
-    const sanitisedString = rowValues[0].replace(/\//gi, '%2F').toLowerCase();
+    const sanitisedString = helpers.urlStringSanitiser(rowValues[0]);
+
     if (tableName === 'holding') history.push(`/token/${sanitisedString}`);
     if (tableName === 'farming') history.push(`/farming/${sanitisedString}`);
     if (tableName === 'earning') history.push(`/earning/${sanitisedString}`);

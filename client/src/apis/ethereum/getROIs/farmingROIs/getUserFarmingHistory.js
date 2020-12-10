@@ -32,15 +32,22 @@ async function getUserFarmingHistory(field, userTokenTransactions, trackedFields
       switch (tx.receiptToken.protocol.name) {
         //TODO: check if this works properly with pure SNX staking
         case 'Curve':
-          tx.pricePerToken = await getOneCurveHistReceiptPrice(tx, trackedFields);
+          // tx.pricePerToken = await getOneCurveHistReceiptPrice(tx, trackedFields);
+          const curvePriceAndDate = await getOneCurveHistReceiptPrice(tx, trackedFields);
+          tx.pricePerToken = curvePriceAndDate.pricePerToken;
+          tx.txDate = curvePriceAndDate.txDate;
           break;
-
+          
           case 'Uniswap':
             tx.pricePerToken = await getOneUniswapHistReceiptPrice(tx, userAccount);
+            const uniswapPriceAndDate = await getOneUniswapHistReceiptPrice(tx, userAccount);
+            tx.pricePerToken = uniswapPriceAndDate.histPricePerToken;
+            tx.txDate = uniswapPriceAndDate.txDate;
             break;
     
         default: 
       }
+      
     }
   }
 

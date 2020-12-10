@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './EarningFieldDetails.css';
 import DetailsTable from '../../components/DetailsTable/DetailsTable';
 
 export default function EarningFieldDetails ({name, userFields}) {
   
   const currentField = userFields.find(field => field.name === name);
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <div className="field-details">
@@ -13,8 +17,8 @@ export default function EarningFieldDetails ({name, userFields}) {
         <p><span className='field-title-header'>Description</span>: lorem ipsum dolor sit amet consectetuer</p>
         <p><span className='field-title-header'>Current nominal APY</span>: {currentField.earningAPY ? (currentField.earningAPY*100).toFixed(2) : (currentField.farmingAPY*100).toFixed(2)}%</p>
         <p><span className='field-title-header'>Underlying tokens</span>: {currentField.seedTokens.reduce((acc, curr) => [...acc, curr.name], []).join(', ')}</p>
-
       </div>
+
       <div className="field-details-numbers">
         <div className="field-overview field-roi">
           <h2>all time ROI</h2>
