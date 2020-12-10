@@ -11,8 +11,6 @@ function addFieldInvestmentValues(userFields, tokenPrices) {
   updatedFields.forEach(field => {
     let totalFieldValue = 0;
     field.seedTokens.forEach(token => {
-      // console.log(' ---> field', field);
-      // console.log(' ---> token.name', token.name);
       totalFieldValue += token.fieldReserve * tokenPrices[token.name].usd;
     })
   

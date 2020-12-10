@@ -7,7 +7,9 @@ import './App.css';
 import Nav from '../../components/Nav/Nav';
 import Welcome from '../../components/Welcome/Welcome';
 import MyAssets from '../MyAssets/MyAssets';
-import FieldDetails from '../FieldDetails/FieldDetails';
+import TokenDetails from '../TokenDetails/TokenDetails';
+import FarmingFieldDetails from '../FarmingFieldDetails/FarmingFieldDetails';
+import EarningFieldDetails from '../EarningFieldDetails/EarningFieldDetails';
 // import { AppProvider } from './AppContext';
 
 function App() {
@@ -132,7 +134,9 @@ function App() {
         <Switch>
           <Route path='/' exact render={() => <Welcome connect={connectWallet} setSplash={setSplash}/>}/>
           <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} userTokenPrices={userTokenPrices} setSplash={setSplash} setCurrentDetail={setCurrentDetail}/>}/>
-          <Route path='/:fieldName' exact render={() => <FieldDetails name={currentDetail} userTokens={userTokens} userFields={userFields} />}/>
+          <Route path='/token/:tokenName' exact render={() => <TokenDetails name={currentDetail} userTokens={userTokens} userFields={userFields} />}/>
+          <Route path='/farming/:fieldName' exact render={() => <FarmingFieldDetails name={currentDetail} userTokens={userTokens} userFields={userFields} />}/>
+          <Route path='/earning/:fieldName' exact render={() => <EarningFieldDetails name={currentDetail} userTokens={userTokens} userFields={userFields} />}/>
           {/* <Route path='/dashboard/:tokenName' render={() => <HoldingDetails userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
           {/* <Route path='/chart' exact render={() => <HoldingChart userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
         </Switch>

@@ -11,8 +11,9 @@ async function getOneUniswapHistReceiptPrice (tx, userAccount) {
   const rawData = await getUniswapBalanceHistory(userAccount);
   const targetBlock = rawData.data.liquidityPositionSnapshots.find(data => data.block === Number(tx.tx.blockNumber));
   const histPricePerToken = Number(targetBlock.reserveUSD) / Number(targetBlock.liquidityTokenTotalSupply);
+  const txDate = new Date(Number(targetBlock.timestamp) * 1000);
   
-  return histPricePerToken;
+  return {histPricePerToken, txDate};
 }
 
 export default getOneUniswapHistReceiptPrice;

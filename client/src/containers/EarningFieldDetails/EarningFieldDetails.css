@@ -1,0 +1,63 @@
+@import '../../CSS/variables.css';
+
+:root {
+  --field-details-margin-right: 50px;
+}
+
+.field-details {
+  margin: 20px 50px;
+}
+
+.field-details h2, p {
+  color: var(--almost-white);
+}
+
+.field-details-titles {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.field-details-titles h2 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.field-details-titles p {
+  line-height: 1.8em;
+}
+
+.field-title-header {
+  font-weight: 500;
+}
+
+.field-details-numbers {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  margin-right: var(--field-details-margin-right);
+}
+
+.field-overview {
+  display: flex;
+  margin: 15px 20px;
+  padding: 15px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 10px;
+  box-shadow: 0 0px 2px 0px var(--periwinkle);
+  border-width: 1px;;
+  min-width: 150px;
+  min-height: 100px;
+}
+
+.field-overview h2 {
+  font-size: 1.2em;
+}
+
+.field-transactions-table {
+  margin: 10px var(--field-details-margin-right) 0 20px;
+  border-width: 1px;
+  border-radius: 10px;
+}
