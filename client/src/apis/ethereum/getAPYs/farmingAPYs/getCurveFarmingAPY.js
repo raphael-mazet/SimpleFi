@@ -1,6 +1,7 @@
 import { ethers } from 'ethers';
 import provider from '../../ethProvider';
 import { getTotalAnnualReward, getFieldRewardPercent } from '../../protocolQueries/curveQueries/getCurveGaugeConstants';
+import getSecondaryFieldAPYs from './getSecondaryFieldAPYs';
 
 /*
   define annual reward
@@ -22,16 +23,26 @@ async function getCurveFarmingAPY(rewardRateAddress, field, userTokenPrices) {
   const totalAnnualReward = await getTotalAnnualReward(rewardRateContract, curveDecimals);
   const fieldRewardPercent = await getFieldRewardPercent(rewardWeightContract, rewardRateAddress.address, curveDecimals);  
 
-  const annualPayout = totalAnnualReward * fieldRewardPercent;
+  const curveAnnualPayout = totalAnnualReward * fieldRewardPercent;
   const { totalSupply } = field;
 
   //@dev: this assumes there is just one seed
   const seedPrice = userTokenPrices[field.seedTokens[0].name].usd;
-  //TODO: add any second crop token APY
+
+  //get primary Curve APY
   //TODO: figure out the boost situation
   const cropPrice = userTokenPrices[field.cropTokens[curveIndex].name].usd;
+  const curveCropAPY = (curveAnnualPayout * cropPrice) / (totalSupply * seedPrice)
+  
+  //additional crop token APYs
+  let secondaryAPY = 0;
+  if (curveIndex) {
+    const additionalCropAPYs = await getSecondaryFieldAPYs(field, userTokenPrices, curveIndex);
+    secondaryAPY = additionalCropAPYs.reduce((acc, additionalAPY) => acc += additionalAPY.cropAPY, 0)
+  }
 
-  return (annualPayout * cropPrice) / (totalSupply * seedPrice);
+  //TODO: attach origin of each APY for display (already present in secondaryAPY variable above)
+  return curveCropAPY + secondaryAPY;
 }
 
   export default getCurveFarmingAPY;
