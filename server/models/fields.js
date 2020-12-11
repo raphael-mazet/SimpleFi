@@ -28,6 +28,44 @@ async function getFields() {
             address: true,
             contractInterface: true
           }
+        },
+        secondaryFields: {
+          select: {
+            secondaryField: {
+              select: {
+                name: true,
+                contractAddresses: {
+                  select: {
+                    addressTypes: true,
+                    address: true,
+                    contractInterface: true,
+                  }
+                },
+                cropTokens: {
+                  select: {
+                    fieldId: true,
+                    unclaimedBalanceMethod: true,
+                    token: {
+                      select: {
+                        tokenId: true,
+                        name: true,
+                        contractInterface: true,
+                      }
+                    }
+                  }
+                },
+                seedTokens: {
+                  select: {
+                    token: {
+                      select: {
+                        name: true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     });
