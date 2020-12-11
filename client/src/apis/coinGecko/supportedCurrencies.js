@@ -1,7 +1,3 @@
-const supportedCurrencies = [
-  'usd',
-  'eur',
-  'gbp'
-];
+const supportedCurrencies = ["usd", "eur", "gbp"];
 
 export default supportedCurrencies;

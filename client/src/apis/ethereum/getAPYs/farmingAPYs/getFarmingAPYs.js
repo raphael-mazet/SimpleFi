@@ -11,11 +11,12 @@ async function getFarmingAPYs (field, userTokens, userTokenPrices) {
 
     case "synthetix susd farm":
     case "mstable farm":
+      //CHECK: rename function if used for more than one field?
       APY = await getSnxFarmingAPY(rewardRateAddress, field, userTokenPrices);
       break;
 
     case 'curve reward gauge':
-      APY = await getCurveFarmingAPY(rewardRateAddress, field, userTokens, userTokenPrices);
+      APY = await getCurveFarmingAPY(rewardRateAddress, field, userTokenPrices);
       break;
 
     default:
