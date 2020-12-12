@@ -47,7 +47,7 @@ export default function FarmingFieldDetails({name, userFields}) {
       <div className="field-transactions">
         <h2>Transaction history</h2>
         <div className="field-transactions-table">
-          <DetailsTable txHistory={currentField.userFarmingTxHistory}/>
+          <DetailsTable txHistory={currentField.userFarmingTxHistory} name={name}/>
         </div>
       </div>
     </div>

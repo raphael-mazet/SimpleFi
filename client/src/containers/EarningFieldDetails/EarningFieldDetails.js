@@ -37,7 +37,7 @@ export default function EarningFieldDetails ({name, userFields}) {
       <div className="field-transactions">
         <h2>Transaction history</h2>
         <div className="field-transactions-table">
-          <DetailsTable txHistory={currentField.userTxHistory}/>
+          <DetailsTable txHistory={currentField.userTxHistory} name={name}/>
         </div>
       </div>
     </div>

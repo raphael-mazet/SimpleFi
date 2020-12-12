@@ -3,9 +3,9 @@ import './DetailsTable.css';
 import externalLink from '../../assets/icons/external-link.svg';
 import helpers from '../../helpers';
 
-export default function DetailsTable({txHistory}) {
-  const styleHeaders = ['date', 'action', 'value', 'balance', 'balance-value']
-  const columnHeaders = ['Date', 'Action', 'Value', 'Hist. balance', 'Balance value']
+export default function DetailsTable({txHistory, name}) {
+  const styleHeaders = ['date', 'action', 'value', 'balance', 'balance-value'];
+  const columnHeaders = ['Date', 'Action', 'Value', 'Hist. balance', 'Balance value'];
   let balance = 0;
 
   function createCellValues(tempValues) {
@@ -34,7 +34,7 @@ export default function DetailsTable({txHistory}) {
       <div className="details-tx-table-headers">
         {columnHeaders.map((header) => {
           return (
-            <div className="transaction-details-header">
+            <div key={`${name}-${header}`} className="transaction-details-header">
               <h3>{header}</h3>
             </div>
           )
@@ -42,15 +42,15 @@ export default function DetailsTable({txHistory}) {
       </div>
       
       <div className="details-tx-table-rows">
-        {txHistory.map(tx => {
+        {txHistory.map((tx, txIndex) => {
           const tempCellValues = helpers.extractTempFieldDetailsCells(tx, balance);
           // @dev: returns [date, action, amount, effect-on-balance, pricePerToken]
           const cellValues = createCellValues(tempCellValues)
           return (
-            <div className="tx-table-single-row">
+            <div key={`${name}-${tx.tokenSymbol}-${txIndex}`} className="tx-table-single-row">
               {cellValues.map((value, index) => {
                 return (
-                  <div className={`transaction-details-cell transaction-details-${styleHeaders[index]}`}>
+                  <div key={`${name}-${value}-${index}`} className={`transaction-details-cell transaction-details-${styleHeaders[index]}`}>
                     <p>{value}</p>
                   </div>
                 )
