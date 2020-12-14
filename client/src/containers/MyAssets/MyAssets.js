@@ -6,23 +6,22 @@ import helpers from '../../helpers/index';
 import { holdingHeaders, holdingCurrencyCells, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
 
 export default function MyAssets ({userTokens, userFields, userTokenPrices, setCurrentDetail}) {
-  const [holdingValues, setHoldingValues] = useState([]);
+  const [holdingHeadlines, setHoldingHeadlines] = useState({totalInvested: 0, totalUnclaimed: 0, totalValue: 0});
+  const [holdingValues, setHoldingValues] = useState({ baseTokens:[], receiptTokens:[] });
   const [farmingValues, setFarmingValues] = useState([]);
   const [earningValues, setEarningValues] = useState([]);
-  const [totalAssets, setTotalAssets] = useState('Loading');
   const [totalInvested, setTotalInvested] = useState('Loading');
 
   useEffect(() => {
     window.scrollTo(0, 0)
   },[])
 
-  // combine available & locked token balances and add prices from coinGecko
+  // combine available and locked token balances and add prices from coinGecko
   useEffect(() => {
     // if setSplash
-    const combinedHoldings = helpers.combineTokenHoldings(userTokens);
-    const holdingsWithPrices = helpers.addHoldingPrices(combinedHoldings, userTokenPrices);
-    setHoldingValues(holdingsWithPrices.combinedHoldings);
-    setTotalAssets(holdingsWithPrices.totalAssets);
+    const {summaryTableValues, overviewValues} = helpers.extractSummaryHoldingValues(userTokens, userTokenPrices);
+    setHoldingValues(summaryTableValues);
+    setHoldingHeadlines(overviewValues);
     // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [userTokenPrices])
 
@@ -37,7 +36,7 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
   return (
     <div className="myassets-summary">
       <div className="summary-overview-cards-container">
-        <OverviewCard title='Total assets' amount={totalAssets.toLocaleString()} performance={{daily:'plus 2', annual:'plus 3'}}/>
+        <OverviewCard title='Total assets' amount={Number(holdingHeadlines.totalValue.toFixed()).toLocaleString()} performance={{daily:'plus 2', annual:'plus 3'}}/>
         <OverviewCard title='Cumulative investments' amount={totalInvested.toLocaleString()} performance={{daily:'plus 2', annual:'plus 3'}}/>
       </div>
 
@@ -46,15 +45,15 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
       </div>
 
       <div className="summary-container summary-holding">
-        <SummaryBox userValues={holdingValues} headers={holdingHeaders} tableName='holding' currencyCells={holdingCurrencyCells} setCurrentDetail={setCurrentDetail}/>
+        <SummaryBox headlines={holdingHeadlines} userValues={holdingValues.baseTokens} headers={holdingHeaders} tableName='holding' currencyCells={holdingCurrencyCells} setCurrentDetail={setCurrentDetail}/>
       </div>
 
       <div className="summary-container summary-farming">
-        <SummaryBox userValues={farmingValues} headers={farmingHeaders} tableName='farming' currencyCells={[]} setCurrentDetail={setCurrentDetail}/>
+        <SummaryBox headlines={{}} perfClasses={[false, false]} userValues={farmingValues} headers={farmingHeaders} tableName='farming' currencyCells={[]} setCurrentDetail={setCurrentDetail}/>
       </div>
 
       <div className="summary-container summary-earning">
-      <SummaryBox userValues={earningValues} headers={earningHeaders} tableName='earning' currencyCells={[]} setCurrentDetail={setCurrentDetail}/>  
+      <SummaryBox headlines={{}} userValues={earningValues} headers={earningHeaders} tableName='earning' currencyCells={[]} setCurrentDetail={setCurrentDetail}/>  
       </div>
     </div>
   )

@@ -15,9 +15,6 @@ export default function FarmingFieldDetails({name, userFields}) {
   const underlyingTokens = userFields.find(userField => userField.receiptToken === currentField.seedTokens[0].tokenId).seedTokens;
   const mainAPY = currentField.farmingAPY.primaryAPY ? `${(currentField.farmingAPY.primaryAPY.APY * 100).toFixed(2)}% (${currentField.farmingAPY.primaryAPY.name})` : `${(currentField.farmingAPY * 100).toFixed(2)}% (${currentField.cropTokens[0].name})`;
   const secondaryFarmingTokens = currentField.farmingAPY.secondaryAPYs ? currentField.farmingAPY.secondaryAPYs : null;
-  console.log(' ---> currentField.name', currentField.name);
-  console.log(' ---> currentField', currentField);
-  console.log(' ---> secondaryFarmingTokens', secondaryFarmingTokens);
   let secondaryAPYs;
   if (secondaryFarmingTokens) {
     secondaryAPYs = secondaryFarmingTokens.reduce((acc, curr) => `${acc} ${(curr.cropAPY * 100).toFixed(2)}% (${curr.cropToken.name}), `, '').slice(0, -2); 
