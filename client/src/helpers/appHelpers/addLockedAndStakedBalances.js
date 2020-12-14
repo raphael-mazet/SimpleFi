@@ -1,5 +1,5 @@
 function addUnclaimedBalances(unclaimedBalances, userTokens, trackedTokens) {
-  //ASK: is this necessary?
+  //CHECK: is this necessary?
   const updatedUserTokens = [...userTokens];
 
   unclaimedBalances.forEach(unclaimedToken => {
@@ -12,8 +12,8 @@ function addUnclaimedBalances(unclaimedBalances, userTokens, trackedTokens) {
     else if (existingUserToken) existingUserToken.unclaimedBalance = [{balance: unclaimedToken.unclaimedBalance, field: unclaimedToken.fieldId}];
     //otherwise: create a new user Token
     else {
-      //ASK: check this is necessary
-      const newUserToken = trackedTokens.find(trackedToken => trackedToken.tokenId === unclaimedToken.tokenId)
+      //CHECK: check this is necessary
+      const newUserToken = trackedTokens.find(trackedToken => trackedToken.tokenId === unclaimedToken.tokenId);
       newUserToken.unclaimedBalance = [{balance: unclaimedToken.unclaimedBalance, field: unclaimedToken.fieldId}]
       updatedUserTokens.push(newUserToken);
     }
@@ -22,7 +22,7 @@ function addUnclaimedBalances(unclaimedBalances, userTokens, trackedTokens) {
 }
 
 function addLockedTokenBalances (rewoundTokens, userTokens) {
-  //ASK: is this necessary?
+  //CHECK: is this necessary?
   const updatedUserTokens = [...userTokens];
 
   rewoundTokens.forEach(rewoundToken => {
@@ -35,7 +35,7 @@ function addLockedTokenBalances (rewoundTokens, userTokens) {
     else if (existingUserToken) existingUserToken.lockedBalance = [{balance: rewoundToken.userTokenBalance, field: rewoundToken.field}];
     //otherwise: create a new user Token
     else {
-      //ASK: check this is necessary
+      //CHECK: check this is necessary
       const newUserToken = JSON.parse(JSON.stringify(rewoundToken.token));
       newUserToken.lockedBalance = [{balance: rewoundToken.userTokenBalance, field: rewoundToken.field}]
       updatedUserTokens.push(newUserToken);
@@ -46,7 +46,7 @@ function addLockedTokenBalances (rewoundTokens, userTokens) {
 
 
 function addStakedFieldBalances (rewoundFields, userFields) {
-  //ASK: is this necessary?
+  //CHECK: is this necessary?
   const updatedUserFields = [...userFields];
   rewoundFields.forEach(rewoundField => {
     //identify if user already has a balance for curr field
@@ -58,7 +58,7 @@ function addStakedFieldBalances (rewoundFields, userFields) {
     else if (existingUserField) existingUserField.stakedBalance = [{balance: rewoundField.userFieldBalance, parentField: rewoundField.parentField}];
     //otherwise: create a new user Field
     else {
-      //ASK: check this is necessary
+      //CHECK: check this is necessary
       const newUserField = JSON.parse(JSON.stringify(rewoundField.feederField));
       newUserField.stakedBalance = [{balance: rewoundField.userFieldBalance, parentField: rewoundField.parentField}]
       updatedUserFields.push(newUserField);

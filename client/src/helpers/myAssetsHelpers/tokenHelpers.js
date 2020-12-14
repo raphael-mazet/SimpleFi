@@ -21,7 +21,7 @@ function combineTokenHoldings (userTokens) {
 
       if (token.userBalance) {
         combinedBalance = token.userBalance + lockedBalance + unclaimedBalance;
-        lockedPercent = formatter.format(lockedBalance / combinedBalance);
+        lockedPercent = formatter.format((lockedBalance + unclaimedBalance) / combinedBalance);
       } else {
         combinedBalance = lockedBalance + unclaimedBalance;
         lockedPercent = formatter.format(1);

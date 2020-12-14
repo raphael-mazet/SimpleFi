@@ -106,7 +106,7 @@ function App() {
 
     if (rewoundFlag) {
       const tokensWithLockedBalances = helpers.addLockedTokenBalances(rewoundTokenBalances, userTokens);
-      const tokensWithUnclaimedBalances = helpers.addUnclaimedBalances(unclaimedRewards, tokensWithLockedBalances)
+      const tokensWithUnclaimedBalances = helpers.addUnclaimedBalances(unclaimedRewards, tokensWithLockedBalances, trackedTokens)
       setUserTokens(tokensWithUnclaimedBalances);
 
       const fieldsWithStakedBalances = helpers.addStakedFieldBalances(rewoundFieldBalances, userFields);
