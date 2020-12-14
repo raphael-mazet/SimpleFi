@@ -2,7 +2,6 @@ import { ethers } from 'ethers';
 
 //cache
 let totalAnnualReward;
-let totalRewardWeight;
 
 async function getTotalAnnualReward (contract, decimals) {
   if (totalAnnualReward) return totalAnnualReward;
@@ -16,12 +15,8 @@ async function getTotalAnnualReward (contract, decimals) {
 
 
 async function getFieldRewardPercent(contract, address, decimals) {
-  if (!totalRewardWeight) {
-    totalRewardWeight = await contract.get_total_weight();
-  }
-  const gaugeRewardWeight = await contract.get_gauge_weight(address);
-
-  return gaugeRewardWeight / Number(ethers.utils.formatUnits(totalRewardWeight, decimals));
+  const gaugeRewardWeight = await contract["gauge_relative_weight(address)"](address);
+  return Number(ethers.utils.formatUnits(gaugeRewardWeight, decimals));
 }
 
 export {

@@ -21,7 +21,7 @@ async function getCurveFarmingAPY(rewardRateAddress, field, userTokenPrices) {
   // const duration = await contract.DURATION();
   
   const totalAnnualReward = await getTotalAnnualReward(rewardRateContract, curveDecimals);
-  const fieldRewardPercent = await getFieldRewardPercent(rewardWeightContract, rewardRateAddress.address, curveDecimals);  
+  const fieldRewardPercent = await getFieldRewardPercent(rewardWeightContract, rewardRateAddress.address, curveDecimals);
 
   const curveAnnualPayout = totalAnnualReward * fieldRewardPercent;
   const { totalSupply } = field;
@@ -32,17 +32,20 @@ async function getCurveFarmingAPY(rewardRateAddress, field, userTokenPrices) {
   //get primary Curve APY
   //TODO: figure out the boost situation
   const cropPrice = userTokenPrices[field.cropTokens[curveIndex].name].usd;
-  const curveCropAPY = (curveAnnualPayout * cropPrice) / (totalSupply * seedPrice)
+  const curveCropAPY = (curveAnnualPayout * cropPrice) / (totalSupply * seedPrice);
   
   //additional crop token APYs
-  let secondaryAPY = 0;
   if (curveIndex) {
     const additionalCropAPYs = await getSecondaryFieldAPYs(field, userTokenPrices, curveIndex);
-    secondaryAPY = additionalCropAPYs.reduce((acc, additionalAPY) => acc += additionalAPY.cropAPY, 0)
+    const secondaryAPY = additionalCropAPYs.reduce((acc, additionalAPY) => acc += additionalAPY.cropAPY, 0);
+    return {
+      combinedAPY: curveCropAPY + secondaryAPY,
+      primaryAPY: {name: 'Curve', APY: curveCropAPY},
+      secondaryAPYs: additionalCropAPYs //{cropAPY, cropToken, secondaryField}
+    }
+  } else {
+    return curveCropAPY;
   }
-
-  //TODO: attach origin of each APY for display (already present in secondaryAPY variable above)
-  return curveCropAPY + secondaryAPY;
 }
 
   export default getCurveFarmingAPY;
