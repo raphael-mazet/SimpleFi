@@ -4,7 +4,7 @@ import {
   sortLiquidityTxs,
   sortFarmingTxs,
   createWhitelist,
-  calcROI,
+  calcEarningROI,
   calcFarmingROI
 } from './ethROIHelpers';
 
@@ -15,6 +15,6 @@ export {
   sortLiquidityTxs,
   sortFarmingTxs,
   createWhitelist,
-  calcROI,
+  calcEarningROI,
   calcFarmingROI
 }

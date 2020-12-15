@@ -26,6 +26,8 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
   }, [userTokenPrices])
 
   // separate farming and earning fields
+  //TODO: change this total invested
+  //TODO: add headline ROI calcs in overview and tables
   useEffect(() => {
     const {farmingFields, earningFields, totalInvested } = helpers.fieldSeparator(userFields);
     setFarmingValues(farmingFields);

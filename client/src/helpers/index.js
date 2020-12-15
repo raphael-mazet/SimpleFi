@@ -6,7 +6,7 @@ import {
   addStakedFieldBalances,
   addFieldInvestmentValues
 } from './appHelpers'
-import { combineTokenHoldings, addHoldingPrices, extractSummaryHoldingValues } from './myAssetsHelpers/tokenHelpers';
+import extractSummaryHoldingValues from './myAssetsHelpers/tokenHelpers';
 import { fieldSeparator } from './myAssetsHelpers/fieldHelpers';
 import toggleDropdown from './myAssetsHelpers/dropdownHelper';
 import {
@@ -15,7 +15,7 @@ import {
   sortLiquidityTxs,
   sortFarmingTxs,
   createWhitelist,
-  calcROI,
+  calcEarningROI,
   calcFarmingROI
 } from './ethHelpers';
 import extractTempFieldDetailsCells from './detailsTableHelper';
@@ -30,8 +30,6 @@ export default {
   addFieldSuppliesAndReserves,
   addStakedFieldBalances,
   addFieldInvestmentValues,
-  combineTokenHoldings,
-  addHoldingPrices,
   extractSummaryHoldingValues,
   fieldSeparator,
   toggleDropdown,
@@ -40,7 +38,7 @@ export default {
   sortLiquidityTxs,
   sortFarmingTxs,
   createWhitelist,
-  calcROI,
+  calcEarningROI,
   calcFarmingROI,
   extractTempFieldDetailsCells,
   urlStringSanitiser,
