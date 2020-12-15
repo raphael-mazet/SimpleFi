@@ -38,18 +38,19 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
           .then(liquidityHistory => {
             field.investmentValue = currInvestmentValue;
             field.userTxHistory = liquidityHistory;
-            field.allTimeROI = helpers.calcROI(currInvestmentValue, liquidityHistory);
+            field.allTimeROI = helpers.calcEarningROI(currInvestmentValue, liquidityHistory);
           })
       }
     }
 
     if (field.cropTokens.length) {
-      //@dev: [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value, pricePerToken}]
+      //@dev: [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value, pricePerToken, txDate}]
       const userFarmingHistory = await getUserFarmingHistory(field, userTokenTransactions, trackedFields, userAccount);
 
       field.investmentValue = currInvestmentValue;
       field.userFarmingTxHistory = userFarmingHistory;
-      field.allTimeROI = helpers.calcFarmingROI(currInvestmentValue, userFarmingHistory, userTokens, tokenPrices, field.cropTokens);
+      // currInvestmentValue, 
+      field.allTimeROI = helpers.calcFarmingROI(userFarmingHistory, userTokens, tokenPrices, field);
     }
   }
   return fieldsWithROI;

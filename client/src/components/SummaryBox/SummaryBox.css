@@ -1,13 +1,13 @@
 @import '../../CSS/variables.css';
 @import '../../CSS/animations.css';
 
-.container-header {
+.box-container-headline {
   display: flex;
   justify-content: space-between;
   padding: 20px 0 20px 20px;
 }
 
-.container-header h2 {
+.box-container-headline h2 {
   flex: 1;
   margin-right: 20px;
   color: white;
@@ -17,7 +17,7 @@
   font-weight: 500;
 }
 
-.container-header-data {
+.container-headline-data {
   display: flex;
   flex: 4;
   justify-content: flex-start;
@@ -25,17 +25,17 @@
   position: relative;
 }
 
-.container-header-data h3 {
+.container-headline-data h3 {
   color: var(--almost-white);
   padding-right: 35px;
   font-size: 1.2em;
 }
 
-.container-header-data h3:last-child {
+.container-headline-data h3:last-child {
   padding-right: 0;
 }
 
-.container-header-data .header-performance {
+.container-headline-data .headline-performance {
   color: var(--performance-green);
 }
 

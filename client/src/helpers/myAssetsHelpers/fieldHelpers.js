@@ -45,7 +45,7 @@ function fieldSeparator (userFields){
       cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
       farming = farming.slice(0, -2);
 
-      const APY = formatter.format(field.farmingAPY)
+      const APY = field.farmingAPY?.combinedAPY ? formatter.format(field.farmingAPY.combinedAPY) : formatter.format(field.farmingAPY);
 
       farmingFields.push([name, userBalance.toFixed(2), farming, APY])
     }

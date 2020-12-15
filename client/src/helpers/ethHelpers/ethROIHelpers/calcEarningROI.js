@@ -5,7 +5,7 @@
  * @return {Number} - user ROI to date with regards to the analysed field, defined as:
  *                    (current investment value + sum of realised exits [txOut]) / sum of historical investments [txIn]
  */
-function calcROI (investmentValue, txHistory) {
+function calcEarningROI (investmentValue, txHistory) {
   let amountInvested = 0;
   let amountRealised = 0;
 
@@ -18,4 +18,4 @@ function calcROI (investmentValue, txHistory) {
   return ((investmentValue + amountRealised) / amountInvested) - 1;    
 }
 
-export default calcROI;
+export default calcEarningROI;

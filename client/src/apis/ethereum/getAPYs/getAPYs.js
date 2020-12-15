@@ -8,7 +8,8 @@ async function getAPYs (userFields, userTokens, userTokenPrices) {
   for (let field of fieldsWithAPYs) {
     
     if (field.cropTokens.length) {
-      field.farmingAPY = await getFarmingAPYs(field, userTokens, userTokenPrices);
+      //@dev: farmingAPY is either a number or {combinedAPY, secondaryAPYs}
+      field.farmingAPY = await getFarmingAPYs(field, userTokenPrices);
     }
 
     if (field.isEarning) {

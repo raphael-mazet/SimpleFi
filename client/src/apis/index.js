@@ -4,7 +4,6 @@ import getTokenPrices from './coinGecko/getTokenPrices';
 import {
   getUserBalance,
   getAllUserBalances,
-  getAllBasicBalances,
   getUnclaimedRewards,
   createBalanceContracts,
   rewinder,
@@ -23,7 +22,6 @@ export default {
   createBalanceContracts,
   getUserBalance,
   getAllUserBalances,
-  getAllBasicBalances,
   getUnclaimedRewards,
   rewinder,
   getAPYs,

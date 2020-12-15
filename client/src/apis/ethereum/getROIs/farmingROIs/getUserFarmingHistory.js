@@ -17,7 +17,7 @@ import helpers from '../../../../helpers';
 async function getUserFarmingHistory(field, userTokenTransactions, trackedFields, userAccount) {
   const timeFormatter = new Intl.DateTimeFormat('en-GB');
 
-  // @dev: farmingTxs = [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value}]
+  //@dev: farmingTxs = [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value}]
   const farmingTxs = helpers.sortFarmingTxs(field, userTokenTransactions);
 
   for (let tx of farmingTxs) {
@@ -25,12 +25,13 @@ async function getUserFarmingHistory(field, userTokenTransactions, trackedFields
     if (tx.cropToken) {
       const geckoDateFormat = timeFormatter.format(new Date(Number(tx.tx.timeStamp) * 1000)).replace(/\//gi, '-');
       const histTokenPrice = await getHistoricalPrice (tx.priceApi, geckoDateFormat);
+      //TODO: add txDate
       tx.pricePerToken = histTokenPrice;
     }
     //add historical prices of (un)staking transactions based on field issuing the receipt token used as this farming field's seed
     else {
       switch (tx.receiptToken.protocol.name) {
-        //TODO: check if this works properly with pure SNX staking
+        //CHECK: does this work properly with pure SNX staking?
         case 'Curve':
           // tx.pricePerToken = await getOneCurveHistReceiptPrice(tx, trackedFields);
           const curvePriceAndDate = await getOneCurveHistReceiptPrice(tx, trackedFields);
@@ -51,7 +52,7 @@ async function getUserFarmingHistory(field, userTokenTransactions, trackedFields
     }
   }
 
-  //@dev: [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value, pricePerToken}]
+  //@dev: [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value, pricePerToken, txDate}]
   return farmingTxs;
 }
 

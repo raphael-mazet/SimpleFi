@@ -13,6 +13,12 @@ export default function FarmingFieldDetails({name, userFields}) {
   const currentField = userFields.find(field => field.name === name);
   //@dev: assumes there is a single seed/staking token
   const underlyingTokens = userFields.find(userField => userField.receiptToken === currentField.seedTokens[0].tokenId).seedTokens;
+  const mainAPY = currentField.farmingAPY.primaryAPY ? `${(currentField.farmingAPY.primaryAPY.APY * 100).toFixed(2)}% (${currentField.farmingAPY.primaryAPY.name})` : `${(currentField.farmingAPY * 100).toFixed(2)}% (${currentField.cropTokens[0].name})`;
+  const secondaryFarmingTokens = currentField.farmingAPY.secondaryAPYs ? currentField.farmingAPY.secondaryAPYs : null;
+  let secondaryAPYs;
+  if (secondaryFarmingTokens) {
+    secondaryAPYs = secondaryFarmingTokens.reduce((acc, curr) => `${acc} ${(curr.cropAPY * 100).toFixed(2)}% (${curr.cropToken.name}), `, '').slice(0, -2); 
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -21,9 +27,9 @@ export default function FarmingFieldDetails({name, userFields}) {
   return (
     <div className="field-details">
       <div className="field-details-titles">
-        <h2 className="field-title">{name} {currentField.isEarning ? '(earning)' : '(farming)'}</h2>
+        <h2 className="field-title">{name} (farming)</h2>
         <p><span className='field-title-header'>Description</span>: lorem ipsum dolor sit amet consectetuer</p>
-        <p><span className='field-title-header'>Current nominal APY</span>: {currentField.earningAPY ? (currentField.earningAPY*100).toFixed(2) : (currentField.farmingAPY*100).toFixed(2)}%</p>
+        <p><span className='field-title-header'>Current nominal APY</span>: {secondaryFarmingTokens ? mainAPY + ', ' + secondaryAPYs : mainAPY}</p>
         {/* @dev: assumes there is a single staking token */}
         <p><span className='field-title-header'>Staking token</span>: {currentField.seedTokens[0].name}</p>
         <p><span className='field-title-header'>Underlying tokens</span>: {underlyingTokens.reduce((acc, curr) => [...acc, curr.name], []).join(', ')}</p>
@@ -47,7 +53,7 @@ export default function FarmingFieldDetails({name, userFields}) {
       <div className="field-transactions">
         <h2>Transaction history</h2>
         <div className="field-transactions-table">
-          <DetailsTable txHistory={currentField.userFarmingTxHistory}/>
+          <DetailsTable txHistory={currentField.userFarmingTxHistory} name={name}/>
         </div>
       </div>
     </div>

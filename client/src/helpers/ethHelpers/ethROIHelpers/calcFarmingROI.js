@@ -1,12 +1,12 @@
-//FIXME: documentation incorrect
 /**
- * 
+ * FIXME: documentation incorrect
  * @param {Number} investmentValue - current value of investment in analysed field
  * @param {Array} txHistory - pre-sorted list of user interactions with analysed field
  * @return {Number} - user ROI to date with regards to the analysed field, defined as:
  *                    (current investment value + sum of realised exits [txOut]) / sum of historical investments [txIn]
  */
-function calcFarmingROI (investmentValue, txHistory, userTokens, tokenPrices, fieldCropTokens) {
+function calcFarmingROI (txHistory, userTokens, tokenPrices, field) {
+  const {cropTokens, fieldId} = field;
   let amountClaimed = 0;
   let amountUnclaimed = 0;
   let amountInvested = 0;
@@ -23,12 +23,19 @@ function calcFarmingROI (investmentValue, txHistory, userTokens, tokenPrices, fi
     }
   })
 
-  const targetCropTokens = userTokens.filter(userToken => fieldCropTokens.includes(cropToken => userToken.tokenId === cropToken.tokenId));
+  const targetCropTokens = userTokens.filter(userToken => {
+    return cropTokens.some(cropToken => cropToken.tokenId === userToken.tokenId);
+  });
   targetCropTokens.forEach(token => {
-    amountUnclaimed += token.unclaimedBalance.reduce((acc, curr) => acc += curr.balance * tokenPrices[curr.priceApi].usd, 0)
+    amountUnclaimed += token.unclaimedBalance.reduce((acc, curr) => {
+      return curr.field === fieldId ? curr.balance * tokenPrices[token.name].usd : acc;
+    }, amountUnclaimed)
   })
 
-  return ((investmentValue + amountUnclaimed + amountClaimed + amountRealised) / amountInvested) - 1;    
+  //TODO: alt ROI based on current crop value (investmentValue vs. amountInvested) for toggling in Field details
+  //alternative: add investmentValue in function args (currInvestmentValue from getROIs)
+  // return (investmentValue + amountUnclaimed + amountClaimed + amountRealised) / amountInvested;
+  return (amountUnclaimed + amountClaimed + amountRealised) / amountInvested;    
 }
 
 export default calcFarmingROI;

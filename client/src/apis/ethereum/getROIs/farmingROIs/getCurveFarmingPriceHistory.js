@@ -1,6 +1,14 @@
 import getHistoricalPrice from '../../../coinGecko/getHistoricalPrice';
 import { getOneCurvePoolRawData } from '../../protocolQueries';
 
+/**
+ * 
+ * @param {Object} tx - currently analysed user ERC20 transaction fetched from Etherscan
+ * @param {Array} trackedFields - all SimpleFi tracked fields
+ * @dev - this getter fetches the full history of daily balances and supplies from the Curve API
+ *        
+ * @return {Object} - returns a historical price per token and a formatted txDate (important for display in field details tx table)
+ */
 async function getOneCurveHistReceiptPrice(tx, trackedFields) {
   //@dev: assumes that Curve staking/farming fields only have one seed token
   //TEST: field.seedTokens[0] and tx.receiptToken should be the same
@@ -16,6 +24,7 @@ async function getOneCurveHistReceiptPrice(tx, trackedFields) {
 
   for (let seed of targetEarnField.seedTokens) {
     const histSeedValue = await getHistoricalPrice(seed.priceApi, geckoDateformat);
+    //CHECK: handle error in case no seed index (some seeds only added later to contract and are not present in old raw stats)
     const decimaledReserve = historicalStat.balances[seed.seedIndex]/Number(`1e${seed.tokenContract.decimals}`);
     fieldHistReserveValue += histSeedValue * decimaledReserve;
   }
