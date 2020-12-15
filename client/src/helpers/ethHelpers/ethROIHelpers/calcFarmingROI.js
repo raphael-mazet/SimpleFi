@@ -33,8 +33,9 @@ function calcFarmingROI (txHistory, userTokens, tokenPrices, field) {
   })
 
   //TODO: alt ROI based on current crop value (investmentValue vs. amountInvested) for toggling in Field details
+  //FIXME: absolutely necessary
   //alternative: add investmentValue in function args (currInvestmentValue from getROIs)
-  // return (investmentValue + amountUnclaimed + amountClaimed + amountRealised) / amountInvested;
+  //old calc: return (investmentValue + amountUnclaimed + amountClaimed + amountRealised) / amountInvested;
   return (amountUnclaimed + amountClaimed + amountRealised) / amountInvested;    
 }
 

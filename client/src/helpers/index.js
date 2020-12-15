@@ -7,7 +7,7 @@ import {
   addFieldInvestmentValues
 } from './appHelpers'
 import extractSummaryHoldingValues from './myAssetsHelpers/tokenHelpers';
-import { fieldSeparator } from './myAssetsHelpers/fieldHelpers';
+import { fieldSeparator, extractSummaryFieldValues } from './myAssetsHelpers/fieldHelpers';
 import toggleDropdown from './myAssetsHelpers/dropdownHelper';
 import {
   findFieldAddressType,
@@ -32,6 +32,7 @@ export default {
   addFieldInvestmentValues,
   extractSummaryHoldingValues,
   fieldSeparator,
+  extractSummaryFieldValues,
   toggleDropdown,
   findFieldAddressType,
   combineFieldSuppliesAndReserves,

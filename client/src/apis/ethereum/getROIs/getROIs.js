@@ -2,7 +2,6 @@ import getUserLiquidityHistory from './earningROIs/getUserLiquidityHistory';
 import getUserFarmingHistory from './farmingROIs/getUserFarmingHistory';
 import helpers from '../../../helpers';
 
-//TODO: uniswap: double-check everything, indices, decimals, txs, returns, shitty Promise.alls, etc.
 /**
  * 
  * @param {String} userAccount user's Eth account
@@ -48,7 +47,6 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
 
       field.investmentValue = currInvestmentValue;
       field.userFarmingTxHistory = userFarmingHistory;
-      // currInvestmentValue, 
       field.allTimeROI = helpers.calcFarmingROI(userFarmingHistory, userTokens, tokenPrices, field);
     }
   }

@@ -26,6 +26,7 @@ function App() {
   const [fieldSuppliesAndReserves, setFieldSuppliesAndReserves] = useState([]);
   const [userTokenPrices, setUserTokenPrices] = useState({});
   const [rewoundFlag, setRewoundFlag] = useState(false);
+  const [allLoadedFlag, setAllLoadedFlag] = useState(false);
   const [splash, setSplash] = useState(false);
 
   const [currentDetail, setCurrentDetail] = useState('');
@@ -119,7 +120,10 @@ function App() {
           apis.getAPYs(fieldsWithInvestmentValues, tokensWithUnclaimedBalances, tokenPrices)
             .then(fieldsWithAPYs => {
               apis.getROIs(userAccount[0], fieldsWithAPYs, trackedFields, userTokenTransactions, trackedTokens, tokensWithUnclaimedBalances, tokenPrices)
-                .then(fieldsWithROIs => setUserFields(fieldsWithROIs))
+                .then(fieldsWithROIs => {
+                  setUserFields(fieldsWithROIs);
+                  setAllLoadedFlag(true);
+                })
             })
         })
     }
@@ -133,7 +137,7 @@ function App() {
       {/* <AppProvider value={balanceContractsLoaded}> */}
         <Switch>
           <Route path='/' exact render={() => <Welcome connect={connectWallet} setSplash={setSplash}/>}/>
-          <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} userTokenPrices={userTokenPrices} setSplash={setSplash} setCurrentDetail={setCurrentDetail}/>}/>
+          <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} userTokenPrices={userTokenPrices} setSplash={setSplash} setCurrentDetail={setCurrentDetail} allLoadedFlag={allLoadedFlag}/>}/>
           <Route path='/token/:tokenName' exact render={() => <TokenDetails name={currentDetail} userTokens={userTokens} userFields={userFields} />}/>
           <Route path='/farming/:fieldName' exact render={() => <FarmingFieldDetails name={currentDetail} userTokens={userTokens} userFields={userFields} />}/>
           <Route path='/earning/:fieldName' exact render={() => <EarningFieldDetails name={currentDetail} userTokens={userTokens} userFields={userFields} />}/>
