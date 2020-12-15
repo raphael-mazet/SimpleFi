@@ -15,7 +15,7 @@ import helpers from '../../../helpers';
 async function getROIs(userAccount, userFields, trackedFields, userTokenTransactions, trackedTokens, userTokens, tokenPrices) {
 
   const fieldsWithROI = [...userFields];
-
+  
   for (let field of fieldsWithROI) {
 
     let currInvestmentValue = 0;
@@ -32,14 +32,13 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
       const receiptToken = trackedTokens.find(trackedToken => trackedToken.tokenId === field.receiptToken);
       const userReceiptTokenTxs = userTokenTransactions.filter(tx => tx.contractAddress === receiptToken.address.toLowerCase());
       
-      const userLiquidityHistory = await getUserLiquidityHistory(trackedFields, field, receiptToken, userReceiptTokenTxs, userAccount);
-      if (userLiquidityHistory) {
-        Promise.all(userLiquidityHistory)
-          .then(liquidityHistory => {
-            field.investmentValue = currInvestmentValue;
-            field.userTxHistory = liquidityHistory;
-            field.allTimeROI = helpers.calcEarningROI(currInvestmentValue, liquidityHistory);
-          })
+      const userLiquidityHistoryPromises = await getUserLiquidityHistory(trackedFields, field, receiptToken, userReceiptTokenTxs, userAccount);
+      if (userLiquidityHistoryPromises) {
+        const userLiquidityHistory = await Promise.all(userLiquidityHistoryPromises);
+        //TODO: rename variable to totalCurrInvValue
+        field.investmentValue = currInvestmentValue;
+        field.userTxHistory = userLiquidityHistory;
+        field.allTimeROI = helpers.calcEarningROI(currInvestmentValue, userLiquidityHistory);
       }
     }
 
