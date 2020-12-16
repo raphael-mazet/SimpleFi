@@ -1,10 +1,12 @@
 import { holdingHeaders, holdingCurrencyCells } from './holdingHeaders';
-import farmingHeaders from './farmingHeaders';
-import earningHeaders from './earningHeaders';
+import {farmingHeaders, farmingCurrencyCells} from './farmingHeaders';
+import { earningHeaders, earningCurrencyCells } from './earningHeaders';
 
 export {
   holdingHeaders,
   holdingCurrencyCells,
   farmingHeaders,
-  earningHeaders
+  farmingCurrencyCells,
+  earningHeaders,
+  earningCurrencyCells
 }

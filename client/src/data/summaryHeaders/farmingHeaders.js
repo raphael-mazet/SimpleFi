@@ -1,8 +1,14 @@
 const farmingHeaders = [
   'Name',
-  'Balance',
+  'Invested ($)',
   'Farming',
+  'ROI',
   'APY'
 ];
 
-export default farmingHeaders;
+const farmingCurrencyCells = [false, true, false, false, false];
+
+export {
+  farmingHeaders,
+  farmingCurrencyCells
+}

@@ -19,29 +19,34 @@ function extractSummaryFieldValues (userFields) {
     const { combinedBalance, stakedPercent } = combineFieldBalances(field);
     //CHECK: quid using investmentValue and allTimeROI when a field has both farming and earning returns
     //CHECK: is investmentValue based on current price or historical investment prices?
-    const { name, userBalance, cropTokens, stakedBalance, isEarning, unstakedUserInvestmentValue, investmentValue, allTimeROI } = field;
+    const { name, cropTokens, isEarning, investmentValue, allTimeROI } = field;
 
     if (cropTokens.length) {
       let farming = '';
       cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
       farming = farming.slice(0, -2);
 
-      const APY = field.farmingAPY?.combinedAPY ? formatter.format(field.farmingAPY.combinedAPY) : formatter.format(field.farmingAPY);
-
-      totalInvested.farmingInv += investmentValue;
       //FIXME: ROI weight should be based on the historic investment value
       totalROI.farmingROI += allTimeROI * investmentValue;
-      farmingFields.push([name, investmentValue?.toFixed(2), farming, allTimeROI, APY])
+      totalInvested.farmingInv += investmentValue;
+      
+      const APY = field.farmingAPY?.combinedAPY ? formatter.format(field.farmingAPY.combinedAPY) : formatter.format(field.farmingAPY);
+      const ROI = formatter.format(allTimeROI);
+      const invested = Number(investmentValue?.toFixed(2)).toLocaleString();
+
+      farmingFields.push([name, invested, farming, ROI, APY])
     }
     
     if (isEarning) {
-      const APY = formatter.format(field.earningAPY);
-      
-      totalInvested.earningInv += investmentValue;
       //FIXME: ROI weight should be based on the historic investment value
       totalROI.earningROI += allTimeROI * investmentValue;
-
-      earningFields.push([name, investmentValue?.toFixed(2), stakedPercent, allTimeROI, APY]);
+      totalInvested.earningInv += investmentValue;
+      
+      const APY = formatter.format(field.earningAPY);
+      const ROI = formatter.format(allTimeROI);
+      const invested = Number(investmentValue?.toFixed(2)).toLocaleString();
+      
+      earningFields.push([name, invested, stakedPercent, ROI, APY]);
     }
   })
   totalROI.farmingROI = totalROI.farmingROI / totalInvested.farmingInv;

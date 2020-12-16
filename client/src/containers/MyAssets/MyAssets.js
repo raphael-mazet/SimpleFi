@@ -3,7 +3,7 @@ import './MyAssets.css';
 import OverviewCard from '../../components/OverViewCard/OverviewCard';
 import SummaryBox from '../../components/SummaryBox/SummaryBox';
 import helpers from '../../helpers/index';
-import { holdingHeaders, holdingCurrencyCells, farmingHeaders, earningHeaders } from '../../data/summaryHeaders';
+import { holdingHeaders, holdingCurrencyCells, farmingHeaders, farmingCurrencyCells, earningHeaders, earningCurrencyCells } from '../../data/summaryHeaders';
 
 export default function MyAssets ({userTokens, userFields, userTokenPrices, setCurrentDetail, allLoadedFlag}) {
   const [holdingHeadlines, setHoldingHeadlines] = useState({totalInvested: 0, totalUnclaimed: 0, totalValue: 0});
@@ -12,7 +12,6 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
   const [holdingValues, setHoldingValues] = useState({ baseTokens:[], receiptTokens:[] });
   const [farmingValues, setFarmingValues] = useState([]);
   const [earningValues, setEarningValues] = useState([]);
-  const [totalCurrInvVal, setTotalCurrInvVal] = useState('Loading');
   const [totalROI, setTotalROI] = useState({farmingROI: 0, earningROI: 0});
 
   useEffect(() => {
@@ -32,25 +31,21 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
   //TODO: change this total invested
   //TODO: add headline ROI calcs in overview and tables
   useEffect(() => {
-    const {farmingFields, earningFields} = helpers.fieldSeparator(userFields);
-    const {totalInvested, totalROI} = helpers.extractSummaryFieldValues(userFields);
+    const {farmingFields, earningFields, totalInvested, totalROI} = helpers.extractSummaryFieldValues(userFields);
     setFarmingHeadlines({investment: totalInvested.farmingInv, ROI: totalROI.farmingROI});
     setEarningHeadlines({investment: totalInvested.earningInv, ROI: totalROI.earningROI});
 
     setFarmingValues(farmingFields);
     setEarningValues(earningFields);
-    setTotalCurrInvVal(totalInvested);
     setTotalROI(totalROI);
     // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [allLoadedFlag])
 
-  //FIXME: change OverviewCard to add a percentage type w/o $
-  //TODO: add box headers for earning/farming
   return (
     <div className="myassets-summary">
       <div className="summary-overview-cards-container">
         <OverviewCard title='Total assets' amount={Number(holdingHeadlines.totalValue.toFixed()).toLocaleString()} performance={{daily:'plus 2', annual:'plus 3'}}/>
-        <OverviewCard title='Total ROI' amount={(totalROI.farmingROI + totalROI.earningROI).toLocaleString()} performance={{daily:'plus 2', annual:'plus 3'}}/>
+        <OverviewCard title='Total ROI' numType='percent' amount={(Number((totalROI.farmingROI + totalROI.earningROI) * 100).toFixed(2)).toLocaleString()} performance={{daily:'plus 2', annual:'plus 3'}}/>
       </div>
 
       <div className="account-overview">
@@ -62,11 +57,11 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
       </div>
 
       <div className="summary-container summary-farming">
-        <SummaryBox headlines={farmingHeadlines} userValues={farmingValues} headers={farmingHeaders} tableName='farming' currencyCells={[]} setCurrentDetail={setCurrentDetail}/>
+        <SummaryBox headlines={farmingHeadlines} userValues={farmingValues} headers={farmingHeaders} tableName='farming' currencyCells={farmingCurrencyCells} setCurrentDetail={setCurrentDetail}/>
       </div>
 
       <div className="summary-container summary-earning">
-      <SummaryBox headlines={earningHeadlines} userValues={earningValues} headers={earningHeaders} tableName='earning' currencyCells={[]} setCurrentDetail={setCurrentDetail}/>  
+      <SummaryBox headlines={earningHeadlines} userValues={earningValues} headers={earningHeaders} tableName='earning' currencyCells={earningCurrencyCells} setCurrentDetail={setCurrentDetail}/>  
       </div>
     </div>
   )
