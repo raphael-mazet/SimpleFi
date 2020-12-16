@@ -21,6 +21,7 @@ import {
 import extractTempFieldDetailsCells from './detailsTableHelper';
 import urlStringSanitiser from './urlStringSanitiser';
 import formatHeadlines from './summaryBoxHelper';
+import {extractTotalTokenBalance} from './tokenDetailsHelper';
 
 //eslint-disable-next-line import/no-anonymous-default-export
 export default {
@@ -43,5 +44,6 @@ export default {
   calcFarmingROI,
   extractTempFieldDetailsCells,
   urlStringSanitiser,
-  formatHeadlines
+  formatHeadlines,
+  extractTotalTokenBalance
 }

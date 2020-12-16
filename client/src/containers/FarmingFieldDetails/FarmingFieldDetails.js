@@ -10,7 +10,10 @@ import DetailsTable from '../../components/DetailsTable/DetailsTable';
 */
 
 export default function FarmingFieldDetails({name, userFields}) {
-  const currentField = userFields.find(field => field.name === name);
+
+  const [currentField, setCurrentField] = useState('Loading');
+  setCurrentField(userFields.find(field => field.name === name));
+
   //@dev: assumes there is a single seed/staking token
   const underlyingTokens = userFields.find(userField => userField.receiptToken === currentField.seedTokens[0].tokenId).seedTokens;
   const mainAPY = currentField.farmingAPY.primaryAPY ? `${(currentField.farmingAPY.primaryAPY.APY * 100).toFixed(2)}% (${currentField.farmingAPY.primaryAPY.name})` : `${(currentField.farmingAPY * 100).toFixed(2)}% (${currentField.cropTokens[0].name})`;

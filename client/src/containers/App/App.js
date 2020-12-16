@@ -107,7 +107,7 @@ function App() {
 
     if (rewoundFlag) {
       const tokensWithLockedBalances = helpers.addLockedTokenBalances(rewoundTokenBalances, userTokens);
-      const tokensWithUnclaimedBalances = helpers.addUnclaimedBalances(unclaimedRewards, tokensWithLockedBalances, trackedTokens)
+      const tokensWithUnclaimedBalances = helpers.addUnclaimedBalances(unclaimedRewards, tokensWithLockedBalances, trackedTokens);
       setUserTokens(tokensWithUnclaimedBalances);
 
       const fieldsWithStakedBalances = helpers.addStakedFieldBalances(rewoundFieldBalances, userFields);
@@ -138,9 +138,9 @@ function App() {
         <Switch>
           <Route path='/' exact render={() => <Welcome connect={connectWallet} setSplash={setSplash}/>}/>
           <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} userTokenPrices={userTokenPrices} setSplash={setSplash} setCurrentDetail={setCurrentDetail} allLoadedFlag={allLoadedFlag}/>}/>
-          <Route path='/token/:tokenName' exact render={() => <TokenDetails name={currentDetail} userTokens={userTokens} userFields={userFields} />}/>
-          <Route path='/farming/:fieldName' exact render={() => <FarmingFieldDetails name={currentDetail} userTokens={userTokens} userFields={userFields} />}/>
-          <Route path='/earning/:fieldName' exact render={() => <EarningFieldDetails name={currentDetail} userTokens={userTokens} userFields={userFields} />}/>
+          <Route path='/token/:tokenName' exact render={() => <TokenDetails name={currentDetail} userTokens={userTokens} userTokenPrices={userTokenPrices} />}/>
+          <Route path='/farming/:fieldName' exact render={() => <FarmingFieldDetails name={currentDetail} userFields={userFields} />}/>
+          <Route path='/earning/:fieldName' exact render={() => <EarningFieldDetails name={currentDetail} userFields={userFields} />}/>
           {/* <Route path='/dashboard/:tokenName' render={() => <HoldingDetails userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
           {/* <Route path='/chart' exact render={() => <HoldingChart userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
         </Switch>
