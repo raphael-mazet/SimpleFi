@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import './FarmingFieldDetails.css';
 import DetailsTable from '../../components/DetailsTable/DetailsTable';
 
@@ -11,21 +11,24 @@ import DetailsTable from '../../components/DetailsTable/DetailsTable';
 
 export default function FarmingFieldDetails({name, userFields}) {
 
-  const [currentField, setCurrentField] = useState('Loading');
-  setCurrentField(userFields.find(field => field.name === name));
+  const [currentField] = useState(userFields.find(field => field.name === name));
+  const [underlyingTokens, setUnderlyingTokens] = useState([]);
+  const [mainAPY, setMainAPY] = useState(0);
+  const [secondaryFarmingTokens, setSecondaryFarmingTokens] = useState(null);
+  const [secondaryAPYs, setSecondaryAPYs] = useState(null);
 
   //@dev: assumes there is a single seed/staking token
-  const underlyingTokens = userFields.find(userField => userField.receiptToken === currentField.seedTokens[0].tokenId).seedTokens;
-  const mainAPY = currentField.farmingAPY.primaryAPY ? `${(currentField.farmingAPY.primaryAPY.APY * 100).toFixed(2)}% (${currentField.farmingAPY.primaryAPY.name})` : `${(currentField.farmingAPY * 100).toFixed(2)}% (${currentField.cropTokens[0].name})`;
-  const secondaryFarmingTokens = currentField.farmingAPY.secondaryAPYs ? currentField.farmingAPY.secondaryAPYs : null;
-  let secondaryAPYs;
-  if (secondaryFarmingTokens) {
-    secondaryAPYs = secondaryFarmingTokens.reduce((acc, curr) => `${acc} ${(curr.cropAPY * 100).toFixed(2)}% (${curr.cropToken.name}), `, '').slice(0, -2); 
-  }
-
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, []);
+    window.scrollTo(0, 0);
+    setUnderlyingTokens(userFields.find(userField => userField.receiptToken === currentField.seedTokens[0].tokenId).seedTokens);
+    setMainAPY(currentField.farmingAPY.primaryAPY ? `${(currentField.farmingAPY.primaryAPY.APY * 100).toFixed(2)}% (${currentField.farmingAPY.primaryAPY.name})` : `${(currentField.farmingAPY * 100).toFixed(2)}% (${currentField.cropTokens[0].name})`);
+    const tempSecondaryFarmingTokens = currentField.farmingAPY.secondaryAPYs ? currentField.farmingAPY.secondaryAPYs : null;
+    if (tempSecondaryFarmingTokens) {
+      setSecondaryFarmingTokens(tempSecondaryFarmingTokens);
+      setSecondaryAPYs(tempSecondaryFarmingTokens.reduce((acc, curr) => `${acc} ${(curr.cropAPY * 100).toFixed(2)}% (${curr.cropToken.name}), `, '').slice(0, -2))
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentField]);
 
   return (
     <div className="field-details">

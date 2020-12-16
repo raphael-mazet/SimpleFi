@@ -22,6 +22,7 @@ import extractTempFieldDetailsCells from './detailsTableHelper';
 import urlStringSanitiser from './urlStringSanitiser';
 import formatHeadlines from './summaryBoxHelper';
 import {extractTotalTokenBalance} from './tokenDetailsHelper';
+import extractDetailsChartValues from './detailsChartHelper';
 
 //eslint-disable-next-line import/no-anonymous-default-export
 export default {
@@ -45,5 +46,6 @@ export default {
   extractTempFieldDetailsCells,
   urlStringSanitiser,
   formatHeadlines,
-  extractTotalTokenBalance
+  extractTotalTokenBalance,
+  extractDetailsChartValues
 }

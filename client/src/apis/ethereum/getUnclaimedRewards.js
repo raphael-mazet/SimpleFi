@@ -6,7 +6,7 @@ async function getUnclaimedRewards(userAccount, trackedFields) {
   const farmFields = trackedFields.filter(field => field.cropTokens.length)
 
   for (let field of farmFields) {
-    const { fieldId, cropTokens } = field;
+    const { cropTokens } = field;
     for (let cropToken of cropTokens) {
       const { tokenId } = cropToken;
       //@dev: assume that the same contract address is used to check the balance of multiple crop tokens (albeit with different methods saved in the cropToken DB table)
@@ -15,7 +15,7 @@ async function getUnclaimedRewards(userAccount, trackedFields) {
         const unclaimedRewardContract = new ethers.Contract(targetAddress.address, targetAddress.contractInterface.abi, provider);
         let unclaimedBalance = await unclaimedRewardContract[cropToken.unclaimedBalanceMethod](userAccount);
         unclaimedBalance = Number(ethers.utils.formatUnits(unclaimedBalance, targetAddress.contractInterface.decimals));
-        unclaimedCropBalances.push({fieldId, tokenId, unclaimedBalance});
+        unclaimedCropBalances.push({field, tokenId, unclaimedBalance});
       } catch (err) {
         console.error('Unclaimed rewards error', err);
       }

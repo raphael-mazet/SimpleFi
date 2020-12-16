@@ -4,12 +4,11 @@ import DetailsTable from '../../components/DetailsTable/DetailsTable';
 
 export default function EarningFieldDetails ({name, userFields}) {
   
-  const [currentField, setCurrentField] = useState('Loading');
-  setCurrentField(userFields.find(field => field.name === name));
+  const [currentField] = useState(userFields.find(field => field.name === name));
 
   useEffect(() => {
     window.scrollTo(0, 0)
-  }, [])
+  }, [currentField])
 
   return (
     <div className="field-details">

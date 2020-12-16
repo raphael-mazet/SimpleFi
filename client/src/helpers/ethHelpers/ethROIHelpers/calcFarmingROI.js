@@ -28,7 +28,7 @@ function calcFarmingROI (txHistory, userTokens, tokenPrices, field) {
   });
   targetCropTokens.forEach(token => {
     amountUnclaimed += token.unclaimedBalance.reduce((acc, curr) => {
-      return curr.field === fieldId ? curr.balance * tokenPrices[token.name].usd : acc;
+      return curr.field.fieldId === fieldId ? curr.balance * tokenPrices[token.name].usd : acc;
     }, amountUnclaimed)
   })
 
