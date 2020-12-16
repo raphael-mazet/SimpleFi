@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import './TokenDetails.css';
 import HoldingChart from '../../components/HoldingChart/HoldingChart';
-import AltHoldingChart from '../../components/AltHoldingChart/AltHoldingChart'
+import DetailsChart from '../../components/DetailsChart/DetailsChart'
 import helpers from '../../helpers';
 
 export default function TokenDetails({name, userTokens, userTokenPrices}) {
@@ -41,9 +41,8 @@ export default function TokenDetails({name, userTokens, userTokenPrices}) {
       </div>
 
       <div className="token-location-container">
-        <HoldingChart/>
+        <DetailsChart data={currentToken} type='token'/>
       </div>
-      <AltHoldingChart data={currentToken} type='token'/>
 
       {/* <div className="field-transactions">
         <h2>Transaction history</h2>

@@ -141,8 +141,6 @@ function App() {
           <Route path='/token/:tokenName' exact render={() => <TokenDetails name={currentDetail} userTokens={userTokens} userTokenPrices={userTokenPrices} />}/>
           <Route path='/farming/:fieldName' exact render={() => <FarmingFieldDetails name={currentDetail} userFields={userFields} />}/>
           <Route path='/earning/:fieldName' exact render={() => <EarningFieldDetails name={currentDetail} userFields={userFields} />}/>
-          {/* <Route path='/dashboard/:tokenName' render={() => <HoldingDetails userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
-          {/* <Route path='/chart' exact render={() => <HoldingChart userTokens={userTokens} userFields={userFields} apis={apis} setSplash={setSplash}/>}/> */}
         </Switch>
       {/* </AppProvider> */}
     </div>
