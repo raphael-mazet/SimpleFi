@@ -7,21 +7,24 @@ export default function extractDetailsChartValues(data, type) {
   if (type === 'token') {
     const {userBalance, lockedBalance, unclaimedBalance} = data;
     
-    extractedValues.data.push([userBalance]);
-    extractedValues.labels.push(['Available']);
-    extractedValues.fill.push(pieChartColours[colourIndex]);
+    if (userBalance) {
+      extractedValues.data.push([userBalance]);
+      extractedValues.labels.push(['Available']);
+      extractedValues.fill.push(pieChartColours[colourIndex]);
+    }
     colourIndex++;
 
     lockedBalance && lockedBalance.forEach(lockedBalance => {
       extractedValues.data.push(Number(lockedBalance.balance.toFixed(2)));
-      extractedValues.labels.push(lockedBalance.field.name);
+      const lockedBalanceLabel = lockedBalance.via ? lockedBalance.field.name + ` (via ${lockedBalance.via.name})` : lockedBalance.field.name;
+      extractedValues.labels.push(lockedBalanceLabel);
       if (colourIndex === pieChartColours.length) colourIndex = 0;
       extractedValues.fill.push(pieChartColours[colourIndex]);
       colourIndex++;
     });
     unclaimedBalance && unclaimedBalance.forEach(unclaimedBalance => {
       extractedValues.data.push(Number(unclaimedBalance.balance.toFixed(2)));
-      extractedValues.labels.push('unclaimed: ' + unclaimedBalance.field.name);
+      extractedValues.labels.push('unclaimed from ' + unclaimedBalance.field.name);
       if (colourIndex === pieChartColours.length) colourIndex = 0;
       extractedValues.fill.push(pieChartColours[colourIndex]);
       colourIndex++;

@@ -39,20 +39,22 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
     fieldBalances
    };
 
-
-  async function tokenBalanceExtractor (token, field, share) {
+  //@dev via indicates the parent field via which the user has a token balance from a feederfield
+  async function tokenBalanceExtractor (token, field, share, via) {
     const { tokenId, isBase, tokenContract } = token;
     
     //@dev: field seed reserves are the number of underlying tokens held by the field
     let fieldSeedReserve = await getFieldSeedReserves(field, token, tokenContract, fieldSeedReserveCache);
   
-    // if (isBase) {
+    // if isBase or !isBase
       const userTokenBalance = fieldSeedReserve * share;
-      userTokenBalances.push({token, userTokenBalance, field});
+      const balanceObj = {token, userTokenBalance, field};
+      if (via) balanceObj.via = via;
+      userTokenBalances.push(balanceObj);
   
-    // } else {
     if (!isBase) {
       let feederField = trackedFields.find(field => field.receiptToken === tokenId);
+      const parentField = field;
 
       //TODO: stop this from changing tracked Fields as well as user fields
       //TODO: avoid populating this multiple times (once in App.js)
@@ -64,10 +66,10 @@ async function rewinder (userFields, trackedTokens, trackedFields) {
       const userFeederShare = userFieldBalance / totalFeederSupply;
       
       //rewoundFieldBalances will contain any field with a receipt token that was fed into a field the user has staked in
-      userFeederFieldBalances.push({feederField, userFieldBalance, parentField: field});
+      userFeederFieldBalances.push({feederField, userFieldBalance, parentField});
   
       for (const token of feederField.seedTokens) {
-        await tokenBalanceExtractor(token, feederField, userFeederShare)
+        await tokenBalanceExtractor(token, feederField, userFeederShare, parentField)
       }
     }
   }

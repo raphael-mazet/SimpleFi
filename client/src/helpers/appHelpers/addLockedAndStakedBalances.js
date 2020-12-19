@@ -1,5 +1,4 @@
 function addUnclaimedBalances(unclaimedBalances, userTokens, trackedTokens) {
-  //CHECK: is this necessary?
   const updatedUserTokens = [...userTokens];
 
   unclaimedBalances.forEach(unclaimedToken => {
@@ -22,7 +21,6 @@ function addUnclaimedBalances(unclaimedBalances, userTokens, trackedTokens) {
 }
 
 function addLockedTokenBalances (rewoundTokens, userTokens) {
-  //CHECK: is this necessary?
   const updatedUserTokens = [...userTokens];
 
   rewoundTokens.forEach(rewoundToken => {
@@ -30,14 +28,22 @@ function addLockedTokenBalances (rewoundTokens, userTokens) {
     const existingUserToken = updatedUserTokens.find(userToken => userToken.tokenId === rewoundToken.token.tokenId);
     //if so, add rewound token balance to the token's locked balance
     if (existingUserToken && existingUserToken.lockedBalance) {
-      existingUserToken.lockedBalance.push({balance: rewoundToken.userTokenBalance, field: rewoundToken.field});
+      const lockedBalanceObj = {balance: rewoundToken.userTokenBalance, field: rewoundToken.field};
+      if (rewoundToken.via) lockedBalanceObj.via = rewoundToken.via;
+      existingUserToken.lockedBalance.push(lockedBalanceObj);
     }
-    else if (existingUserToken) existingUserToken.lockedBalance = [{balance: rewoundToken.userTokenBalance, field: rewoundToken.field}];
+    else if (existingUserToken) {
+      const lockedBalanceObj = {balance: rewoundToken.userTokenBalance, field: rewoundToken.field};
+      if (rewoundToken.via) lockedBalanceObj.via = rewoundToken.via;
+      existingUserToken.lockedBalance = [lockedBalanceObj];
+    }
     //otherwise: create a new user Token
     else {
       //CHECK: check this is necessary
       const newUserToken = JSON.parse(JSON.stringify(rewoundToken.token));
-      newUserToken.lockedBalance = [{balance: rewoundToken.userTokenBalance, field: rewoundToken.field}]
+      const lockedBalanceObj = {balance: rewoundToken.userTokenBalance, field: rewoundToken.field};
+      if (rewoundToken.via) lockedBalanceObj.via = rewoundToken.via;
+      newUserToken.lockedBalance = [lockedBalanceObj]
       updatedUserTokens.push(newUserToken);
     }
   })
