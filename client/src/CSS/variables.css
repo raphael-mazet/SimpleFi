@@ -20,4 +20,7 @@
 
   --performance-green: #00FF66;
   --performance-red: #ff2222;
+
+  /* margins */
+  --details-page-margin-right: 50px;
 }

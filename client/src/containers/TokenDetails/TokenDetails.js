@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import './TokenDetails.css';
-import HoldingChart from '../../components/HoldingChart/HoldingChart';
 import DetailsChart from '../../components/DetailsChart/DetailsChart'
 import helpers from '../../helpers';
 
@@ -9,7 +8,7 @@ export default function TokenDetails({name, userTokens, userTokenPrices}) {
   const [currentToken] = useState(userTokens.find(field => field.name === name));
   const [totalBalance, setTotalBalance] = useState(0);
   const [totalValue, setTotalValue] = useState(0);
-
+  
   useEffect(() => {
     window.scrollTo(0, 0);
     const totalTokenBalance = helpers.extractTotalTokenBalance(currentToken);
@@ -19,34 +18,37 @@ export default function TokenDetails({name, userTokens, userTokenPrices}) {
   }, [currentToken]);
 
   return(
-    <div className="field-details">
-      <div className="field-details-titles">
-        <h2 className="field-title">{name}</h2>
-        <p><span className='field-title-header'>Description</span>: lorem ipsum dolor sit amet consectetuer</p>
-        <p><span className='field-title-header'>Contract address</span>: <a href={`https://etherscan.io/token/${currentToken.address}`} target="_blank" rel="noreferrer">{currentToken.address}</a></p>
+    <div className="token-details">
+      <div className="token-details-titles">
+        <h2>{name}</h2>
+        <p><span className='token-title-header'>Description</span>: lorem ipsum dolor sit amet consectetuer</p>
+        <p><span className='token-title-header'>Contract address</span>: <a href={`https://etherscan.io/token/${currentToken.address}`} target="_blank" rel="noreferrer">{currentToken.address}</a></p>
       </div>
 
-      <div className="field-details-numbers">
-        <div className="field-overview field-roi">
-          <h2>Total balance</h2>
-          <p>{Number(totalBalance.toFixed(2)).toLocaleString()}</p>
-          <div className="field-roi-graph">Graph</div>
+      <div className="token-details-overviews">
+        <div className="token-details-numbers">
+          <div className="token-overview token-roi">
+            <h2>Total balance</h2>
+            <p>{Number(totalBalance.toFixed(2)).toLocaleString()}</p>
+          </div>
+
+          <div className="token-overview token-invested">
+            <h2>Current value</h2>
+            <p>${Number(totalValue.toFixed(2)).toLocaleString()}</p>
+          </div>
         </div>
 
-        <div className="field-overview field-invested">
-          <h2>Current value</h2>
-          <p>${Number(totalValue.toFixed(2)).toLocaleString()}</p>
-          <div className="field-invested-graph">Pie chart and path</div>
+        <div className="token-source-container">
+            <h2>Source of funds</h2>
+          <div className="token-source-chart">
+            <DetailsChart data={currentToken} type='token'/>
+          </div>
         </div>
       </div>
 
-      <div className="token-location-container">
-        <DetailsChart data={currentToken} type='token'/>
-      </div>
-
-      {/* <div className="field-transactions">
+      {/* <div className="token-transactions">
         <h2>Transaction history</h2>
-        <div className="field-transactions-table">
+        <div className="token-transactions-table">
           <DetailsTable txHistory={currentField.userTxHistory} name={name}/>
         </div>
       </div> */}

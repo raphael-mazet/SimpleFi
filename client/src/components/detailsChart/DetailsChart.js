@@ -1,59 +1,44 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import './DetailsChart.css';
 import helpers from '../../helpers';
+const Chart = require('chart.js');
 
-export default function AltHoldingChart ({data, type}) {
+export default function DetailsChart({data, type}) {
 
-const [tableData] = useState(helpers.extractDetailsChartValues(data, type));
+  const [tableData] = useState(helpers.extractDetailsChartValues(data, type));
+  const chartRef = useRef(null);
 
   useEffect(() => {
-    google.charts.setOnLoadCallback(drawChart); //eslint-disable-line no-undef
-  }, [tableData]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  function drawChart() {
-    // Create the data table.
-    const chartData = new google.visualization.DataTable(); // eslint-disable-line no-undef
-    chartData.addColumn('string', 'State');
-    chartData.addColumn('number', 'Balance');
-    chartData.addRows(tableData);
-
-    var chartOptions = {
-      title:'',
-      backgroundColor: {
-        fill:'transparent',
+    new Chart(chartRef.current, {
+      type: "pie",
+      data: {
+          datasets: [{
+            data: tableData.data,
+            backgroundColor: tableData.fill
+          }],
+          labels: tableData.labels
       },
-      pieSliceText: 'label',
-      slices: [
-        {color: "#57C3E1"},
-        {color: "#DCCDE8"},
-        {color: "#007fad"},
-        {color: "#F9B5AC"}
-      ],
-      legend: {
-        // position: "none",
-        alignment: "center",
-        textStyle: {
-          color: "233238",
-          fontSize: 14
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            left: 0
+          }
+        },
+        legend: {
+          labels: {
+            fontColor: '#FFFAFA'
+          },
+          position: 'right',
+          align: 'center',
+          fontFamily: "'Roboto', 'Noto Sans', 'Ubuntu', 'Droid Sans', 'Helvetica Neue'",
         }
-      },
-      tooltip: {
-        showColorCode: true
-      },
-      chartArea: {
-        left: 0,
-        top: 0,
-        width: "100%",
-        height: "80%",
-       },
-       fontName: ""
-    };
-      
-    var chart = new google.visualization.PieChart(document.getElementById('chart_div')); // eslint-disable-line no-undef
-    chart.draw(chartData, chartOptions);
-    }
+      }
+    });
+  }, [tableData]);
 
   return (
-    <div id="chart_div"></div>
+    <canvas id="details-token-chart" width="100%" height="100%" ref={chartRef}></canvas>
   )
 }

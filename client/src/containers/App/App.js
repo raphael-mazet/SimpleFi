@@ -66,6 +66,7 @@ function App() {
   //Create first set of userTokens with token balances
   //Get all user token transactions
   useEffect(() => {
+    console.log(' ---> balances');
     if (userAccount.length && balanceContractsLoaded) {
       
       apis.getUserTokenTransactions(userAccount[0])
@@ -91,6 +92,7 @@ function App() {
 
   // Add all underlying token and field balances
   useEffect(() => {
+    console.log(' ---> rewind');
     if (userFields.length && userTokens.length && !rewoundFlag) {
       apis.rewinder(userFields, trackedTokens, trackedFields)
         .then(rewound => {
@@ -104,7 +106,7 @@ function App() {
   }, [userFields])
 
   useEffect(() => {
-
+    console.log(' ---> prices');
     if (rewoundFlag) {
       const tokensWithLockedBalances = helpers.addLockedTokenBalances(rewoundTokenBalances, userTokens);
       const tokensWithUnclaimedBalances = helpers.addUnclaimedBalances(unclaimedRewards, tokensWithLockedBalances, trackedTokens);

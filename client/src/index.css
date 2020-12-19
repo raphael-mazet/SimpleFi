@@ -8,6 +8,7 @@ body {
   /* background-color: rgb(137, 96, 159); */
   background-color: var(--lilac);
   font-family: -apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
+  position: relative;
 }
 
 a, button {
