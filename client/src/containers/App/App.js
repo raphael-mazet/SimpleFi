@@ -105,9 +105,11 @@ function App() {
       setLoadingMessage(() => helpers.amendModal('rewinding'));
       apis.rewinder(userFields, trackedTokens, trackedFields)
         .then(rewound => {
+          setLoadingMessage(prev => helpers.amendModal('Rewinding underlying farming investments', prev));
           setRewoundTokenBalances (rewound.userTokenBalances);
           setRewoundFieldBalances (rewound.userFeederFieldBalances);
           setFieldSuppliesAndReserves(rewound.fieldBalances);
+          setLoadingMessage(prev => helpers.amendModal('Rewinding underlying tokens', prev));
           setRewoundFlag(true);
         })
     }
@@ -136,7 +138,7 @@ function App() {
               .then(fieldsWithROIs => {
                   setLoadingMessage(prev => helpers.amendModal('Calculating ROIs', prev));
                   setUserFields(fieldsWithROIs);
-                  // setLoadingMessage(() => {return {headline: null, actions: []}});
+                  setTimeout(() => setLoadingMessage(() => {return {headline: null, actions: []}}), 300);
                   setAllLoadedFlag(true);
                 })
             })

@@ -6,7 +6,7 @@ export default function amendModal(message, loadingMessage) {
     case 'balances':
       headline = 'Loading balances';
       actions = [
-        'Fetching primary token and field balances',
+        'Fetching token and field balances',
         'Fetching historic token transactions',
         'Fetching unclaimed rewards',
       ]
@@ -14,7 +14,11 @@ export default function amendModal(message, loadingMessage) {
 
     case 'rewinding':
       headline = 'Rewinding invested balances';
-      actions = [];
+      actions = [
+        'Rewinding underlying farming investments',
+        'Rewinding underlying tokens'
+
+      ];
       break;
 
     case 'ROIs':
@@ -28,11 +32,14 @@ export default function amendModal(message, loadingMessage) {
 
     default: 
       headline = loadingMessage.headline;
-      actions = loadingMessage.actions.filter(
-        action => action !== message
+      actions = loadingMessage.actions.map(
+        action => {
+          if (action === message) {
+            action = action + '  ✔️';
+          }
+          return action
+        }
         );
     }
-    console.log(' ---> headline', headline);
-    console.log(' --->actions',actions);
     return {headline, actions}
 }

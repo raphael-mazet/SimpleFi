@@ -17,9 +17,22 @@ export default function LoadingModal({loadingMessage}) {
   return (
     <div className="loading-modal" style={display}>
       <div className="modal-content">
-        <h2>{loadingMessage.headline}</h2>
-        <div className="loading-actions">
-          {loadingMessage.actions.map((action) => {return (<p>{action}</p>)})}
+        <div className="modal-text">
+          <h2>{loadingMessage.headline}</h2>
+          <div className="loading-actions">
+            {loadingMessage.actions.map((action) => {
+              let tick;
+              if (action.slice(-2) === '✔️') {
+                tick = <span className="modal-tick">✔</span>
+                action = action.slice(0, -2);
+              }
+              return (<p key={action}>{action}{tick}</p>)
+            })
+          }
+          </div>
+        </div>
+        <div className="loading-animation">
+          <div className="dot-bricks"></div>
         </div>
       </div>
     </div>
