@@ -10,6 +10,7 @@ import MyAssets from '../MyAssets/MyAssets';
 import TokenDetails from '../TokenDetails/TokenDetails';
 import FarmingFieldDetails from '../FarmingFieldDetails/FarmingFieldDetails';
 import EarningFieldDetails from '../EarningFieldDetails/EarningFieldDetails';
+import LoadingModal from '../../components/LoadingModal/LoadingModal';
 // import { AppProvider } from './AppContext';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
   const [rewoundFlag, setRewoundFlag] = useState(false);
   const [allLoadedFlag, setAllLoadedFlag] = useState(false);
   const [splash, setSplash] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState({headline: null, actions: []});
 
   const [currentDetail, setCurrentDetail] = useState('');
   const history = useHistory();
@@ -52,6 +54,7 @@ function App() {
 
   //Get tracked tokens and fields from SimpleFi db and attach contracts
   useEffect(() => {
+    if (ethereum) ethereum.autoRefreshOnNetworkChange = false; //eslint-disable-line no-undef
     const getTokens = apis.getTokens();
     const getFields = apis.getFields();
     Promise.all([getTokens, getFields])
@@ -66,22 +69,28 @@ function App() {
   //Create first set of userTokens with token balances
   //Get all user token transactions
   useEffect(() => {
-    console.log(' ---> balances');
     if (userAccount.length && balanceContractsLoaded) {
+      setLoadingMessage(() => helpers.amendModal('balances'));
       
       apis.getUserTokenTransactions(userAccount[0])
-        .then(txArr => setUserTokenTransactions(txArr.result));
+        .then(txArr => {
+          setLoadingMessage(prev => helpers.amendModal('Fetching historic token transactions', prev));
+          setUserTokenTransactions(txArr.result);
+        })
 
       apis.getUnclaimedRewards(userAccount[0], trackedFields, trackedTokens)
-        .then(unclaimedArr => setUnclaimedRewards(unclaimedArr))
+        .then(unclaimedArr => {
+          setLoadingMessage(prev => helpers.amendModal('Fetching unclaimed rewards', prev));
+          setUnclaimedRewards(unclaimedArr)
+        })
 
       const getTokenBalances = apis.getAllUserBalances(userAccount[0], trackedTokens);
       const getFieldBalances = apis.getAllUserBalances(userAccount[0], trackedFields);
       Promise.all([getTokenBalances, getFieldBalances])
         .then(([tokensWithBalance, fieldsWithBalance]) => {
           setUserTokens(tokensWithBalance);
-
           fieldsWithBalance = helpers.populateFieldTokensFromCache(fieldsWithBalance, trackedTokens);
+          setLoadingMessage(prev => helpers.amendModal('Fetching primary token and field balances', prev));
           setUserFields(fieldsWithBalance);
           if (!fieldsWithBalance.length) setRewoundFlag(true);
         })
@@ -92,8 +101,8 @@ function App() {
 
   // Add all underlying token and field balances
   useEffect(() => {
-    console.log(' ---> rewind');
     if (userFields.length && userTokens.length && !rewoundFlag) {
+      setLoadingMessage(() => helpers.amendModal('rewinding'));
       apis.rewinder(userFields, trackedTokens, trackedFields)
         .then(rewound => {
           setRewoundTokenBalances (rewound.userTokenBalances);
@@ -106,8 +115,8 @@ function App() {
   }, [userFields])
 
   useEffect(() => {
-    console.log(' ---> prices');
     if (rewoundFlag) {
+      setLoadingMessage(() => helpers.amendModal('ROIs'));
       const tokensWithLockedBalances = helpers.addLockedTokenBalances(rewoundTokenBalances, userTokens);
       const tokensWithUnclaimedBalances = helpers.addUnclaimedBalances(unclaimedRewards, tokensWithLockedBalances, trackedTokens);
       setUserTokens(tokensWithUnclaimedBalances);
@@ -117,13 +126,17 @@ function App() {
       
       apis.getTokenPrices(tokensWithUnclaimedBalances, fieldsWithSuppliesAndReserves, trackedTokens)
         .then(tokenPrices => {
+          setLoadingMessage(prev => helpers.amendModal('Fetching token and field prices', prev));
           setUserTokenPrices(tokenPrices);
           const fieldsWithInvestmentValues = helpers.addFieldInvestmentValues(fieldsWithSuppliesAndReserves, tokenPrices)
           apis.getAPYs(fieldsWithInvestmentValues, tokensWithUnclaimedBalances, tokenPrices)
-            .then(fieldsWithAPYs => {
+          .then(fieldsWithAPYs => {
+              setLoadingMessage(prev => helpers.amendModal('Calculating APYs', prev));
               apis.getROIs(userAccount[0], fieldsWithAPYs, trackedFields, userTokenTransactions, trackedTokens, tokensWithUnclaimedBalances, tokenPrices)
-                .then(fieldsWithROIs => {
+              .then(fieldsWithROIs => {
+                  setLoadingMessage(prev => helpers.amendModal('Calculating ROIs', prev));
                   setUserFields(fieldsWithROIs);
+                  // setLoadingMessage(() => {return {headline: null, actions: []}});
                   setAllLoadedFlag(true);
                 })
             })
@@ -134,9 +147,10 @@ function App() {
 
   //TODO: setcontext around this
   return (
-    <div>
+    <div className="simplefi-app">
       <Nav connect={connectWallet} splash={splash}/>
       {/* <AppProvider value={balanceContractsLoaded}> */}
+      <LoadingModal loadingMessage={loadingMessage}/>
         <Switch>
           <Route path='/' exact render={() => <Welcome connect={connectWallet} setSplash={setSplash}/>}/>
           <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} userTokenPrices={userTokenPrices} setSplash={setSplash} setCurrentDetail={setCurrentDetail} allLoadedFlag={allLoadedFlag}/>}/>

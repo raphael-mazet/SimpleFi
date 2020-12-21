@@ -16,7 +16,7 @@ export default function extractDetailsChartValues(data, type) {
 
     lockedBalance && lockedBalance.forEach(lockedBalance => {
       extractedValues.data.push(Number(lockedBalance.balance.toFixed(2)));
-      const lockedBalanceLabel = lockedBalance.via ? lockedBalance.field.name + ` (via ${lockedBalance.via.name})` : lockedBalance.field.name;
+      const lockedBalanceLabel = lockedBalance.via ? lockedBalance.via.name + ` (via ${lockedBalance.field.name})` : lockedBalance.field.name;
       extractedValues.labels.push(lockedBalanceLabel);
       if (colourIndex === pieChartColours.length) colourIndex = 0;
       extractedValues.fill.push(pieChartColours[colourIndex]);

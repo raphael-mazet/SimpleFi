@@ -1,0 +1,36 @@
+@import '../../CSS/variables.css';
+
+.loading-modal {
+  background-color: rgba(0,0,0,0.5); /* Overlay effect: translucent background: black w/ partial opacity */
+  z-index: 1; /* Overlay effect: positioned over other containers */
+  height: 100%; /* Full height */
+  width: 100%;
+  position: fixed; /* Fix position on the top-left corner*/
+  top: 0;
+  left: 0;
+  overflow: auto; /* Enable scroll if needed */
+  padding-top: 150px; /* Location of the content container */
+}
+/* Modal content */
+.modal-content {
+  background-color: var(--transp-offwhite);
+  color: var(--dark-grey-font);
+  box-shadow: 5px 5px 10px 0px var(--periwinkle);
+  width: 70%; /* Width in proportion to its parent container*/
+  max-width: 640px; /* Max width where it stops expanding */
+  height: 40%; /* Height in proportion to its parent container */
+  margin: auto; /* Auto margin according to the element width */
+  padding: 10px;
+  border-radius: 20px; /* Optional. Rounds container corners */
+}
+
+.modal-content h2 {
+  color: var(--darkest-grey-font);
+  font-size: 1.2em;
+  margin: auto;
+}
+
+.loading-actions p {
+  color: var(--darkest-grey-font);
+}
+
