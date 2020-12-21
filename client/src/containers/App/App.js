@@ -38,15 +38,17 @@ function App() {
     //TODO: autorefresh when toggle account from Metamask
     if (window.ethereum) {
       const newAccount = await metamaskConnect();
-      if(!userAccount[0]) {setUserAccount(newAccount);
-      history.push('/dashboard');
-    } else if (newAccount[0] !== userAccount[0]) {
-        const resetUserTokens = setUserTokens([]);
-        const resetUserFields = setUserFields([]);
-        //ASK: not sure this does anything
-        Promise.all([resetUserTokens, resetUserFields])
-          .then(resets => {setUserAccount(newAccount);})
+      if (newAccount.error) {
+        if (newAccount.error.code === 4001) {
+          alert('Please connect to Metamask');
+        } else {
+          alert('Oops, something went wrong - please refresh the page');
+        }
       }
+      if(newAccount[0] && newAccount !== userAccount) {
+        setUserAccount(newAccount);
+        history.push('/dashboard');
+      } 
     } else {
       alert('Please install Metamask to use SimpleFi (https://metamask.io/)')
     }
@@ -54,7 +56,17 @@ function App() {
 
   //Get tracked tokens and fields from SimpleFi db and attach contracts
   useEffect(() => {
-    if (ethereum) ethereum.autoRefreshOnNetworkChange = false; //eslint-disable-line no-undef
+    if (window.ethereum) { 
+      window.ethereum.autoRefreshOnNetworkChange = false;
+      window.ethereum.on('accountsChanged', function (accounts) {
+        console.log(' ---> accounts', accounts);
+        setUserAccount(accounts);
+        setRewoundFlag(false);
+      });
+        //eslint-disable-next-line no-undef
+    } else {
+      alert('Please install Metamask to use SimpleFi (https://metamask.io/)');
+    }
     const getTokens = apis.getTokens();
     const getFields = apis.getFields();
     Promise.all([getTokens, getFields])
