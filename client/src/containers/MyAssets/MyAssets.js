@@ -28,8 +28,6 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
   }, [allLoadedFlag])
   
   // separate farming and earning fields
-  //TODO: change this total invested
-  //TODO: add headline ROI calcs in overview and tables
   useEffect(() => {
     const {farmingFields, earningFields, totalInvested, totalROI} = helpers.extractSummaryFieldValues(userFields);
     setFarmingHeadlines({investment: totalInvested.farmingInv, ROI: totalROI.farmingROI});

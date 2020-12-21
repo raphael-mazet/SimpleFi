@@ -104,13 +104,13 @@ function App() {
     if (userFields.length && userTokens.length && !rewoundFlag) {
       setLoadingMessage(() => helpers.amendModal('rewinding'));
       apis.rewinder(userFields, trackedTokens, trackedFields)
-        .then(rewound => {
+      .then(rewound => {
           setLoadingMessage(prev => helpers.amendModal('Rewinding underlying farming investments', prev));
           setRewoundTokenBalances (rewound.userTokenBalances);
           setRewoundFieldBalances (rewound.userFeederFieldBalances);
           setFieldSuppliesAndReserves(rewound.fieldBalances);
-          setLoadingMessage(prev => helpers.amendModal('Rewinding underlying tokens', prev));
-          setRewoundFlag(true);
+          setTimeout(() => setLoadingMessage(prev => helpers.amendModal('Rewinding underlying tokens', prev)), 50);
+          setTimeout(() => setRewoundFlag(true), 200);
         })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps  

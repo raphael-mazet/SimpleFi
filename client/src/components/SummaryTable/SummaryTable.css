@@ -17,13 +17,13 @@
   border-radius: 10px;
   box-shadow: 0 1px 6px 0 rgba(0,0,0,.1);
   cursor: pointer;
-  transition: 0.4s;
+  transition: 0.2s;
   position: relative;
   line-height: 60px;
 }
 
 .summary-table-row:hover {
-  box-shadow: 0 1px 5px 3px var(--periwinkle);
+  box-shadow: 0 0 5px 5px var(--periwinkle);
 }
 
 .summary-table-row td {
