@@ -28,13 +28,14 @@ function calcFarmingROI (txHistory, userTokens, tokenPrices, field) {
   });
   targetCropTokens.forEach(token => {
     amountUnclaimed += token.unclaimedBalance.reduce((acc, curr) => {
-      return curr.field === fieldId ? curr.balance * tokenPrices[token.name].usd : acc;
+      return curr.field.fieldId === fieldId ? curr.balance * tokenPrices[token.name].usd : acc;
     }, amountUnclaimed)
   })
 
   //TODO: alt ROI based on current crop value (investmentValue vs. amountInvested) for toggling in Field details
+  //FIXME: absolutely necessary
   //alternative: add investmentValue in function args (currInvestmentValue from getROIs)
-  // return (investmentValue + amountUnclaimed + amountClaimed + amountRealised) / amountInvested;
+  //old calc: return (investmentValue + amountUnclaimed + amountClaimed + amountRealised) / amountInvested;
   return (amountUnclaimed + amountClaimed + amountRealised) / amountInvested;    
 }
 

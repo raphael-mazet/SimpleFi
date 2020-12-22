@@ -1,8 +1,14 @@
 const earningHeaders = [
   'Name',
-  'Balance',
+  'Invested ($)',
   'Staked',
+  'ROI',
   'APY'
 ];
 
-  export default earningHeaders;
+const earningCurrencyCells = [false, true, false, false, false]
+
+export {
+  earningHeaders,
+  earningCurrencyCells
+}

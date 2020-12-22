@@ -35,8 +35,12 @@
   padding-right: 0;
 }
 
-.container-headline-data .headline-performance {
+.container-headline-data .headline-performance-green {
   color: var(--performance-green);
+}
+
+.container-headline-data .headline-performance-red {
+  color: var(--performance-red);
 }
 
 .dropdown-button-wrapper {

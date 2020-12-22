@@ -2,7 +2,6 @@ import getUserLiquidityHistory from './earningROIs/getUserLiquidityHistory';
 import getUserFarmingHistory from './farmingROIs/getUserFarmingHistory';
 import helpers from '../../../helpers';
 
-//TODO: uniswap: double-check everything, indices, decimals, txs, returns, shitty Promise.alls, etc.
 /**
  * 
  * @param {String} userAccount user's Eth account
@@ -15,7 +14,7 @@ import helpers from '../../../helpers';
 async function getROIs(userAccount, userFields, trackedFields, userTokenTransactions, trackedTokens, userTokens, tokenPrices) {
 
   const fieldsWithROI = [...userFields];
-
+  
   for (let field of fieldsWithROI) {
 
     let currInvestmentValue = 0;
@@ -32,14 +31,13 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
       const receiptToken = trackedTokens.find(trackedToken => trackedToken.tokenId === field.receiptToken);
       const userReceiptTokenTxs = userTokenTransactions.filter(tx => tx.contractAddress === receiptToken.address.toLowerCase());
       
-      const userLiquidityHistory = await getUserLiquidityHistory(trackedFields, field, receiptToken, userReceiptTokenTxs, userAccount);
-      if (userLiquidityHistory) {
-        Promise.all(userLiquidityHistory)
-          .then(liquidityHistory => {
-            field.investmentValue = currInvestmentValue;
-            field.userTxHistory = liquidityHistory;
-            field.allTimeROI = helpers.calcEarningROI(currInvestmentValue, liquidityHistory);
-          })
+      const userLiquidityHistoryPromises = await getUserLiquidityHistory(trackedFields, field, receiptToken, userReceiptTokenTxs, userAccount);
+      if (userLiquidityHistoryPromises) {
+        const userLiquidityHistory = await Promise.all(userLiquidityHistoryPromises);
+        //TODO: rename variable to totalCurrInvValue
+        field.investmentValue = currInvestmentValue;
+        field.userTxHistory = userLiquidityHistory;
+        field.allTimeROI = helpers.calcEarningROI(currInvestmentValue, userLiquidityHistory);
       }
     }
 
@@ -49,7 +47,6 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
 
       field.investmentValue = currInvestmentValue;
       field.userFarmingTxHistory = userFarmingHistory;
-      // currInvestmentValue, 
       field.allTimeROI = helpers.calcFarmingROI(userFarmingHistory, userTokens, tokenPrices, field);
     }
   }

@@ -1,47 +1,59 @@
+@import '../../CSS/variables.css';
+
 nav {
   display: flex;
-  justify-content: space-between;
+  margin: 30px 0 40px 0;
+  padding: 0 50px 20px 50px;
 }
 
 .nav-title {
+  flex: 1;
+}
+
+.nav-title h1 {
   color: white;
   font-size: 30px;
   font-weight: 700;
-  margin: 45px 50px;
-  font-family: 'Baloo 2', cursive;;
+  font-family: 'Baloo 2', cursive;
 }
 
 .nav-items {
-  display: flex;
-}
-
-.nav-links {
-  display: flex;  
-} 
-
-.menu-items {
+  flex: 3;
   display: flex;
   justify-content: flex-end;
-  color: white;
-  margin: 55px 30px 30px 10px;
 }
 
-.nav-button button {
-  background-color: rgb(87, 195, 225);
+.nav-items p {
+  font-size: 15px;
+  font-weight: normal;
   color: white;
-  font-weight: 500;
-  margin: 45px 50px 50px 50px;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.5);
   cursor: pointer;
 }
 
-.nav-button-transp button {
-  background-color: rgb(137, 96, 159);
-  color: rgb(137, 96, 159);
-  font-weight: 500;
-  margin: 45px 50px 50px 50px;
-  padding: 10px;
-  border-radius: 8px;
+.nav-links {
+  display: flex;
+  align-items: center;
+} 
+
+.nav-links p {
+  margin-right: 30px;
+}
+
+.nav-address-button {
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  border-radius: 30px;
+  box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.5);
+  cursor: pointer;
+  background-color: var(--transp-grey-background);
+}
+
+.nav-address-button p {
+  margin-right: 8px;
+}
+
+.nav-address-button canvas {
+  border-radius: 100%;
+  box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.5);
 }

@@ -1,0 +1,120 @@
+@import '../../CSS/variables.css';
+
+.loading-modal {
+  display: flex;
+  background-color: rgba(0,0,0,0.5); /* Overlay effect: translucent background: black w/ partial opacity */
+  z-index: 1; /* Overlay effect: positioned over other containers */
+  height: 100%; /* Full height */
+  width: 100%;
+  position: fixed; /* Fix position on the top-left corner*/
+  top: 0;
+  left: 0;
+  overflow: auto; /* Enable scroll if needed */
+  padding-top: 160px; /* Location of the content container */
+}
+/* Modal content */
+.modal-content {
+  position: relative;
+  background-color: var(--transp-offwhite);
+  color: var(--dark-grey-font);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 5px 5px 10px 0px var(--periwinkle);
+  width: 70%; /* Width in proportion to its parent container*/
+  max-width: 600px; /* Max width where it stops expanding */
+  height: 40%; /* Height in proportion to its parent container */
+  margin: auto; /* Auto margin according to the element width */
+  border-radius: 20px; /* Optional. Rounds container corners */
+}
+
+.modal-text {
+  padding: 30px 0 0 50px;
+}
+
+.modal-content h2 {
+  color: var(--darkest-grey-font);
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.loading-actions {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.loading-actions p {
+  color: var(--darkest-grey-font);
+  line-height: 1.8em;
+}
+
+.loading-actions .modal-tick {
+  color: var(--success-green);
+}
+
+.loading-animation{
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 60px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+
+.dot-bricks {
+  position: relative;
+  margin: auto;
+  top: 8px;
+  left: -9999px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: var(--modal-dot);
+  color: var(--modal-dot);
+  box-shadow: 9991px -16px 0 0 var(--modal-dot), 9991px 0 0 0 var(--modal-dot), 10007px 0 0 0 var(--modal-dot);
+  animation: dotBricks 2s infinite ease;
+}
+
+@keyframes dotBricks {
+  0% {
+    box-shadow: 9991px -16px 0 0 var(--modal-dot), 9991px 0 0 0 var(--modal-dot), 10007px 0 0 0 var(--modal-dot);
+  }
+  8.333% {
+    box-shadow: 10007px -16px 0 0 var(--modal-dot), 9991px 0 0 0 var(--modal-dot), 10007px 0 0 0 var(--modal-dot);
+  }
+  16.667% {
+    box-shadow: 10007px -16px 0 0 var(--modal-dot), 9991px -16px 0 0 var(--modal-dot), 10007px 0 0 0 var(--modal-dot);
+  }
+  25% {
+    box-shadow: 10007px -16px 0 0 var(--modal-dot), 9991px -16px 0 0 var(--modal-dot), 9991px 0 0 0 var(--modal-dot);
+  }
+  33.333% {
+    box-shadow: 10007px 0 0 0 var(--modal-dot), 9991px -16px 0 0 var(--modal-dot), 9991px 0 0 0 var(--modal-dot);
+  }
+  41.667% {
+    box-shadow: 10007px 0 0 0 var(--modal-dot), 10007px -16px 0 0 var(--modal-dot), 9991px 0 0 0 var(--modal-dot);
+  }
+  50% {
+    box-shadow: 10007px 0 0 0 var(--modal-dot), 10007px -16px 0 0 var(--modal-dot), 9991px -16px 0 0 var(--modal-dot);
+  }
+  58.333% {
+    box-shadow: 9991px 0 0 0 var(--modal-dot), 10007px -16px 0 0 var(--modal-dot), 9991px -16px 0 0 var(--modal-dot);
+  }
+  66.666% {
+    box-shadow: 9991px 0 0 0 var(--modal-dot), 10007px 0 0 0 var(--modal-dot), 9991px -16px 0 0 var(--modal-dot);
+  }
+  75% {
+    box-shadow: 9991px 0 0 0 var(--modal-dot), 10007px 0 0 0 var(--modal-dot), 10007px -16px 0 0 var(--modal-dot);
+  }
+  83.333% {
+    box-shadow: 9991px -16px 0 0 var(--modal-dot), 10007px 0 0 0 var(--modal-dot), 10007px -16px 0 0 var(--modal-dot);
+  }
+  91.667% {
+    box-shadow: 9991px -16px 0 0 var(--modal-dot), 9991px 0 0 0 var(--modal-dot), 10007px -16px 0 0 var(--modal-dot);
+  }
+  100% {
+    box-shadow: 9991px -16px 0 0 var(--modal-dot), 9991px 0 0 0 var(--modal-dot), 10007px 0 0 0 var(--modal-dot);
+  }
+}
+

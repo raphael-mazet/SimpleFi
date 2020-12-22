@@ -1,8 +1,18 @@
 @import '../../CSS/variables.css';
 @import '../../CSS/animations.css';
 
+
+.myassets-summary {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  margin-right: var(--overview-page-margin-right);
+}
+
 .summary-overview-cards-container {
   display: flex;
+  width: 70%;
+  align-self: center;
   margin: 20px 50px 50px 50px;
   padding: 0 100px;
   justify-content: space-around;

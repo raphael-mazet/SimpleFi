@@ -13,8 +13,12 @@ function addFieldInvestmentValues(userFields, tokenPrices) {
     field.seedTokens.forEach(token => {
       totalFieldValue += token.fieldReserve * tokenPrices[token.name].usd;
     })
-  
-    field.unstakedUserInvestmentValue = (field.userBalance / field.totalSupply) * totalFieldValue;
+    
+    if (field.userBalance) {
+      field.unstakedUserInvestmentValue = (field.userBalance / field.totalSupply) * totalFieldValue;
+    } else {
+      field.unstakedUserInvestmentValue = 0;
+    }
     if (field.stakedBalance) {
       field.stakedBalance.forEach(
         stakedBalance => stakedBalance.userInvestmentValue = (stakedBalance.balance / field.totalSupply) * totalFieldValue

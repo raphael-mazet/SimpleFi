@@ -1,0 +1,96 @@
+@import '../../CSS/variables.css';
+
+.token-details {
+  margin: 20px 50px;
+  position: relative;
+}
+
+.token-details h2, .token-details p, .token-details a {
+  color: var(--almost-white);
+}
+
+.token-details-titles {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.token-details-titles h2 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.token-details-titles p {
+  line-height: 1.8em;
+}
+
+.token-details-titles a {
+  cursor: pointer;
+}
+
+.token-title-header {
+  font-weight: 500;
+}
+
+.token-details-overviews {
+  display: flex;
+  justify-content: center;
+  margin-right: var(--details-page-margin-right);
+  padding-left: 50px;
+  height: 300px;
+}
+
+.token-details-numbers {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.token-overview {
+  display: flex;
+  margin-top: 20px;
+  padding: 20px 30px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 10px;
+  box-shadow: 0 0px 2px 0px var(--periwinkle);
+  border-width: 1px;
+}
+
+.token-overview h2, .token-source-container h2 {
+  font-size: 1.2em;
+  line-height: 2em;
+  margin-bottom: 10px;
+}
+
+.token-overview p {
+  font-size: 1.2em;
+}
+
+.token-source-container {
+  display: flex;
+  flex: 2;
+  flex-direction: column;
+  position: relative;
+  align-items: flex-start;
+}
+
+.token-source-container h2 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.token-source-chart {
+  position: relative;
+  height: 250px;
+  width: 500px;
+}
+
+.token-transactions-table {
+  margin: 10px var(--token-details-margin-right) 0 20px;
+  border-width: 1px;
+  border-radius: 10px;
+}

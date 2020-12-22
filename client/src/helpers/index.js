@@ -4,10 +4,11 @@ import {
   addUnclaimedBalances,
   addFieldSuppliesAndReserves,
   addStakedFieldBalances,
-  addFieldInvestmentValues
+  addFieldInvestmentValues,
+  amendModal
 } from './appHelpers'
 import extractSummaryHoldingValues from './myAssetsHelpers/tokenHelpers';
-import { fieldSeparator } from './myAssetsHelpers/fieldHelpers';
+import { fieldSeparator, extractSummaryFieldValues } from './myAssetsHelpers/fieldHelpers';
 import toggleDropdown from './myAssetsHelpers/dropdownHelper';
 import {
   findFieldAddressType,
@@ -21,6 +22,8 @@ import {
 import extractTempFieldDetailsCells from './detailsTableHelper';
 import urlStringSanitiser from './urlStringSanitiser';
 import formatHeadlines from './summaryBoxHelper';
+import {extractTotalTokenBalance} from './tokenDetailsHelper';
+import extractDetailsChartValues from './detailsChartHelper';
 
 //eslint-disable-next-line import/no-anonymous-default-export
 export default {
@@ -30,8 +33,10 @@ export default {
   addFieldSuppliesAndReserves,
   addStakedFieldBalances,
   addFieldInvestmentValues,
+  amendModal,
   extractSummaryHoldingValues,
   fieldSeparator,
+  extractSummaryFieldValues,
   toggleDropdown,
   findFieldAddressType,
   combineFieldSuppliesAndReserves,
@@ -42,5 +47,7 @@ export default {
   calcFarmingROI,
   extractTempFieldDetailsCells,
   urlStringSanitiser,
-  formatHeadlines
+  formatHeadlines,
+  extractTotalTokenBalance,
+  extractDetailsChartValues
 }

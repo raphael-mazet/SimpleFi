@@ -27,7 +27,7 @@ export default function SummaryBox({headlines, userValues, headers, tableName, c
         <div className="container-headline-data">
           <h3 className={`headline-total-${tableName}`}>{`${userValues.length} ${tableName === 'holding' ? 'tokens' : 'investments'}`}</h3>
           {boxHeadlines.formattedHeadlines.map((headline, index) => (
-            <h3 key={`${tableName}-headline-${index}`} className={boxHeadlines.perfClasses[index] ? "headline-performance" : "headline"}>{headline}</h3>
+            <h3 key={`${tableName}-headline-${index}`} className={boxHeadlines.perfClasses[index] ? `headline-performance-${boxHeadlines.perfClasses[index]}` : "headline"}>{headline}</h3>
           ))}
         </div>
         <div className="dropdown-button-wrapper">

@@ -3,13 +3,18 @@ import simpleFiSplash from '../../assets/images/simpleFi-splash-blue-sun.svg';
 import simpleFiLogo from '../../assets/logos/simplefi-logotype.svg';
 import './Welcome.css';
 import Footer from '../Footer/Footer';
+import { connectWallet } from '../../authentication/web3';
+import { useHistory } from 'react-router-dom';
 
-export default function Welcome ({connect, setSplash}) {
+export default function Welcome ({setUserAccount, userAccount, setSplash}) {
+
+  const history = useHistory();
 
   useEffect(() => {
     setSplash(false);
+    return () => setSplash(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps  
-  }, [])
+  })
 
   return (
     <>
@@ -22,7 +27,7 @@ export default function Welcome ({connect, setSplash}) {
           <h2>Making decentralized finance accessible to everyone</h2>
         </div>
         <div className="splash-connect">
-            <button className='welcome-button' onClick={connect}>Connect wallet</button>
+            <button className='welcome-button' onClick={() => connectWallet(setUserAccount, history, userAccount)}>Connect wallet</button>
         </div>
       </div>
       <div className="welcome-media">

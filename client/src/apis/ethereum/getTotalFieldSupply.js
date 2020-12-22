@@ -1,6 +1,7 @@
 const ethers = require('ethers');
 
 async function getTotalFieldSupply (fieldName, contract, decimals, cache) {
+  
 
   const findSupplyInCache = cache.filter(fieldWithSupply => fieldWithSupply.fieldName === fieldName)[0];
   
