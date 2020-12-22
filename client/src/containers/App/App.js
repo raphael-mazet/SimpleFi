@@ -30,6 +30,7 @@ function App() {
   const [allLoadedFlag, setAllLoadedFlag] = useState(false);
   const [splash, setSplash] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState({headline: null, actions: []});
+  const [changedAddress, setChangedAddress] = useState(false);
 
   const [currentDetail, setCurrentDetail] = useState('');
   const history = useHistory();
@@ -54,14 +55,28 @@ function App() {
     }
   }
 
+  useEffect(() => {
+    if (changedAddress) {
+      setUserTokens([]);
+      setUserFields([]);
+      setUserTokenTransactions([]);
+      setUnclaimedRewards([]);
+      setRewoundTokenBalances([]);
+      setRewoundFieldBalances([]);
+      setFieldSuppliesAndReserves([]);
+      setRewoundFlag(false);
+      setAllLoadedFlag(false);
+      setChangedAddress(false);
+    }
+  }, [changedAddress])
+
   //Get tracked tokens and fields from SimpleFi db and attach contracts
   useEffect(() => {
     if (window.ethereum) { 
       window.ethereum.autoRefreshOnNetworkChange = false;
       window.ethereum.on('accountsChanged', function (accounts) {
-        console.log(' ---> accounts', accounts);
+        setChangedAddress(true);
         setUserAccount(accounts);
-        setRewoundFlag(false);
       });
         //eslint-disable-next-line no-undef
     } else {
@@ -81,7 +96,7 @@ function App() {
   //Create first set of userTokens with token balances
   //Get all user token transactions
   useEffect(() => {
-    if (userAccount.length && balanceContractsLoaded) {
+    if (userAccount.length && balanceContractsLoaded && !changedAddress) {
       setLoadingMessage(() => helpers.amendModal('balances'));
       
       apis.getUserTokenTransactions(userAccount[0])
@@ -104,16 +119,18 @@ function App() {
           fieldsWithBalance = helpers.populateFieldTokensFromCache(fieldsWithBalance, trackedTokens);
           setLoadingMessage(prev => helpers.amendModal('Fetching primary token and field balances', prev));
           setUserFields(fieldsWithBalance);
-          if (!fieldsWithBalance.length) setRewoundFlag(true);
+          if (!fieldsWithBalance.length) {
+            setRewoundFlag(true);
+          }
         })
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [balanceContractsLoaded, userAccount])
+  }, [balanceContractsLoaded, userAccount, changedAddress])
 
   // Add all underlying token and field balances
   useEffect(() => {
-    if (userFields.length && userTokens.length && !rewoundFlag) {
+    if (userFields.length && userTokens.length && !rewoundFlag && !changedAddress) {
       setLoadingMessage(() => helpers.amendModal('rewinding'));
       apis.rewinder(userFields, trackedTokens, trackedFields)
       .then(rewound => {
@@ -126,10 +143,10 @@ function App() {
         })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps  
-  }, [userFields])
+  }, [userFields, changedAddress])
 
   useEffect(() => {
-    if (rewoundFlag) {
+    if (rewoundFlag && !changedAddress) {
       setLoadingMessage(() => helpers.amendModal('ROIs'));
       const tokensWithLockedBalances = helpers.addLockedTokenBalances(rewoundTokenBalances, userTokens);
       const tokensWithUnclaimedBalances = helpers.addUnclaimedBalances(unclaimedRewards, tokensWithLockedBalances, trackedTokens);
@@ -137,7 +154,6 @@ function App() {
 
       const fieldsWithStakedBalances = helpers.addStakedFieldBalances(rewoundFieldBalances, userFields);
       const fieldsWithSuppliesAndReserves = helpers.addFieldSuppliesAndReserves(fieldSuppliesAndReserves, fieldsWithStakedBalances);
-      
       apis.getTokenPrices(tokensWithUnclaimedBalances, fieldsWithSuppliesAndReserves, trackedTokens)
         .then(tokenPrices => {
           setLoadingMessage(prev => helpers.amendModal('Fetching token and field prices', prev));
@@ -157,9 +173,8 @@ function App() {
         })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps  
-  }, [rewoundFlag])
+  }, [rewoundFlag, changedAddress])
 
-  //TODO: setcontext around this
   return (
     <div className="simplefi-app">
       <Nav connect={connectWallet} splash={splash}/>
