@@ -1,18 +1,18 @@
 import React, {useState, useEffect} from 'react';
 import './LoadingModal.css'
 
-export default function LoadingModal({loadingMessage}) {
+export default function LoadingModal({splash, loadingMessage}) {
 
   const [display, setDisplay] = useState({display: 'none'});
 
   useEffect(() => {
     const {headline} = loadingMessage;
-    if (headline) {
+    if (splash && headline) {
       setDisplay({display: 'block'});
     } else {
       setDisplay({display: 'none'})
     }
-  }, [loadingMessage])
+  }, [splash, loadingMessage])
 
   return (
     <div className="loading-modal" style={display}>

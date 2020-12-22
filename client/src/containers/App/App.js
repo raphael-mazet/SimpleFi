@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import apis from '../../apis';
 import helpers from '../../helpers';
-import { metamaskConnect } from '../../authentication/web3';
 import './App.css';
 import Nav from '../../components/Nav/Nav';
 import Welcome from '../../components/Welcome/Welcome';
@@ -16,7 +15,6 @@ import LoadingModal from '../../components/LoadingModal/LoadingModal';
 function App() {
   const [trackedTokens, setTrackedTokens] = useState([]);
   const [trackedFields, setTrackedFields] = useState([]);
-  const [balanceContractsLoaded, setBalanceContractsLoaded] = useState(false);
   const [userAccount, setUserAccount] = useState([]);
   const [userTokens, setUserTokens] = useState([]);
   const [userFields, setUserFields] = useState([]);
@@ -26,36 +24,44 @@ function App() {
   const [rewoundFieldBalances, setRewoundFieldBalances] = useState([]);
   const [fieldSuppliesAndReserves, setFieldSuppliesAndReserves] = useState([]);
   const [userTokenPrices, setUserTokenPrices] = useState({});
+  
+  const [splash, setSplash] = useState(false);
+  const [balanceContractsLoaded, setBalanceContractsLoaded] = useState(false);
   const [rewoundFlag, setRewoundFlag] = useState(false);
   const [allLoadedFlag, setAllLoadedFlag] = useState(false);
-  const [splash, setSplash] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState({headline: null, actions: []});
   const [changedAddress, setChangedAddress] = useState(false);
-
+  
   const [currentDetail, setCurrentDetail] = useState('');
+  const [loadingMessage, setLoadingMessage] = useState({headline: null, actions: []});
+  
   const history = useHistory();
+  const [blocky, setBlocky] = useState(null);
 
-  async function connectWallet () {
-    //TODO: autorefresh when toggle account from Metamask
-    if (window.ethereum) {
-      const newAccount = await metamaskConnect();
-      if (newAccount.error) {
-        if (newAccount.error.code === 4001) {
-          alert('Please connect to Metamask');
-        } else {
-          alert('Oops, something went wrong - please refresh the page');
-        }
-      }
-      if(newAccount[0] && newAccount !== userAccount) {
-        setUserAccount(newAccount);
-        history.push('/dashboard');
-      } 
+  //Get tracked tokens and fields from SimpleFi db and attach contracts
+  useEffect(() => {
+    if (window.ethereum) { 
+      window.ethereum.autoRefreshOnNetworkChange = false;
+      window.ethereum.on('accountsChanged', function (accounts) {
+        if(splash) history.push('/dashboard');
+        setChangedAddress(true);
+        setUserAccount(accounts);
+      });
     } else {
-      alert('Please install Metamask to use SimpleFi (https://metamask.io/)')
+      alert('Please install Metamask to use SimpleFi (https://metamask.io/)');
     }
-  }
+    const getTokens = apis.getTokens();
+    const getFields = apis.getFields();
+    Promise.all([getTokens, getFields])
+      .then(([tokens, fields]) => {
+        setTrackedTokens(apis.createBalanceContracts(tokens));
+        setTrackedFields(apis.createBalanceContracts(fields));
+        setBalanceContractsLoaded(true);
+    })
+  //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
+    //TODO fix no rewind on refresh of same address - persist metamask account
     if (changedAddress) {
       setUserTokens([]);
       setUserFields([]);
@@ -70,62 +76,34 @@ function App() {
     }
   }, [changedAddress])
 
-  //Get tracked tokens and fields from SimpleFi db and attach contracts
-  useEffect(() => {
-    if (window.ethereum) { 
-      window.ethereum.autoRefreshOnNetworkChange = false;
-      window.ethereum.on('accountsChanged', function (accounts) {
-        setChangedAddress(true);
-        setUserAccount(accounts);
-      });
-        //eslint-disable-next-line no-undef
-    } else {
-      alert('Please install Metamask to use SimpleFi (https://metamask.io/)');
-    }
-    const getTokens = apis.getTokens();
-    const getFields = apis.getFields();
-    Promise.all([getTokens, getFields])
-      .then(([tokens, fields]) => {
-        setTrackedTokens(apis.createBalanceContracts(tokens));
-        setTrackedFields(apis.createBalanceContracts(fields));
-        setBalanceContractsLoaded(true);
-    })
-    setSplash(true);
-  }, [])
+  // useEffect(() => {console.log(' ---> blocky', blocky)}, [blocky]);
 
   //Create first set of userTokens with token balances
   //Get all user token transactions
   useEffect(() => {
     if (userAccount.length && balanceContractsLoaded && !changedAddress) {
       setLoadingMessage(() => helpers.amendModal('balances'));
-      
-      apis.getUserTokenTransactions(userAccount[0])
-        .then(txArr => {
-          setLoadingMessage(prev => helpers.amendModal('Fetching historic token transactions', prev));
-          setUserTokenTransactions(txArr.result);
-        })
-
-      apis.getUnclaimedRewards(userAccount[0], trackedFields, trackedTokens)
-        .then(unclaimedArr => {
-          setLoadingMessage(prev => helpers.amendModal('Fetching unclaimed rewards', prev));
-          setUnclaimedRewards(unclaimedArr)
-        })
-
       const getTokenBalances = apis.getAllUserBalances(userAccount[0], trackedTokens);
       const getFieldBalances = apis.getAllUserBalances(userAccount[0], trackedFields);
-      Promise.all([getTokenBalances, getFieldBalances])
-        .then(([tokensWithBalance, fieldsWithBalance]) => {
-          setUserTokens(tokensWithBalance);
+      const userTxPromise = apis.getUserTokenTransactions(userAccount[0]);
+      const unclaimedRewardsPromise = apis.getUnclaimedRewards(userAccount[0], trackedFields, trackedTokens);
+
+      Promise.all([getTokenBalances, getFieldBalances, userTxPromise, unclaimedRewardsPromise])
+        .then(([tokensWithBalance, fieldsWithBalance, txArr, unclaimedArr]) => {
           fieldsWithBalance = helpers.populateFieldTokensFromCache(fieldsWithBalance, trackedTokens);
           setLoadingMessage(prev => helpers.amendModal('Fetching primary token and field balances', prev));
-          setUserFields(fieldsWithBalance);
-          if (!fieldsWithBalance.length) {
-            setRewoundFlag(true);
-          }
+          setLoadingMessage(prev => helpers.amendModal('Fetching historic token transactions', prev));
+          setLoadingMessage(prev => helpers.amendModal('Fetching unclaimed rewards', prev));
+          setTimeout(() => {
+            setUserTokens(tokensWithBalance);
+            setUserFields(fieldsWithBalance);
+            setUserTokenTransactions(txArr.result);
+            setUnclaimedRewards(unclaimedArr);
+            if (!fieldsWithBalance.length) setRewoundFlag(true);
+          }, 200)
         })
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [balanceContractsLoaded, userAccount, changedAddress])
 
   // Add all underlying token and field balances
@@ -135,14 +113,16 @@ function App() {
       apis.rewinder(userFields, trackedTokens, trackedFields)
       .then(rewound => {
           setLoadingMessage(prev => helpers.amendModal('Rewinding underlying farming investments', prev));
-          setRewoundTokenBalances (rewound.userTokenBalances);
-          setRewoundFieldBalances (rewound.userFeederFieldBalances);
-          setFieldSuppliesAndReserves(rewound.fieldBalances);
-          setTimeout(() => setLoadingMessage(prev => helpers.amendModal('Rewinding underlying tokens', prev)), 50);
-          setTimeout(() => setRewoundFlag(true), 200);
+          setLoadingMessage(prev => helpers.amendModal('Rewinding underlying tokens', prev));
+          setTimeout(() => {
+            setRewoundTokenBalances (rewound.userTokenBalances);
+            setRewoundFieldBalances (rewound.userFeederFieldBalances);
+            setFieldSuppliesAndReserves(rewound.fieldBalances);
+            setRewoundFlag(true);
+          }, 200)
         })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps  
+  // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [userFields, changedAddress])
 
   useEffect(() => {
@@ -166,22 +146,22 @@ function App() {
               .then(fieldsWithROIs => {
                   setLoadingMessage(prev => helpers.amendModal('Calculating ROIs', prev));
                   setUserFields(fieldsWithROIs);
-                  setTimeout(() => setLoadingMessage(() => {return {headline: null, actions: []}}), 300);
                   setAllLoadedFlag(true);
+                  setTimeout(() => setLoadingMessage(() => {return {headline: null, actions: []}}), 300);
                 })
             })
         })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps  
+  // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [rewoundFlag, changedAddress])
 
   return (
     <div className="simplefi-app">
-      <Nav connect={connectWallet} splash={splash}/>
+      <Nav splash={splash} userAccount={userAccount}/>
       {/* <AppProvider value={balanceContractsLoaded}> */}
-      <LoadingModal loadingMessage={loadingMessage}/>
+      <LoadingModal splash={splash} loadingMessage={loadingMessage}/>
         <Switch>
-          <Route path='/' exact render={() => <Welcome connect={connectWallet} setSplash={setSplash}/>}/>
+          <Route path='/' exact render={() => <Welcome setUserAccount={setUserAccount} userAccount={userAccount} setSplash={setSplash}/>}/>
           <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} userTokenPrices={userTokenPrices} setSplash={setSplash} setCurrentDetail={setCurrentDetail} allLoadedFlag={allLoadedFlag}/>}/>
           <Route path='/token/:tokenName' exact render={() => <TokenDetails name={currentDetail} userTokens={userTokens} userTokenPrices={userTokenPrices} />}/>
           <Route path='/farming/:fieldName' exact render={() => <FarmingFieldDetails name={currentDetail} userFields={userFields} />}/>

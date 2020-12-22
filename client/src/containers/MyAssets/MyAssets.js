@@ -19,23 +19,21 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
   },[])
 
   // combine available and locked token balances and add prices from coinGecko
-  useEffect(() => {
-    // if setSplash
-    const {summaryTableValues, overviewValues} = helpers.extractSummaryHoldingValues(userTokens, userTokenPrices);
-    setHoldingValues(summaryTableValues);
-    setHoldingHeadlines(overviewValues);
-    // eslint-disable-next-line react-hooks/exhaustive-deps  
-  }, [allLoadedFlag])
-  
   // separate farming and earning fields
   useEffect(() => {
-    const {farmingFields, earningFields, totalInvested, totalROI} = helpers.extractSummaryFieldValues(userFields);
-    setFarmingHeadlines({investment: totalInvested.farmingInv, ROI: totalROI.farmingROI});
-    setEarningHeadlines({investment: totalInvested.earningInv, ROI: totalROI.earningROI});
-
-    setFarmingValues(farmingFields);
-    setEarningValues(earningFields);
-    setTotalROI(totalROI);
+    if(allLoadedFlag) {
+      const {summaryTableValues, overviewValues} = helpers.extractSummaryHoldingValues(userTokens, userTokenPrices);
+      setHoldingValues(summaryTableValues);
+      setHoldingHeadlines(overviewValues);
+  
+      const {farmingFields, earningFields, totalInvested, totalROI} = helpers.extractSummaryFieldValues(userFields);
+      setFarmingHeadlines({investment: totalInvested.farmingInv, ROI: totalROI.farmingROI});
+      setEarningHeadlines({investment: totalInvested.earningInv, ROI: totalROI.earningROI});
+  
+      setFarmingValues(farmingFields);
+      setEarningValues(earningFields);
+      setTotalROI(totalROI);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [allLoadedFlag])
 
