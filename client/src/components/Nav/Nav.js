@@ -1,12 +1,13 @@
 import React from 'react';
 import './Nav.css';
 import Blockies from 'react-blockies';
+import simpleFiLogo from '../../assets/logos/simplefi-logotype.svg';
 
 export default function Nav ({splash, userAccount}) {
   return (
     <nav style={splash ? {'borderBottom':'1px solid  #BBB3E855'} : {}}>
-      <div className="nav-title">
-        <h1 style={!splash ? {visibility:'hidden'} : {}}>SimpleFi</h1>
+      <div className="nav-logo">
+        <img src={simpleFiLogo} alt='simpleFi logo' style={!splash ? {visibility:'hidden'} : {}}/>
       </div>
       <div className="nav-items">
         <div className="nav-links">

@@ -19,7 +19,7 @@
 
 @media (min-width: 640px) {
   .summary-overview-cards-container .overview-card:first-child {
-    margin-right: 50px;
+    margin-right: 80px;
   }
 }
 

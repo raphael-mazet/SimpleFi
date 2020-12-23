@@ -2,19 +2,27 @@
 
 nav {
   display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 30px 0 40px 0;
-  padding: 0 50px 20px 50px;
+  padding: 0 80px 20px 50px;
 }
 
-.nav-title {
+.nav-logo {
   flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  position: relative;
+  max-height: 45px;
+  min-width: 165px;
 }
 
-.nav-title h1 {
-  color: white;
-  font-size: 30px;
-  font-weight: 700;
-  font-family: 'Baloo 2', cursive;
+.nav-logo img {
+  align-self: flex-start;
+  justify-self: flex-start;
+  height: 45px;
+  width: 165px;
 }
 
 .nav-items {
@@ -42,7 +50,7 @@ nav {
 .nav-address-button {
   display: flex;
   align-items: center;
-  padding: 0 15px;
+  padding: 6px 15px;
   border-radius: 30px;
   box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.5);
   cursor: pointer;
