@@ -1,27 +1,16 @@
 .overview-card {
-  position: relative;
+  display: flex;
   border-radius: 10px;
   box-shadow: 0 0px 2px 0px var(--periwinkle);
-  border-width: 1px;
   min-width: 220px;
   min-height: 120px;
-  position: relative;
-}
-
-.card-text-container {
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  justify-content: center;
-  background-color: blue;
 }
 
 .card-headline, .card-headline-green, .card-headline-red {
   display: flex;
-  height: 100%;
+  margin: auto;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
 .card-headline h1, .card-headline-green h1, .card-headline-red h1 {
@@ -53,4 +42,3 @@
 .card-headline-green h2:after, .card-headline-red h2:after {
   content: '%';
 }
-

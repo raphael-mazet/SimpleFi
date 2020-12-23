@@ -6,20 +6,38 @@
   display: flex;
   position: relative;
   flex-direction: column;
-  margin-right: var(--overview-page-margin-right);
+  justify-content: center;
 }
 
 .summary-overview-cards-container {
   display: flex;
-  width: 70%;
+  width: 80%;
   align-self: center;
-  margin: 20px 50px 50px 50px;
-  padding: 0 100px;
-  justify-content: space-around;
+  margin: 20px 0 50px 0;
+  justify-content: center;
+}
+
+@media (min-width: 640px) {
+  .summary-overview-cards-container .overview-card:first-child {
+    margin-right: 50px;
+  }
+}
+
+@media (max-width: 639px) {
+  .summary-overview-cards-container {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 5px;
+  }
+
+  .summary-overview-cards-container .overview-card:first-child {
+    margin-bottom: 30px;
+  }
 }
 
 .account-overview {
-  margin: 20px 50px 0 50px;
+  width: 83%;
+  align-self: center;
   padding: 0px 20px 10px 20px;
   box-shadow: 0 6px 2px -6px var(--periwinkle);
 }
@@ -30,12 +48,21 @@
   color: var(--transp-offwhite);
 }
 
+.summary-container-sup {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  align-items: center;
+  width: 80%;
+}
+
 .summary-container {
   display: flex;
   flex-direction: column;
-  border-width: 1px;
+  width: 100%;
+  justify-content: center;
   border-radius: 10px;
-  position: relative;
   margin: 20px 50px 0 50px;
   padding: 0px 20px 0px 20px;
   background-color: var(--opaque-grey)
