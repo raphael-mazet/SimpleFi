@@ -25,7 +25,7 @@ async function getUserFarmingHistory(field, userTokenTransactions, trackedFields
     if (tx.cropToken) {
       const geckoDateFormat = timeFormatter.format(new Date(Number(tx.tx.timeStamp) * 1000)).replace(/\//gi, '-');
       const histTokenPrice = await getHistoricalPrice (tx.priceApi, geckoDateFormat);
-      //TODO: add txDate
+      tx.txDate = new Date(Number(tx.tx.timeStamp) * 1000);
       tx.pricePerToken = histTokenPrice;
     }
     //add historical prices of (un)staking transactions based on field issuing the receipt token used as this farming field's seed

@@ -19,7 +19,7 @@ function calcFarmingROI (txHistory, userTokens, tokenPrices, field) {
     } else if (stakingValue) {
       amountInvested += stakingValue * pricePerToken;
     } else if (unstakingValue) {
-      amountRealised += stakingValue * pricePerToken;
+      amountRealised += unstakingValue * pricePerToken;
     }
   })
 
