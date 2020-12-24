@@ -8,10 +8,10 @@ import helpers from '../../../../helpers';
  * @param {Object} field - currently analysed farming field
  * @param {Array} userTokenTransactions - all user ERC20 transactions
  * @param {Array} trackedFields - all fields tracked by SimpleFi
- * @return {Array} - an array of objects containing :{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value, pricePerToken}
+ * @return {Array} - an array of objects containing :{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Amount, pricePerToken}
  * @dev - in sortFarmingTxs():
- *          Presence of a receipt token indicates that the tx is a staking or unstaking transaction, and corresponds to the presence of an (un)stakingValue property
- *          Presence of a cropToken means that the user claimed a reward and corresponds to the presence of a rewardValue property)
+ *          Presence of a receipt token indicates that the tx is a staking or unstaking transaction, and corresponds to the presence of an (un)stakingAmount property
+ *          Presence of a cropToken means that the user claimed a reward and corresponds to the presence of a rewardAmount property)
  *      - in getHistoricalPrice(): assumes all crop tokens are base (and have a coinGecko price api code)
  */
 async function getUserFarmingHistory(field, userTokenTransactions, trackedFields, userAccount) {
