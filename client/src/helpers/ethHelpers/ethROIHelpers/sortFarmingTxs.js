@@ -15,8 +15,8 @@ function sortFarmingTxs(field, userTokenTransactions) {
         const cropToken = cropTokenAddresses[tx.contractAddress];
         //@dev: assumes all crop tokens are base tokens in DB
         const priceApi = cropToken.priceApi;
-        const rewardValue = tx.value / Number(`1e${cropToken.contractInterface.decimals}`);
-        return [...acc, {tx, cropToken, priceApi, rewardValue}]
+        const rewardAmount = tx.value / Number(`1e${cropToken.contractInterface.decimals}`);
+        return [...acc, {tx, cropToken, priceApi, rewardAmount}]
       } else {
         return acc;
       }
@@ -27,12 +27,12 @@ function sortFarmingTxs(field, userTokenTransactions) {
       const receiptToken = field.seedTokens[0];
         //@dev: assumes the correct deposit method was used
         if (tx.to === rewardDepositContract.address.toLowerCase()) {
-          const stakingValue = tx.value / Number(`1e${receiptToken.contractInterface.decimals}`);
-          return [...acc, {tx, receiptToken, stakingValue}];
+          const stakingAmount = tx.value / Number(`1e${receiptToken.contractInterface.decimals}`);
+          return [...acc, {tx, receiptToken, stakingAmount}];
         //identify unstaking tx
         } else if (tx.from === rewardWithdrawalContract.address.toLowerCase()) {
-          const unstakingValue = tx.value / Number(`1e${receiptToken.contractInterface.decimals}`);
-          return [...acc, {tx, receiptToken, unstakingValue}];
+          const unstakingAmount = tx.value / Number(`1e${receiptToken.contractInterface.decimals}`);
+          return [...acc, {tx, receiptToken, unstakingAmount}];
         } else {
           return acc;
         }

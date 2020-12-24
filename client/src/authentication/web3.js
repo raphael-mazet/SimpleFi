@@ -1,5 +1,5 @@
 
-//TODO: persist login at each refresh if Metamask still logged
+//TODO: persist login at each refresh if Metamask still logged - session cache
 async function metamaskConnect () {
   try {
     const account = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -19,12 +19,12 @@ async function connectWallet (setUserAccount, history, userAccount) {
       } else {
         alert('Oops, something went wrong - please refresh the page');
       }
-    }
-    if(newAccount[0] && newAccount !== userAccount) {
-      console.log(' ---> userAccount', userAccount);
+    } else if (newAccount[0] && newAccount[0] !== userAccount[0]) {
       setUserAccount(newAccount);
       history.push('/dashboard');
-    } 
+    } else {
+      history.push('/dashboard');
+    }
   } else {
     alert('Please install Metamask to use SimpleFi (https://metamask.io/)')
   }

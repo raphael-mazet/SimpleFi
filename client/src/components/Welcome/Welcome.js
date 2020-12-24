@@ -27,7 +27,7 @@ export default function Welcome ({setUserAccount, userAccount, setSplash}) {
           <h2>Making decentralized finance accessible to everyone</h2>
         </div>
         <div className="splash-connect">
-            <button className='welcome-button' onClick={() => connectWallet(setUserAccount, history, userAccount)}>Connect wallet</button>
+            <button className='welcome-button' onClick={() => connectWallet(setUserAccount, history, userAccount)}>{userAccount[0] ? 'View dashboard' : 'Connect wallet'}</button>
         </div>
       </div>
       <div className="welcome-media">

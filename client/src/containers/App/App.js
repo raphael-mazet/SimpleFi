@@ -35,7 +35,6 @@ function App() {
   const [loadingMessage, setLoadingMessage] = useState({headline: null, actions: []});
   
   const history = useHistory();
-  const [blocky, setBlocky] = useState(null);
 
   //Get tracked tokens and fields from SimpleFi db and attach contracts
   useEffect(() => {

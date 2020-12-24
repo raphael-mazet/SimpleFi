@@ -7,19 +7,23 @@
  */
 function calcFarmingROI (txHistory, userTokens, tokenPrices, field) {
   const {cropTokens, fieldId} = field;
-  let amountClaimed = 0;
-  let amountUnclaimed = 0;
-  let amountInvested = 0;
-  let amountRealised = 0;
-  //@dev: [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value, pricePerToken}]
+  let valueClaimed = 0;
+  let valueUnclaimed = 0;
+  let valueInvested = 0;
+  let valueRealised = 0;
+  // const invArray = [{amount, date}]
+
+
+  //@dev: [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Amount, pricePerToken}]
   txHistory.forEach(userTx => {
-    const { rewardValue, stakingValue, unstakingValue, pricePerToken} = userTx;
-    if (rewardValue) {
-      amountClaimed += rewardValue * pricePerToken;
-    } else if (stakingValue) {
-      amountInvested += stakingValue * pricePerToken;
-    } else if (unstakingValue) {
-      amountRealised += stakingValue * pricePerToken;
+    if (field.name === "SNX: curve sUSD rewards") console.log(' ---> userTx', userTx);
+    const { rewardAmount, stakingAmount, unstakingAmount, pricePerToken} = userTx;
+    if (rewardAmount) {
+      valueClaimed += rewardAmount * pricePerToken;
+    } else if (stakingAmount) {
+      valueInvested += stakingAmount * pricePerToken;
+    } else if (unstakingAmount) {
+      valueRealised += unstakingAmount * pricePerToken;
     }
   })
 
@@ -27,16 +31,16 @@ function calcFarmingROI (txHistory, userTokens, tokenPrices, field) {
     return cropTokens.some(cropToken => cropToken.tokenId === userToken.tokenId);
   });
   targetCropTokens.forEach(token => {
-    amountUnclaimed += token.unclaimedBalance.reduce((acc, curr) => {
+    valueUnclaimed += token.unclaimedBalance.reduce((acc, curr) => {
       return curr.field.fieldId === fieldId ? curr.balance * tokenPrices[token.name].usd : acc;
-    }, amountUnclaimed)
+    }, valueUnclaimed)
   })
 
   //TODO: alt ROI based on current crop value (investmentValue vs. amountInvested) for toggling in Field details
   //FIXME: absolutely necessary
   //alternative: add investmentValue in function args (currInvestmentValue from getROIs)
   //old calc: return (investmentValue + amountUnclaimed + amountClaimed + amountRealised) / amountInvested;
-  return (amountUnclaimed + amountClaimed + amountRealised) / amountInvested;    
+  return (valueUnclaimed + valueClaimed + valueRealised) / valueInvested;    
 }
 
 export default calcFarmingROI;
