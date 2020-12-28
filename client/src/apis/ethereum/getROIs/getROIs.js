@@ -47,7 +47,8 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
 
       field.investmentValue = currInvestmentValue;
       field.userFarmingTxHistory = userFarmingHistory;
-      field.allTimeROI = helpers.calcFarmingROI(userFarmingHistory, userTokens, tokenPrices, field);
+      // field.allTimeROI = helpers.calcFarmingROI(userFarmingHistory, userTokens, tokenPrices, field);
+      field.farmingROI = helpers.calcFarmingROI(userFarmingHistory, userTokens, tokenPrices, field)
     }
   }
   return fieldsWithROI;

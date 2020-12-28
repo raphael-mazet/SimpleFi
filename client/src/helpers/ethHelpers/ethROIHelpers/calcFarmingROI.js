@@ -8,7 +8,9 @@
 function calcFarmingROI (txHistory, userTokens, tokenPrices, field) {
   const {cropTokens, fieldId} = field;
   //registers value at time of claim only - assume return is realised at that moment (no calc of what it's worth today if user held onto it)
+  let amountClaimed = 0;
   let valueClaimed = 0;
+  let amountUnclaimed = 0;
   let valueUnclaimed = 0;
   // let valueInvested = 0;
   // let valueRealised = 0;
@@ -76,7 +78,9 @@ function calcFarmingROI (txHistory, userTokens, tokenPrices, field) {
     console.log(' ---> valueUnclaimed', valueUnclaimed);
   })
 
-  return (valueUnclaimed + valueClaimed) / avgInvestment;    
+  // return (valueUnclaimed + valueClaimed) / avgInvestment;
+  const allTimeROI = (valueUnclaimed + valueClaimed) / avgInvestment
+  return {allTimeROI, valueUnclaimed, valueClaimed, avgInvestment}
 }
 
 export default calcFarmingROI;
