@@ -1,4 +1,5 @@
-//FIXME: documentation incorrect
+//FIXME: documentation and comments incorrect
+//FIXME: clean up commented out code
 /**
  * 
  * @param {Number} investmentValue - current value of investment in analysed field
@@ -20,7 +21,6 @@ function calcFarmingROI (txHistory, userTokens, tokenPrices, field) {
   const currentInv = {value: 0, amount: 0, dateStart: null};
   const weightedInvestments =[];
 
-field.userFarmingTxHistory = 
   //@dev: [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Amount, pricePerToken}]
   //txHistory.forEach(userTx => {
     //TODO: delete above
@@ -91,9 +91,6 @@ field.userFarmingTxHistory =
         return acc;
     }, {amountUnclaimed: 0, valueUnclaimed: 0})
   })
-  console.log(' ---> claimed', claimed);
-  console.log(' ---> Object.values(claimed)', Object.values(claimed));
-  console.log(' ---> Object.entries(claimed)', Object.entries(claimed));
   claimed.totalValue = Object.values(claimed).reduce((acc, curr) => acc + curr.valueClaimed, 0);
   unclaimed.totalValue = Object.values(unclaimed).reduce((acc, curr) => acc + curr.valueUnclaimed, 0);
 

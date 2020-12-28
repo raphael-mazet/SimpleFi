@@ -29,6 +29,8 @@ export default function FarmingFieldDetails({name, userFields}) {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentField]);
+  console.log(' ---> currentField.name', currentField.name);
+  console.log(' ---> currentField.userFarmingTxHistory', currentField.userFarmingTxHistory);
 
   return (
     <div className="field-details">
@@ -44,7 +46,7 @@ export default function FarmingFieldDetails({name, userFields}) {
       <div className="field-details-numbers">
         <div className="field-overview field-roi">
           <h2>all time ROI</h2>
-          <p>{(currentField.allTimeROI * 100).toFixed(2)}%</p>
+          <p>{(currentField.farmingROI.allTimeROI * 100).toFixed(2)}%</p>
           {/* TODO: breakdown ROI due to fee and underlying value */}
           <div className="field-roi-graph">Graph</div>
         </div>
