@@ -1,5 +1,6 @@
+//FIXME: documentation incorrect
 /**
- * FIXME: documentation incorrect
+ * 
  * @param {Number} investmentValue - current value of investment in analysed field
  * @param {Array} txHistory - pre-sorted list of user interactions with analysed field
  * @return {Number} - user ROI to date with regards to the analysed field, defined as:
@@ -12,20 +13,30 @@ function calcFarmingROI (txHistory, userTokens, tokenPrices, field) {
   let valueClaimed = 0;
   let amountUnclaimed = 0;
   let valueUnclaimed = 0;
-  // let valueInvested = 0;
-  // let valueRealised = 0;
+  const unclaimed = {};
+  const claimed = {};
   //used to record the amount of time an investment was made for (value indicates value in $. Amount indicates token amount (un)staked)
   //currentInv.amount not currently used in calcs, but may be at a later date
   const currentInv = {value: 0, amount: 0, dateStart: null};
   const weightedInvestments =[];
 
-  console.log(' ---> field.name', field.name);
+field.userFarmingTxHistory = 
   //@dev: [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Amount, pricePerToken}]
-  txHistory.forEach(userTx => {
-    if (field.name === "SNX: curve sUSD rewards") console.log(' ---> userTx', userTx);
+  //txHistory.forEach(userTx => {
+    //TODO: delete above
+    field.userFarmingTxHistory.forEach(userTx => {
     const { rewardAmount, stakingAmount, unstakingAmount, pricePerToken} = userTx;
     if (rewardAmount) {
-      valueClaimed += rewardAmount * pricePerToken;
+      if (claimed[userTx.cropToken.name]) {
+        claimed[userTx.cropToken.name].amountClaimed += rewardAmount;
+        claimed[userTx.cropToken.name].valueClaimed += rewardAmount * pricePerToken;
+      } else {
+        claimed[userTx.cropToken.name] = {amountClaimed: 0, valueClaimed: 0};
+        claimed[userTx.cropToken.name].amountClaimed += rewardAmount;
+        claimed[userTx.cropToken.name].valueClaimed += rewardAmount * pricePerToken;
+      }
+      // amountClaimed += rewardAmount;
+      // valueClaimed += rewardAmount * pricePerToken;
     } else if (stakingAmount) {
       if (currentInv.value) {
         const stakedTime = userTx.txDate - currentInv.dateStart;
@@ -57,30 +68,41 @@ function calcFarmingROI (txHistory, userTokens, tokenPrices, field) {
     const stakedTime = new Date() - currentInv.dateStart;
     weightedInvestments.push({amount: currentInv.amount, value: currentInv.value, stakedTime});
   }
-  console.log(' ---> weightedInvestments', weightedInvestments);
   const reducedInvestmentWeights = weightedInvestments.reduce((acc, curr) => {
     acc.investments += curr.value * curr.stakedTime;
     acc.totalTime += curr.stakedTime;
     return acc;
   }, {investments: 0, totalTime: 0});
-  console.log(' ---> reducedInvestmentWeights', reducedInvestmentWeights);
   const avgInvestment = reducedInvestmentWeights.investments / reducedInvestmentWeights.totalTime;
-  console.log(' ---> avgInvestment', avgInvestment);
 
   const targetCropTokens = userTokens.filter(userToken => {
     return cropTokens.some(cropToken => cropToken.tokenId === userToken.tokenId);
   });
   targetCropTokens.forEach(token => {
-    console.log(' ---> token.name', token.name);
-    valueUnclaimed += token.unclaimedBalance.reduce((acc, curr) => {
-      return curr.field.fieldId === fieldId ? curr.balance * tokenPrices[token.name].usd : acc;
-    }, valueUnclaimed)
-    console.log(' ---> valueUnclaimed', valueUnclaimed);
+    // unclaimed[token.name] += token.unclaimedBalance.reduce((acc, curr) => {
+      // valueUnclaimed += token.unclaimedBalance.reduce((acc, curr) => {
+        // return curr.field.fieldId === fieldId ? curr.balance * tokenPrices[token.name].usd : acc;
+        // }, valueUnclaimed)
+      unclaimed[token.name] = token.unclaimedBalance.reduce((acc, curr) => {
+        if (curr.field.fieldId === fieldId) {
+          acc.amountUnclaimed += curr.balance;
+          acc.valueUnclaimed += curr.balance * tokenPrices[token.name].usd;
+        }
+        return acc;
+    }, {amountUnclaimed: 0, valueUnclaimed: 0})
   })
+  console.log(' ---> claimed', claimed);
+  console.log(' ---> Object.values(claimed)', Object.values(claimed));
+  console.log(' ---> Object.entries(claimed)', Object.entries(claimed));
+  claimed.totalValue = Object.values(claimed).reduce((acc, curr) => acc + curr.valueClaimed, 0);
+  unclaimed.totalValue = Object.values(unclaimed).reduce((acc, curr) => acc + curr.valueUnclaimed, 0);
 
   // return (valueUnclaimed + valueClaimed) / avgInvestment;
-  const allTimeROI = (valueUnclaimed + valueClaimed) / avgInvestment
-  return {allTimeROI, valueUnclaimed, valueClaimed, avgInvestment}
+  // const allTimeROI = (valueUnclaimed + valueClaimed) / avgInvestment
+  // const allTimeROI = (valueUnclaimed + valueClaimed) / avgInvestment
+  const allTimeROI = (unclaimed.totalValue + claimed.totalValue) / avgInvestment
+  // return {allTimeROI, valueUnclaimed, valueClaimed, avgInvestment}
+  return {allTimeROI, unclaimed, claimed, avgInvestment}
 }
 
 export default calcFarmingROI;
