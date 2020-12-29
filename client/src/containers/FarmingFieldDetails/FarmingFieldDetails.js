@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './FarmingFieldDetails.css';
+import DetailsChart from '../../components/DetailsChart/DetailsChart';
 import DetailsTable from '../../components/DetailsTable/DetailsTable';
 
 //TODO: identify joint components with EarningFieldDetails container
@@ -29,8 +30,6 @@ export default function FarmingFieldDetails({name, userFields}) {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentField]);
-  console.log(' ---> currentField.name', currentField.name);
-  console.log(' ---> currentField.userFarmingTxHistory', currentField.userFarmingTxHistory);
 
   return (
     <div className="field-details">
@@ -43,20 +42,33 @@ export default function FarmingFieldDetails({name, userFields}) {
         <p><span className='field-title-header'>Underlying tokens</span>: {underlyingTokens.reduce((acc, curr) => [...acc, curr.name], []).join(', ')}</p>
       </div>
      
-      <div className="field-details-numbers">
-        <div className="field-overview field-roi">
-          <h2>all time ROI</h2>
-          <p>{(currentField.farmingROI.allTimeROI * 100).toFixed(2)}%</p>
-          {/* TODO: breakdown ROI due to fee and underlying value */}
-          <div className="field-roi-graph">Graph</div>
+      <div className="token-details-overviews">
+        <div className="token-details-numbers">
+          <div className="field-overview field-roi">
+            <h2>all time ROI</h2>
+            <p>{(currentField.farmingROI.allTimeROI * 100).toFixed(2)}%</p>
+          </div>
+
+          <div className="field-overview field-invested">
+            <h2>Curr. value locked</h2>
+            <p>${Number(currentField.investmentValue.toFixed()).toLocaleString()}</p>
+          </div>
+
+          <div className="field-overview field-roi">
+            <h2>Avg value locked</h2>
+            <p>${Number(currentField.farmingROI.avgInvestment.toFixed(2)).toLocaleString()}</p>
+          </div>
+
+        </div>
+        <div className="token-source-container">
+            <h2>Source of ROI</h2>
+          <div className="token-source-chart">
+            <DetailsChart data={currentField.farmingROI} type='farming'/>
+          </div>
         </div>
 
-      <div className="field-overview field-invested">
-        <h2>Current value</h2>
-        <p>${Number(currentField.investmentValue.toFixed()).toLocaleString()}</p>
-        <div className="field-invested-graph">Pie chart and path</div>
       </div>
-    </div>
+
 
       <div className="field-transactions">
         <h2>Transaction history</h2>

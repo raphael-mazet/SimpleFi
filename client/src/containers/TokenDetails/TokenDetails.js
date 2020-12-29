@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './TokenDetails.css';
-import DetailsChart from '../../components/DetailsChart/DetailsChart'
+import DetailsChart from '../../components/DetailsChart/DetailsChart';
 import helpers from '../../helpers';
 
 export default function TokenDetails({name, userTokens, userTokenPrices}) {

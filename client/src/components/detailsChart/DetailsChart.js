@@ -8,13 +8,33 @@ export default function DetailsChart({data, type}) {
   const [tableData] = useState(helpers.extractDetailsChartValues(data, type));
   const chartRef = useRef(null);
 
+  const tableCallbacks = 
+    {
+      label: {
+        farming: function(tooltipItem, data) {
+          console.log(' ---> tooltipItem', tooltipItem);
+          return ` $ ${data.datasets[0].data[tooltipItem.index]} (${data.datasets[0].other[tooltipItem.index]})` ;
+        }
+      },
+      title: {
+        farming: function(tooltipItem, data) {
+         console.log(' ---> data.datasets[0].labels', data.datasets[0].labels);
+         console.log(' ---> tooltipItem.index', tooltipItem.index);
+         console.log(' ---> tooltipItem', tooltipItem);
+          return data.datasets[0].labels[tooltipItem[0].index]
+        }
+      }
+    }
+
   useEffect(() => {
     new Chart(chartRef.current, {
       type: "pie",
       data: {
           datasets: [{
             data: tableData.data,
-            backgroundColor: tableData.fill
+            backgroundColor: tableData.fill,
+            labels: tableData.labels,
+            other: tableData.other,
           }],
           labels: tableData.labels
       },
@@ -24,6 +44,25 @@ export default function DetailsChart({data, type}) {
         layout: {
           padding: {
             left: 0
+          }
+        },
+        tooltips: {
+          callbacks: {
+            label: function(tooltipItem, data) {
+              if (type === 'farming') {
+                return tableCallbacks.label.farming(tooltipItem, data);
+              } else {
+                return Chart.defaults.doughnut.tooltips.callbacks.label(tooltipItem, data);
+              }
+            },
+            title: function(tooltipItem, data) {
+              if (type === 'farming') {
+                console.log(' ---> type', type);
+                return tableCallbacks.title.farming(tooltipItem, data);
+              }
+            },
+            labelTextColor: (tooltipItem, data) => '#FF69B4',
+
           }
         },
         legend: {
