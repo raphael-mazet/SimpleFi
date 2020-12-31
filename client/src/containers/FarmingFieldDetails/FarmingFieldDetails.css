@@ -20,42 +20,25 @@
 .farming-overview {
   display: flex;
   margin: 15px 20px;
-  padding: 15px;
+  padding: 5px 15px 1px 15px;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
   border-radius: 10px;
   box-shadow: 0 0px 2px 0px var(--periwinkle);
   border-width: 1px;;
-  min-width: 180px;
-  min-height: 120px;
+  width: 180px;
+  height: 140px;
 }
 
 .farming-overview h2 {
-  font-size: 1.2em;
+  /* font-size: 1.2em; */
+  text-align: center;
 }
 
 .farming-overview p {
   font-size: 1.2em;
   font-weight: bold;
-}
-
-.farming-locked-toggle {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  align-items: center;
-}
-
-.farming-locked-toggle input {
-  margin: 0 5px 0 5px;
-  align-self: flex-end;
-}
-
-.farming-locked-toggle p {
-  font-size: 0.7em;
-  font-weight: normal;
-  color: var(--offwhite);
 }
 
 .farming-source-container {

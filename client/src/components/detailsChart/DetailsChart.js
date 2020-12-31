@@ -12,15 +12,11 @@ export default function DetailsChart({data, type}) {
     {
       label: {
         farming: function(tooltipItem, data) {
-          console.log(' ---> tooltipItem', tooltipItem);
           return ` $ ${data.datasets[0].data[tooltipItem.index]} (${data.datasets[0].other[tooltipItem.index]})` ;
         }
       },
       title: {
         farming: function(tooltipItem, data) {
-         console.log(' ---> data.datasets[0].labels', data.datasets[0].labels);
-         console.log(' ---> tooltipItem.index', tooltipItem.index);
-         console.log(' ---> tooltipItem', tooltipItem);
           return data.datasets[0].labels[tooltipItem[0].index]
         }
       }
@@ -57,11 +53,10 @@ export default function DetailsChart({data, type}) {
             },
             title: function(tooltipItem, data) {
               if (type === 'farming') {
-                console.log(' ---> type', type);
                 return tableCallbacks.title.farming(tooltipItem, data);
               }
             },
-            labelTextColor: (tooltipItem, data) => '#FF69B4',
+            labelTextColor: () => '#FF69B4',
 
           }
         },

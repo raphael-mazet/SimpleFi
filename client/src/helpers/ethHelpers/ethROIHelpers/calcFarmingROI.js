@@ -97,9 +97,11 @@ function calcFarmingROI (txHistory, userTokens, tokenPrices, field) {
   // return (valueUnclaimed + valueClaimed) / avgInvestment;
   // const allTimeROI = (valueUnclaimed + valueClaimed) / avgInvestment
   // const allTimeROI = (valueUnclaimed + valueClaimed) / avgInvestment
-  const allTimeROI = (unclaimed.totalValue + claimed.totalValue) / avgInvestment
+  const absReturnValue = unclaimed.totalValue + claimed.totalValue;
+  const allTimeROI = absReturnValue / avgInvestment;
+  
   // return {allTimeROI, valueUnclaimed, valueClaimed, avgInvestment}
-  return {allTimeROI, unclaimed, claimed, avgInvestment}
+  return {allTimeROI, absReturnValue, unclaimed, claimed, avgInvestment}
 }
 
 export default calcFarmingROI;

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import './FarmingFieldDetails.css';
 import DetailsChart from '../../components/DetailsChart/DetailsChart';
 import DetailsTable from '../../components/DetailsTable/DetailsTable';
-import ToggleWidget from '../../components/ToggleWidget/ToggleWidget';
+import MiniToggle from '../../components/MiniToggle/MiniToggle';
 
 //TODO: identify joint components with EarningFieldDetails container
 /* @dev: differences with EarningFieldDetails:
@@ -18,7 +18,8 @@ export default function FarmingFieldDetails({name, userFields}) {
   const [mainAPY, setMainAPY] = useState(0);
   const [secondaryFarmingTokens, setSecondaryFarmingTokens] = useState(null);
   const [secondaryAPYs, setSecondaryAPYs] = useState(null);
-  const [lockedValue, setLockedValue] = useState({title: 'Curr.', value: Number(currentField.investmentValue.toFixed()).toLocaleString()});
+  const [lockedValue, setLockedValue] = useState({title: 'Current', value: Number(currentField.investmentValue.toFixed()).toLocaleString()});
+  const [ROIValue, setROIValue] = useState({title: 'Total ROI', value: `${(currentField.farmingROI.allTimeROI * 100).toFixed(2)}%`});
 
   //@dev: assumes there is a single seed/staking token
   useEffect(() => {
@@ -34,16 +35,29 @@ export default function FarmingFieldDetails({name, userFields}) {
   }, [currentField]);
 
   function toggleFarmingLocked(e) {
-    console.log(' ---> e.target.checked', e.target.checked);
     if (e.target.checked) {
       setLockedValue(prev => ({
-          title: 'Avg',
+          title: 'Average historic',
           value: Number(currentField.farmingROI.avgInvestment.toFixed()).toLocaleString()
       }))
     } else {
       setLockedValue(prev => ({
-        title: 'Curr.',
+        title: 'Current',
         value: Number(currentField.investmentValue.toFixed()).toLocaleString()
+      }))
+    }
+  }
+
+  function toggleFarmingROI(e) {
+    if (e.target.checked) {
+      setROIValue(prev => ({
+          title: 'Total reward value',
+          value: `$${Number(currentField.farmingROI.absReturnValue.toFixed(2)).toLocaleString()}`
+      }))
+    } else {
+      setROIValue(prev => ({
+        title: 'Total ROI',
+        value: `${(currentField.farmingROI.allTimeROI * 100).toFixed(2)}%`
       }))
     }
   }
@@ -62,18 +76,15 @@ export default function FarmingFieldDetails({name, userFields}) {
       <div className="farming-details-overviews">
         <div className="farming-details-numbers">
           <div className="farming-overview field-roi">
-            <h2>all time ROI</h2>
-            <p>{(currentField.farmingROI.allTimeROI * 100).toFixed(2)}%</p>
+            <h2>{ROIValue.title}</h2>
+            <p>{ROIValue.value}</p>
+            <MiniToggle before='%' after='$' handleChange={toggleFarmingROI} />
           </div>
 
           <div className="farming-overview field-invested">
-            <h2>{lockedValue.title} investment</h2>
+            <h2>{lockedValue.title} <br/> investment value</h2>
             <p>${lockedValue.value}</p>
-            <div className="farming-locked-toggle">
-              <p>curr.</p>
-              <ToggleWidget handleChange={toggleFarmingLocked} />
-              <p>avg</p>
-            </div>
+            <MiniToggle before='curr.' after='hist.' handleChange={toggleFarmingLocked} />
           </div>
         </div>
 
