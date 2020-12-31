@@ -9,6 +9,7 @@ import {
   rewinder,
   getAPYs,
   getUserTokenTransactions,
+  getUserNormalTransactions,
   getROIs,
   uniswapQueries
 } from './ethereum/index';
@@ -26,6 +27,7 @@ export default {
   rewinder,
   getAPYs,
   getUserTokenTransactions,
+  getUserNormalTransactions,
   getROIs,
   uniswapQueries
 }

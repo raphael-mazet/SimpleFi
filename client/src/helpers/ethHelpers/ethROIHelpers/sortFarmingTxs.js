@@ -1,4 +1,4 @@
-function sortFarmingTxs(field, userTokenTransactions) {
+function sortFarmingTxs(field, userTokenTransactions, userNormalTransactions) {
   const rewardDepositContract = field.contractAddresses.find(contractAddress => contractAddress.addressTypes.includes('deposit'));
   const rewardWithdrawalContract = field.contractAddresses.find(contractAddress => contractAddress.addressTypes.includes('withdraw'));
   
@@ -10,8 +10,18 @@ function sortFarmingTxs(field, userTokenTransactions) {
   const sortedTxs = userTokenTransactions.reduce((acc, tx) => {
     //identify rewards claimed
     if (cropTokenAddresses[tx.contractAddress]) {
+      
+      //Check if reward address is in input method rather than from address
+      let addressInMethod = false;
+      if (tx.from === '0x0000000000000000000000000000000000000000') {
+        const referenceTx = userNormalTransactions.find(normalTx => normalTx.hash === tx.hash);
+        if (referenceTx) {
+          const methodInput = '0x' + referenceTx.input.slice(-40);
+          if (methodInput === rewardWithdrawalContract.address.toLowerCase()) addressInMethod = true;
+        }
+      }
       //ASK: should this rather be unclaimedReward contract?
-      if (tx.from === rewardWithdrawalContract.address.toLowerCase()) {
+      if (tx.from === rewardWithdrawalContract.address.toLowerCase() || addressInMethod) {
         const cropToken = cropTokenAddresses[tx.contractAddress];
         //@dev: assumes all crop tokens are base tokens in DB
         const priceApi = cropToken.priceApi;
