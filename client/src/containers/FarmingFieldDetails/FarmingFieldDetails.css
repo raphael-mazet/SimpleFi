@@ -1,1 +1,78 @@
-/* See Earning field details for CSS stylesheet */
+@import '../../CSS/variables.css';
+/* See Earning field and Token details for CSS stylesheet */
+
+.farming-details-overviews {
+  display: flex;
+  justify-content: center;
+  margin-right: var(--details-page-margin-right);
+  padding-left: 50px;
+  height: 300px;
+}
+
+.farming-details-numbers {
+  display: flex;
+  flex: 1.5;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.farming-overview {
+  display: flex;
+  margin: 15px 20px;
+  padding: 15px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 10px;
+  box-shadow: 0 0px 2px 0px var(--periwinkle);
+  border-width: 1px;;
+  min-width: 180px;
+  min-height: 120px;
+}
+
+.farming-overview h2 {
+  font-size: 1.2em;
+}
+
+.farming-overview p {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.farming-locked-toggle {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+}
+
+.farming-locked-toggle input {
+  margin: 0 5px 0 5px;
+  align-self: flex-end;
+}
+
+.farming-locked-toggle p {
+  font-size: 0.7em;
+  font-weight: normal;
+  color: var(--offwhite);
+}
+
+.farming-source-container {
+  display: flex;
+  flex: 2;
+  flex-direction: column;
+  position: relative;
+  align-items: flex-start;
+}
+
+.farming-source-container h2 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.farming-source-chart {
+  position: relative;
+  height: 250px;
+  width: 500px;
+}

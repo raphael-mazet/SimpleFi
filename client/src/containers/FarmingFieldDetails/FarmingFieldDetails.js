@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import './FarmingFieldDetails.css';
 import DetailsChart from '../../components/DetailsChart/DetailsChart';
 import DetailsTable from '../../components/DetailsTable/DetailsTable';
+import ToggleWidget from '../../components/ToggleWidget/ToggleWidget';
 
 //TODO: identify joint components with EarningFieldDetails container
 /* @dev: differences with EarningFieldDetails:
@@ -17,6 +18,7 @@ export default function FarmingFieldDetails({name, userFields}) {
   const [mainAPY, setMainAPY] = useState(0);
   const [secondaryFarmingTokens, setSecondaryFarmingTokens] = useState(null);
   const [secondaryAPYs, setSecondaryAPYs] = useState(null);
+  const [lockedValue, setLockedValue] = useState({title: 'Curr.', value: Number(currentField.investmentValue.toFixed()).toLocaleString()});
 
   //@dev: assumes there is a single seed/staking token
   useEffect(() => {
@@ -31,6 +33,21 @@ export default function FarmingFieldDetails({name, userFields}) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentField]);
 
+  function toggleFarmingLocked(e) {
+    console.log(' ---> e.target.checked', e.target.checked);
+    if (e.target.checked) {
+      setLockedValue(prev => ({
+          title: 'Avg',
+          value: Number(currentField.farmingROI.avgInvestment.toFixed()).toLocaleString()
+      }))
+    } else {
+      setLockedValue(prev => ({
+        title: 'Curr.',
+        value: Number(currentField.investmentValue.toFixed()).toLocaleString()
+      }))
+    }
+  }
+
   return (
     <div className="field-details">
       <div className="field-details-titles">
@@ -42,33 +59,32 @@ export default function FarmingFieldDetails({name, userFields}) {
         <p><span className='field-title-header'>Underlying tokens</span>: {underlyingTokens.reduce((acc, curr) => [...acc, curr.name], []).join(', ')}</p>
       </div>
      
-      <div className="token-details-overviews">
-        <div className="token-details-numbers">
-          <div className="field-overview field-roi">
+      <div className="farming-details-overviews">
+        <div className="farming-details-numbers">
+          <div className="farming-overview field-roi">
             <h2>all time ROI</h2>
             <p>{(currentField.farmingROI.allTimeROI * 100).toFixed(2)}%</p>
           </div>
 
-          <div className="field-overview field-invested">
-            <h2>Curr. value locked</h2>
-            <p>${Number(currentField.investmentValue.toFixed()).toLocaleString()}</p>
+          <div className="farming-overview field-invested">
+            <h2>{lockedValue.title} investment</h2>
+            <p>${lockedValue.value}</p>
+            <div className="farming-locked-toggle">
+              <p>curr.</p>
+              <ToggleWidget handleChange={toggleFarmingLocked} />
+              <p>avg</p>
+            </div>
           </div>
-
-          <div className="field-overview field-roi">
-            <h2>Avg value locked</h2>
-            <p>${Number(currentField.farmingROI.avgInvestment.toFixed(2)).toLocaleString()}</p>
-          </div>
-
         </div>
-        <div className="token-source-container">
+
+        <div className="farming-source-container">
             <h2>Source of ROI</h2>
-          <div className="token-source-chart">
+          <div className="farming-source-chart">
             <DetailsChart data={currentField.farmingROI} type='farming'/>
           </div>
         </div>
 
       </div>
-
 
       <div className="field-transactions">
         <h2>Transaction history</h2>
