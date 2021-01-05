@@ -5,6 +5,16 @@ import DetailsTable from '../../components/DetailsTable/DetailsTable';
 export default function EarningFieldDetails ({name, userFields}) {
   
   const [currentField] = useState(userFields.find(field => field.name === name));
+  // const [farmingFields] = useState((field => field.seedTokens[0].address === currentField.receiptToken));
+  const [farmingROI, setFarmingROI] = useState(0);
+
+  // function toggleFarmingROI() {
+  //   if (farmingROI) {
+  //     setFarmingROI(0);
+  //   } else {
+  //     setFarmingROI(farmingFields.reduce((acc, curr) => acc + curr.farmingROI.allTimeROI, 0));
+  //   }
+  // }
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -18,6 +28,8 @@ export default function EarningFieldDetails ({name, userFields}) {
         <p><span className='field-title-header'>Current nominal APY</span>: {currentField.earningAPY ? (currentField.earningAPY*100).toFixed(2) : (currentField.farmingAPY*100).toFixed(2)}%</p>
         <p><span className='field-title-header'>Underlying tokens</span>: {currentField.seedTokens.reduce((acc, curr) => [...acc, curr.name], []).join(', ')}</p>
       </div>
+
+      <button onClick={()=>{}/*toggleFarmingROI*/}>Add farming ROI</button>
 
       <div className="field-details-numbers">
         <div className="field-overview field-roi">

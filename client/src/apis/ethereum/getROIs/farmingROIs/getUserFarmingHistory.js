@@ -14,11 +14,11 @@ import helpers from '../../../../helpers';
  *          Presence of a cropToken means that the user claimed a reward and corresponds to the presence of a rewardAmount property)
  *      - in getHistoricalPrice(): assumes all crop tokens are base (and have a coinGecko price api code)
  */
-async function getUserFarmingHistory(field, userTokenTransactions, trackedFields, userAccount) {
+async function getUserFarmingHistory(field, userTokenTransactions, userNormalTransactions, trackedFields, userAccount) {
   const timeFormatter = new Intl.DateTimeFormat('en-GB');
 
   //@dev: farmingTxs = [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value}]
-  const farmingTxs = helpers.sortFarmingTxs(field, userTokenTransactions);
+  const farmingTxs = helpers.sortFarmingTxs(field, userTokenTransactions, userNormalTransactions);
 
   for (let tx of farmingTxs) {
     //add historical prices of reward claims

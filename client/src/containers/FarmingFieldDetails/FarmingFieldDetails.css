@@ -1,1 +1,60 @@
-/* See Earning field details for CSS stylesheet */
+@import '../../CSS/variables.css';
+/* See Earning field and Token details for additional/common CSS */
+
+.farming-details-overviews {
+  display: flex;
+  justify-content: center;
+  margin-right: var(--details-page-margin-right);
+  padding-left: 50px;
+  height: 300px;
+}
+
+.farming-details-numbers {
+  display: flex;
+  flex: 1.5;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.farming-overview {
+  display: flex;
+  margin: 15px 20px;
+  padding: 5px 15px 1px 15px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 10px;
+  box-shadow: 0 0px 2px 0px var(--periwinkle);
+  border-width: 1px;;
+  width: 180px;
+  height: 140px;
+}
+
+.farming-overview h2 {
+  text-align: center;
+}
+
+.farming-overview p {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.farming-source-container {
+  display: flex;
+  flex: 2;
+  flex-direction: column;
+  position: relative;
+  align-items: flex-start;
+}
+
+.farming-source-container h2 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.farming-source-chart {
+  position: relative;
+  height: 250px;
+  width: 500px;
+}

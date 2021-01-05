@@ -11,7 +11,7 @@ import helpers from '../../../helpers';
  * @param {Array} trackedTokens all tracked tokens
  * @return {Array} userFields with added ROI, user transaction history and current value of investment
  */
-async function getROIs(userAccount, userFields, trackedFields, userTokenTransactions, trackedTokens, userTokens, tokenPrices) {
+async function getROIs(userAccount, userFields, trackedFields, userTokenTransactions, userNormalTransactions, trackedTokens, userTokens, tokenPrices) {
 
   const fieldsWithROI = [...userFields];
   
@@ -43,11 +43,11 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
 
     if (field.cropTokens.length) {
       //@dev: [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value, pricePerToken, txDate}]
-      const userFarmingHistory = await getUserFarmingHistory(field, userTokenTransactions, trackedFields, userAccount);
+      const userFarmingHistory = await getUserFarmingHistory(field, userTokenTransactions, userNormalTransactions, trackedFields, userAccount);
 
       field.investmentValue = currInvestmentValue;
       field.userFarmingTxHistory = userFarmingHistory;
-      field.allTimeROI = helpers.calcFarmingROI(userFarmingHistory, userTokens, tokenPrices, field);
+      field.farmingROI = helpers.calcFarmingROI(userTokens, tokenPrices, field)
     }
   }
   return fieldsWithROI;

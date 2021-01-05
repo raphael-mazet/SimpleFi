@@ -19,6 +19,7 @@ function App() {
   const [userTokens, setUserTokens] = useState([]);
   const [userFields, setUserFields] = useState([]);
   const [userTokenTransactions, setUserTokenTransactions] = useState([]);
+  const [userNormalTransactions, setUserNormalTransactions] = useState([]);
   const [unclaimedRewards, setUnclaimedRewards] = useState([]);
   const [rewoundTokenBalances, setRewoundTokenBalances] = useState([]);
   const [rewoundFieldBalances, setRewoundFieldBalances] = useState([]);
@@ -75,8 +76,6 @@ function App() {
     }
   }, [changedAddress])
 
-  // useEffect(() => {console.log(' ---> blocky', blocky)}, [blocky]);
-
   //Create first set of userTokens with token balances
   //Get all user token transactions
   useEffect(() => {
@@ -85,10 +84,11 @@ function App() {
       const getTokenBalances = apis.getAllUserBalances(userAccount[0], trackedTokens);
       const getFieldBalances = apis.getAllUserBalances(userAccount[0], trackedFields);
       const userTxPromise = apis.getUserTokenTransactions(userAccount[0]);
+      const userNormalPromise = apis.getUserNormalTransactions(userAccount[0]);
       const unclaimedRewardsPromise = apis.getUnclaimedRewards(userAccount[0], trackedFields, trackedTokens);
 
-      Promise.all([getTokenBalances, getFieldBalances, userTxPromise, unclaimedRewardsPromise])
-        .then(([tokensWithBalance, fieldsWithBalance, txArr, unclaimedArr]) => {
+      Promise.all([getTokenBalances, getFieldBalances, userTxPromise, userNormalPromise, unclaimedRewardsPromise])
+        .then(([tokensWithBalance, fieldsWithBalance, tokenTxArr, normalTxArr, unclaimedArr]) => {
           fieldsWithBalance = helpers.populateFieldTokensFromCache(fieldsWithBalance, trackedTokens);
           setLoadingMessage(prev => helpers.amendModal('Fetching primary token and field balances', prev));
           setLoadingMessage(prev => helpers.amendModal('Fetching historic token transactions', prev));
@@ -96,10 +96,15 @@ function App() {
           setTimeout(() => {
             setUserTokens(tokensWithBalance);
             setUserFields(fieldsWithBalance);
-            setUserTokenTransactions(txArr.result);
+            setUserTokenTransactions(tokenTxArr.result);
+            setUserNormalTransactions(normalTxArr.result);
             setUnclaimedRewards(unclaimedArr);
             if (!fieldsWithBalance.length) setRewoundFlag(true);
           }, 200)
+        })
+        .catch(e => {
+          console.error(e);
+          alert("Oops, something went wrong. Please refresh the page!");
         })
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -141,7 +146,7 @@ function App() {
           apis.getAPYs(fieldsWithInvestmentValues, tokensWithUnclaimedBalances, tokenPrices)
           .then(fieldsWithAPYs => {
               setLoadingMessage(prev => helpers.amendModal('Calculating APYs', prev));
-              apis.getROIs(userAccount[0], fieldsWithAPYs, trackedFields, userTokenTransactions, trackedTokens, tokensWithUnclaimedBalances, tokenPrices)
+              apis.getROIs(userAccount[0], fieldsWithAPYs, trackedFields, userTokenTransactions, userNormalTransactions, trackedTokens, tokensWithUnclaimedBalances, tokenPrices)
               .then(fieldsWithROIs => {
                   setLoadingMessage(prev => helpers.amendModal('Calculating ROIs', prev));
                   setUserFields(fieldsWithROIs);
