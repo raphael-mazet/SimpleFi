@@ -5,11 +5,6 @@ import DetailsTable from '../../components/DetailsTable/DetailsTable';
 import MiniToggle from '../../components/MiniToggle/MiniToggle';
 
 //TODO: identify joint components with EarningFieldDetails container
-/* @dev: differences with EarningFieldDetails:
-      - additional const underlyingTokens and corresponding field-title-header
-      - additional stakingtoken field-title-header
-      - currentField.userFarmingTxHistory passed as prop to DetailsTable instead of userTxHistory
-*/
 
 export default function FarmingFieldDetails({name, userFields}) {
 

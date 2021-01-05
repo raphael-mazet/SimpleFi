@@ -70,7 +70,7 @@ export default function DetailsChart({data, type}) {
         }
       }
     });
-  }, [tableData]);
+  }, [tableData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <canvas id="details-token-chart" width="100%" height="100%" ref={chartRef}></canvas>
