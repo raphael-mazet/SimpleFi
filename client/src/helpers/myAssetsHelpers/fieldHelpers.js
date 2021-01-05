@@ -18,10 +18,7 @@ function extractSummaryFieldValues (userFields) {
 
     const { combinedBalance, stakedPercent } = combineFieldBalances(field);
     //CHECK: quid using investmentValue and allTimeROI when a field has both farming and earning returns
-    //CHECK: is investmentValue based on current price or historical investment prices?
-    // const { name, cropTokens, isEarning, investmentValue, allTimeROI } = field;
-    //FIXME: allTimeROI only valid for earning fields rn
-    const { name, cropTokens, isEarning, investmentValue, allTimeROI, farmingROI } = field;
+    const { name, cropTokens, isEarning, investmentValue, earningROI, farmingROI } = field;
 
     if (cropTokens.length) {
       let farming = '';
@@ -40,11 +37,11 @@ function extractSummaryFieldValues (userFields) {
     
     if (isEarning) {
       //FIXME: ROI weight should be based on the historic investment value
-      totalROI.earningROI += allTimeROI * investmentValue;
+      totalROI.earningROI += earningROI.allTimeROI * investmentValue;
       totalInvested.earningInv += investmentValue;
       
       const APY = formatter.format(field.earningAPY);
-      const ROI = formatter.format(allTimeROI);
+      const ROI = formatter.format(earningROI.allTimeROI);
       const invested = Number(investmentValue?.toFixed(2)).toLocaleString();
       
       earningFields.push([name, invested, stakedPercent, ROI, APY]);

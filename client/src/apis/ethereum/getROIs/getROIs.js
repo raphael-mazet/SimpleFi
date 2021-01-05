@@ -37,7 +37,9 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
         //TODO: rename variable to totalCurrInvValue
         field.investmentValue = currInvestmentValue;
         field.userTxHistory = userLiquidityHistory;
-        field.allTimeROI = helpers.calcEarningROI(currInvestmentValue, userLiquidityHistory);
+        //@dev: {allTimeROI, absReturnValue, histInvestmentValue}
+        field.earningROI = helpers.calcEarningROI(currInvestmentValue, userLiquidityHistory);
+        // field.allTimeROI = helpers.calcEarningROI(currInvestmentValue, userLiquidityHistory);
       }
     }
 

@@ -58,5 +58,26 @@ export default function extractDetailsChartValues(data, type) {
       })
     }
   }
+
+  if (type === 'earningAndFarming') {
+    const {earningField, farmingFields} = data;
+
+    if (earningField) {
+      extractedValues.data.push(Number(earningField.earningROI.absReturnValue.toFixed(2)));
+      extractedValues.labels.push(`main earnings (${earningField.name})`);
+      extractedValues.fill.push(pieChartColours[colourIndex]);
+      colourIndex++;
+    }
+
+    if (farmingFields.length) {
+      farmingFields.forEach(farmingField => {
+        extractedValues.data.push(Number(farmingField.farmingROI.absReturnValue.toFixed(2)));
+        extractedValues.labels.push(`farming returns from ${farmingField.name})`);
+        extractedValues.fill.push(pieChartColours[colourIndex]);
+        colourIndex++;
+      })
+    }
+  }
+  
   return extractedValues;
 }

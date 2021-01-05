@@ -5,7 +5,7 @@ const Chart = require('chart.js');
 
 export default function DetailsChart({data, type}) {
 
-  const [tableData] = useState(helpers.extractDetailsChartValues(data, type));
+  const [tableData, setTableData] = useState({data: [], fill:[], labels: [], other: []});
   const chartRef = useRef(null);
 
   const tableCallbacks = 
@@ -21,6 +21,10 @@ export default function DetailsChart({data, type}) {
         }
       }
     }
+
+    useEffect(() => {
+      setTableData(helpers.extractDetailsChartValues(data, type))
+    }, [data, type]);
 
   useEffect(() => {
     new Chart(chartRef.current, {
@@ -56,8 +60,6 @@ export default function DetailsChart({data, type}) {
                 return tableCallbacks.title.farming(tooltipItem, data);
               }
             },
-            labelTextColor: () => '#FF69B4',
-
           }
         },
         legend: {

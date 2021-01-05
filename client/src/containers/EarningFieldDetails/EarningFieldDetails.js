@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import './EarningFieldDetails.css';
 import DetailsTable from '../../components/DetailsTable/DetailsTable';
+import DetailsChart from '../../components/DetailsChart/DetailsChart';
 
 export default function EarningFieldDetails ({name, userFields}) {
   
   const [currentField] = useState(userFields.find(field => field.name === name));
-  // const [farmingFields] = useState((field => field.seedTokens[0].address === currentField.receiptToken));
-  const [farmingROI, setFarmingROI] = useState(0);
+  const [farmingFields, setFarmingFields] = useState({});
+  const [combinedROI, setCombinedROI] = useState({currentField: null, farmingFields: []});
 
   // function toggleFarmingROI() {
   //   if (farmingROI) {
@@ -17,8 +18,11 @@ export default function EarningFieldDetails ({name, userFields}) {
   // }
 
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [currentField])
+    window.scrollTo(0, 0);
+    const targetFarms = userFields.filter(field => field.seedTokens[0].tokenId === currentField.receiptToken)
+    setFarmingFields(targetFarms);
+    setCombinedROI({earningField: currentField, farmingFields: targetFarms});
+  }, [currentField]) //eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="field-details">
@@ -34,7 +38,7 @@ export default function EarningFieldDetails ({name, userFields}) {
       <div className="field-details-numbers">
         <div className="field-overview field-roi">
           <h2>all time ROI</h2>
-          <p>{(currentField.allTimeROI * 100).toFixed(2)}%</p>
+          <p>{(currentField.earningROI.allTimeROI * 100).toFixed(2)}%</p>
           {/* TODO: breakdown ROI due to fee and underlying value */}
           <div className="field-roi-graph">Graph</div>
         </div>
@@ -43,6 +47,13 @@ export default function EarningFieldDetails ({name, userFields}) {
           <h2>Current value</h2>
           <p>${Number(currentField.investmentValue.toFixed()).toLocaleString()}</p>
           <div className="field-invested-graph">Pie chart and path</div>
+        </div>
+      </div>
+
+      <div className="field-details-earning-and-farming-roi">
+        <h2>Earning + Farming ROI</h2>
+        <div className="farming-source-chart">
+          <DetailsChart data={combinedROI} type='earningAndFarming'/>
         </div>
       </div>
 
