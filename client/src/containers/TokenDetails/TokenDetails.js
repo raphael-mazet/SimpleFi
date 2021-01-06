@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './TokenDetails.css';
-import DetailsChart from '../../components/DetailsChart/DetailsChart';
+import DetailsPieChart from '../../components/DetailsPieChart/DetailsPieChart';
 import helpers from '../../helpers';
 
 export default function TokenDetails({name, userTokens, userTokenPrices}) {
@@ -41,7 +41,7 @@ export default function TokenDetails({name, userTokens, userTokenPrices}) {
         <div className="token-source-container">
             <h2>Source of funds</h2>
           <div className="token-source-chart">
-            <DetailsChart data={currentToken} type='token'/>
+            <DetailsPieChart data={currentToken} type='token'/>
           </div>
         </div>
       </div>
