@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './FarmingFieldDetails.css';
-import DetailsChart from '../../components/DetailsChart/DetailsChart';
+import DetailsPieChart from '../../components/DetailsPieChart/DetailsPieChart';
 import DetailsTable from '../../components/DetailsTable/DetailsTable';
 import MiniToggle from '../../components/MiniToggle/MiniToggle';
 
@@ -86,7 +86,7 @@ export default function FarmingFieldDetails({name, userFields}) {
         <div className="farming-source-container">
             <h2>Source of ROI</h2>
           <div className="farming-source-chart">
-            <DetailsChart data={currentField.farmingROI} type='farming'/>
+            <DetailsPieChart data={currentField.farmingROI} type='farming'/>
           </div>
         </div>
 
