@@ -3,7 +3,6 @@ import pieChartColours from '../../data/pieChartColours';
 export default function extractDetailsBarChartValues(data, type) {
   const extractedValues = {data:[], labels: [], fill: [], other:[]};
   let colourIndex = 0;
-  let farmingFieldIndex = 0;
 
   if (type === 'earningAndFarming') {
     const {earningField, farmingFields} = data;

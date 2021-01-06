@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import './DetailsBarChart.css';
 import helpers from '../../helpers';
-import { createWhitelist } from '../../helpers/ethHelpers';
 const Chart = require('chart.js');
 
 export default function DetailsBarChart({data, type}) {
@@ -86,6 +85,6 @@ export default function DetailsBarChart({data, type}) {
   }, [tableData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <canvas id="details-token-chart" width="100%" height="100%" ref={chartRef}></canvas>
+    <canvas id="details-bar-chart" width="100%" height="100%" ref={chartRef}></canvas>
   )
 }

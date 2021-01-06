@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './EarningFieldDetails.css';
 import DetailsTable from '../../components/DetailsTable/DetailsTable';
 import DetailsBarChart from '../../components/DetailsBarChart/DetailsBarChart';
+import MaxiToggle from '../../components/MaxiToggle/MaxiToggle';
 
 
 export default function EarningFieldDetails ({name, userFields}) {
@@ -27,7 +28,6 @@ export default function EarningFieldDetails ({name, userFields}) {
 
   return (
     <div className="field-details">
-      <p>Hello</p>
       <div className="field-details-titles">
         <h2 className="field-title">{name} {currentField.isEarning ? '(earning)' : '(farming)'}</h2>
         <p><span className='field-title-header'>Description</span>: lorem ipsum dolor sit amet consectetuer</p>
@@ -36,6 +36,8 @@ export default function EarningFieldDetails ({name, userFields}) {
       </div>
 
       <button onClick={()=>{}/*toggleFarmingROI*/}>Add farming ROI</button>
+
+      <MaxiToggle handleChange={()=>{}}/>
 
       <div className="field-details-numbers">
         <div className="field-overview field-roi">
@@ -53,8 +55,8 @@ export default function EarningFieldDetails ({name, userFields}) {
       </div>
 
       <div className="field-details-earning-and-farming-roi">
-        <h2>Earning + Farming ROI</h2>
-        <div className="farming-source-chart">
+        <h2>Combined earning and Farming returns</h2>
+        <div className="combined-earning-source-chart">
           <DetailsBarChart data={combinedROI} type='earningAndFarming'/>
         </div>
       </div>
