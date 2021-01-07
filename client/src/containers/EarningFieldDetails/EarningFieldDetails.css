@@ -1,10 +1,11 @@
 @import '../../CSS/variables.css';
+@import '../../CSS/animations.css';
 
 .field-details {
   margin: 20px 50px;
 }
 
-.field-details h2, p {
+.field-details h2, h3, p {
   color: var(--almost-white);
 }
 
@@ -25,6 +26,18 @@
 
 .field-title-header {
   font-weight: 500;
+}
+
+.earning-details-toggle-roi {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.earning-details-toggle-roi h3 {
+  font-size: 0.95em;
+  color: var(--offwhite);
+  margin-right: 5px;
 }
 
 .field-details-numbers {
@@ -52,7 +65,7 @@
   font-size: 1.2em;
 }
 
-.field-details-earning-and-farming-roi {
+.field-details-combined-roi {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -60,11 +73,11 @@
   margin-bottom: 15px;
 }
 
-.field-details-earning-and-farming-roi h2 {
+.field-details-combined-roi h2 {
   margin-bottom: 15px;
 }
 
-.combined-earning-source-chart {
+.combined-roi-earnings-chart {
   position: relative;
   height: 250px;
   width: 500px;
