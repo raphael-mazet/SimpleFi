@@ -66,7 +66,7 @@
 }
 
 .field-details-combined-roi {
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   margin-right: var(--field-details-margin-right);

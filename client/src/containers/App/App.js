@@ -49,6 +49,7 @@ function App() {
     } else {
       alert('Please install Metamask to use SimpleFi (https://metamask.io/)');
     }
+
     const getTokens = apis.getTokens();
     const getFields = apis.getFields();
     Promise.all([getTokens, getFields])
