@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import './EarningFieldDetails.css';
 import DetailsTable from '../../components/DetailsTable/DetailsTable';
 import DetailsBarChart from '../../components/DetailsBarChart/DetailsBarChart';
 import MaxiToggle from '../../components/MaxiToggle/MaxiToggle';
+import helpers from '../../helpers';
 
 
 export default function EarningFieldDetails ({name, userFields}) {
@@ -10,6 +11,7 @@ export default function EarningFieldDetails ({name, userFields}) {
   const [currentField] = useState(userFields.find(field => field.name === name));
   const [farmingFields, setFarmingFields] = useState({});
   const [combinedROI, setCombinedROI] = useState({currentField: null, farmingFields: []});
+  const combinedGraph = useRef(null);
 
   // function toggleFarmingROI() {
   //   if (farmingROI) {
@@ -18,6 +20,11 @@ export default function EarningFieldDetails ({name, userFields}) {
   //     setFarmingROI(farmingFields.reduce((acc, curr) => acc + curr.farmingROI.allTimeROI, 0));
   //   }
   // }
+
+  function toggleCombinedROI(e) {
+    if (e.target.checked) {
+      helpers.toggleDropdown(e, combinedGraph);
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -35,9 +42,10 @@ export default function EarningFieldDetails ({name, userFields}) {
         <p><span className='field-title-header'>Underlying tokens</span>: {currentField.seedTokens.reduce((acc, curr) => [...acc, curr.name], []).join(', ')}</p>
       </div>
 
-      <button onClick={()=>{}/*toggleFarmingROI*/}>Add farming ROI</button>
-
-      <MaxiToggle handleChange={()=>{}}/>
+      <div className="earning-details-toggle-roi">
+        <h3>Add farming ROI</h3>
+        <MaxiToggle handleChange={()=>{}}/>
+      </div>
 
       <div className="field-details-numbers">
         <div className="field-overview field-roi">
@@ -54,9 +62,9 @@ export default function EarningFieldDetails ({name, userFields}) {
         </div>
       </div>
 
-      <div className="field-details-earning-and-farming-roi">
+      <div ref={combinedGraph} className="field-details-combined-roi">
         <h2>Combined earning and Farming returns</h2>
-        <div className="combined-earning-source-chart">
+        <div className="combined-roi-earnings-chart">
           <DetailsBarChart data={combinedROI} type='earningAndFarming'/>
         </div>
       </div>
