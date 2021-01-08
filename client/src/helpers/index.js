@@ -28,6 +28,7 @@ import {
   extractDetailsBarChartValues,
   chartCallbacks
 } from './detailsChartHelpers';
+import calcCombinedROI from './earningFieldDetailsHelpers';
 
 //eslint-disable-next-line import/no-anonymous-default-export
 export default {
@@ -55,5 +56,6 @@ export default {
   extractTotalTokenBalance,
   extractDetailsPieChartValues,
   extractDetailsBarChartValues,
-  chartCallbacks
+  chartCallbacks,
+  calcCombinedROI
 }
