@@ -4,8 +4,8 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 30px 0 40px 0;
-  padding: 0 80px 20px 50px;
+  margin: 0px 0 40px 0;
+  padding: 30px 80px 20px 50px;
 }
 
 .nav-logo {

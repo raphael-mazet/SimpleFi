@@ -10,6 +10,7 @@ import TokenDetails from '../TokenDetails/TokenDetails';
 import FarmingFieldDetails from '../FarmingFieldDetails/FarmingFieldDetails';
 import EarningFieldDetails from '../EarningFieldDetails/EarningFieldDetails';
 import LoadingModal from '../../components/LoadingModal/LoadingModal';
+import Footer from '../../components/Footer/Footer'
 // import { AppProvider } from './AppContext';
 
 function App() {
@@ -173,6 +174,7 @@ function App() {
           <Route path='/earning/:fieldName' exact render={() => <EarningFieldDetails name={currentDetail} userFields={userFields} />}/>
         </Switch>
       {/* </AppProvider> */}
+      <Footer/>
     </div>
   );
 }

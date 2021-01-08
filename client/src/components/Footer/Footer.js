@@ -6,11 +6,7 @@ export default function Footer () {
     <footer>
       <span>© 2020 SimpleFi</span>
       <span>·</span>
-      <span>Privacy Policy</span>
-      <span>·</span>
-      <span>Twitter</span>
-      <span>·</span>
-      <span>Telegram</span>
+      <a href="https://twitter.com/simplefi_" target="_blank" rel="noreferrer">Twitter</a>
     </footer>
   )
 }

@@ -34,7 +34,7 @@ export default function Welcome ({setUserAccount, userAccount, setSplash}) {
         <img src={simpleFiSplash} alt="Welcome to SimpleFi" className="welcome-media-image"/>
       </div>
     </div>
-    <Footer/>
+    {/* <Footer/> */}
     </>
   )
 }

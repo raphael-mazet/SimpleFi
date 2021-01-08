@@ -2,7 +2,7 @@
 @import '../../CSS/animations.css';
 
 .field-details {
-  margin: 20px 100px;
+  margin: 20px 100px 0 100px;
 }
 
 .field-details h2, h3, p {
@@ -23,15 +23,12 @@
 .field-details-titles p {
   line-height: 1.8em;
   margin-left: 20px;
-}
-
-.field-title-description {
-  margin-bottom: 10px;
+  font-weight: 600;
 }
 
 .field-title-header {
-  font-weight: 500;
-  background-color: var(--transp-grey-background);
+  font-weight: 300;
+  margin-right: 10px;
 }
 
 .earning-details-toggle-roi {
@@ -98,7 +95,8 @@
 }
 
 .field-transactions {
-  margin: 40px 0 10px 0;
+  margin: 40px 0 0 0;
+  padding-bottom: 50px;
 }
 
 .field-transactions h2 {

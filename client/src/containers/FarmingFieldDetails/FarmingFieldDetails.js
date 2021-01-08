@@ -61,7 +61,6 @@ export default function FarmingFieldDetails({name, userFields}) {
     <div className="field-details">
       <div className="field-details-titles">
         <h2 className="field-title">{name} (farming)</h2>
-        <p><span className='field-title-header'>Description</span>: lorem ipsum dolor sit amet consectetuer</p>
         <p><span className='field-title-header'>Current nominal APY</span>: {secondaryFarmingTokens ? mainAPY + ', ' + secondaryAPYs : mainAPY}</p>
         {/* @dev: assumes there is a single staking token */}
         <p><span className='field-title-header'>Staking token</span>: {currentField.seedTokens[0].name}</p>

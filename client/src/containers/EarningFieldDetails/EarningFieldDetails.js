@@ -39,10 +39,10 @@ export default function EarningFieldDetails ({name, userFields}) {
     <div className="field-details">
       <div className="field-details-titles">
         <h2 className="field-title">{name} {currentField.isEarning ? '(earning)' : '(farming)'}</h2>
-        <p className='field-title-description'>lorem ipsum dolor sit amet consectetuer</p>
-        <p><span className='field-title-header'>Current nominal APY</span>: {currentField.earningAPY ? (currentField.earningAPY*100).toFixed(2) : (currentField.farmingAPY*100).toFixed(2)}%</p>
-        <p><span className='field-title-header'>Underlying tokens</span>: {currentField.seedTokens.reduce((acc, curr) => [...acc, curr.name], []).join(', ')}</p>
-        <p><span className='field-title-header'>Linked farming fields</span>: {farmingFields.reduce((acc, curr) => [...acc, curr.name], []).join(', ')}</p>
+        <p><span className='field-title-header'>Parent protocol:</span>{currentField.protocol.name}</p>
+        <p><span className='field-title-header'>Current nominal APY:</span>{currentField.earningAPY ? (currentField.earningAPY*100).toFixed(2) : (currentField.farmingAPY*100).toFixed(2)}%</p>
+        <p><span className='field-title-header'>Underlying tokens:</span>{currentField.seedTokens.reduce((acc, curr) => [...acc, curr.name], []).join(', ')}</p>
+        <p><span className='field-title-header'>Linked farming fields:</span>{farmingFields.reduce((acc, curr) => [...acc, curr.name], []).join(', ')}</p>
       </div>
 
       <div className="earning-details-toggle-roi">

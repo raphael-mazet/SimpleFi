@@ -21,7 +21,6 @@ export default function TokenDetails({name, userTokens, userTokenPrices}) {
     <div className="token-details">
       <div className="token-details-titles">
         <h2>{name}</h2>
-        <p><span className='token-title-header'>Description</span>: lorem ipsum dolor sit amet consectetuer</p>
         <p><span className='token-title-header'>Contract address</span>: <a href={`https://etherscan.io/token/${currentToken.address}`} target="_blank" rel="noreferrer">{currentToken.address}</a></p>
       </div>
 
@@ -45,13 +44,6 @@ export default function TokenDetails({name, userTokens, userTokenPrices}) {
           </div>
         </div>
       </div>
-
-      {/* <div className="token-transactions">
-        <h2>Transaction history</h2>
-        <div className="token-transactions-table">
-          <DetailsTable txHistory={currentField.userTxHistory} name={name}/>
-        </div>
-      </div> */}
     </div>
     )
 }
