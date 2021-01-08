@@ -16,21 +16,21 @@ model Farmer {
 }
 
 model Field {
-  fieldId                                                   String            @id @map("field_id")
-  name                                                      String?           @unique
-  protocolId                                                String?           @map("protocol_id")
-  yieldType                                                 Json?             @map("yield_type")
-  instructions                                              Json?
-  riskLevel                                                 Int?              @map("risk_level")
-  receiptToken                                              String?           @unique @map("receipt_token")
-  isEarning                                                 Boolean?          @map("is_earning")
-  protocol                                                  Protocol?         @relation(fields: [protocolId], references: [protocolId])
-  token_field_receipt_tokenTotoken                          Token?            @relation("field_receipt_tokenTotoken", fields: [receiptToken], references: [tokenId])
-  contractAddresses                                         contractAddress[] @relation("contract_addressTofield")
-  cropTokens                                                FieldCrop[]       @relation("fieldTofieldCrop")
-  seedTokens                                                FieldSeed[]       @relation("fieldTofieldSeed")
-  secondaryFields                                           secondaryField[] @relation("fieldTosecondary_field_primary_field_id")
-  fieldTosecondary_field_secondary_field_id                 secondaryField[] @relation("fieldTosecondary_field_secondary_field_id")
+  fieldId                                   String            @id @map("field_id")
+  name                                      String?           @unique
+  protocolId                                String?           @map("protocol_id")
+  fieldDescription                          Json?             @map("field_description")
+  instructions                              Json?
+  riskLevel                                 Int?              @map("risk_level")
+  receiptToken                              String?           @unique @map("receipt_token")
+  isEarning                                 Boolean?          @map("is_earning")
+  protocol                                  Protocol?         @relation(fields: [protocolId], references: [protocolId])
+  token_field_receipt_tokenTotoken          Token?            @relation("field_receipt_tokenTotoken", fields: [receiptToken], references: [tokenId])
+  contractAddresses                         contractAddress[] @relation("contract_addressTofield")
+  cropTokens                                FieldCrop[]       @relation("fieldTofieldCrop")
+  seedTokens                                FieldSeed[]       @relation("fieldTofieldSeed")
+  secondaryFields                           secondaryField[]  @relation("fieldTosecondary_field_primary_field_id")
+  fieldTosecondary_field_secondary_field_id secondaryField[]  @relation("fieldTosecondary_field_secondary_field_id")
 
   @@map("field")
 }
@@ -145,10 +145,10 @@ model contractAddress {
 }
 
 model secondaryField {
-  primaryFieldId                                  String @map("primary_field_id")
-  secondaryFieldId                                String @map("secondary_field_id")
-  field_fieldTosecondary_field_primary_field_id   Field  @relation("fieldTosecondary_field_primary_field_id", fields: [primaryFieldId], references: [fieldId])
-  secondaryField                                  Field  @relation("fieldTosecondary_field_secondary_field_id", fields: [secondaryFieldId], references: [fieldId])
+  primaryFieldId                                String @map("primary_field_id")
+  secondaryFieldId                              String @map("secondary_field_id")
+  field_fieldTosecondary_field_primary_field_id Field  @relation("fieldTosecondary_field_primary_field_id", fields: [primaryFieldId], references: [fieldId])
+  secondaryField                                Field  @relation("fieldTosecondary_field_secondary_field_id", fields: [secondaryFieldId], references: [fieldId])
 
   @@id([primaryFieldId, secondaryFieldId])
   @@map("secondary_field")
