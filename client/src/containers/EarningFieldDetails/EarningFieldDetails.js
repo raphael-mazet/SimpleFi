@@ -5,8 +5,7 @@ import DetailsBarChart from '../../components/DetailsBarChart/DetailsBarChart';
 import MaxiToggle from '../../components/MaxiToggle/MaxiToggle';
 import helpers from '../../helpers';
 
-export default function EarningFieldDetails ({name, userFields}) {
-  
+export default function EarningFieldDetails ({name, userFields, history}) {
   const [currentField] = useState(userFields.find(field => field.name === name));
   const [farmingFields, setFarmingFields] = useState([]);
   const [combinedfields, setCombinedFields] = useState({currentField: null, farmingFields: []});
@@ -33,11 +32,18 @@ export default function EarningFieldDetails ({name, userFields}) {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const targetFarms = userFields.filter(field => field.seedTokens[0].tokenId === currentField.receiptToken)
-    setFarmingFields(targetFarms);
-    setCombinedFields({earningField: currentField, farmingFields: targetFarms});
-    setCombinedROI(helpers.calcCombinedROI({earningField: currentField, farmingFields: targetFarms}));
+    if (name) {
+      const targetFarms = userFields.filter(field => field.seedTokens[0].tokenId === currentField.receiptToken)
+      setFarmingFields(targetFarms);
+      setCombinedFields({earningField: currentField, farmingFields: targetFarms});
+      setCombinedROI(helpers.calcCombinedROI({earningField: currentField, farmingFields: targetFarms}));
+    }
   }, [currentField]) //eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!name) {
+    history.push('/');
+    return (<></>)
+  }
 
   return (
     <div className="field-details">
