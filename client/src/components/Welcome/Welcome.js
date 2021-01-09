@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import simpleFiSplash from '../../assets/images/simpleFi-splash-blue-sun.svg';
 import simpleFiLogo from '../../assets/logos/simplefi-logotype.svg';
 import './Welcome.css';
-import Footer from '../Footer/Footer';
 import { connectWallet } from '../../authentication/web3';
 import { useHistory } from 'react-router-dom';
 
