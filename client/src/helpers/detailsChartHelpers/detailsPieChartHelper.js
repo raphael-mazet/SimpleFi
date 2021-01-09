@@ -1,6 +1,6 @@
-import pieChartColours from '../data/pieChartColours';
+import pieChartColours from '../../data/pieChartColours';
 
-export default function extractDetailsChartValues(data, type) {
+export default function extractDetailsPieChartValues(data, type) {
   const extractedValues = {data:[], labels: [], fill: [], other:[]};
   let colourIndex = 0;
 
@@ -58,5 +58,6 @@ export default function extractDetailsChartValues(data, type) {
       })
     }
   }
+
   return extractedValues;
 }

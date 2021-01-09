@@ -53,13 +53,14 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
           <SummaryBox headlines={holdingHeadlines} userValues={holdingValues.baseTokens} headers={holdingHeaders} tableName='holding' currencyCells={holdingCurrencyCells} setCurrentDetail={setCurrentDetail}/>
         </div>
 
+        <div className="summary-container summary-earning">
+        <SummaryBox headlines={earningHeadlines} userValues={earningValues} headers={earningHeaders} tableName='earning' currencyCells={earningCurrencyCells} setCurrentDetail={setCurrentDetail}/>  
+        </div>
+        
         <div className="summary-container summary-farming">
           <SummaryBox headlines={farmingHeadlines} userValues={farmingValues} headers={farmingHeaders} tableName='farming' currencyCells={farmingCurrencyCells} setCurrentDetail={setCurrentDetail}/>
         </div>
 
-        <div className="summary-container summary-earning">
-        <SummaryBox headlines={earningHeadlines} userValues={earningValues} headers={earningHeaders} tableName='earning' currencyCells={earningCurrencyCells} setCurrentDetail={setCurrentDetail}/>  
-        </div>
       </div>
 
     </div>

@@ -1,17 +1,18 @@
 @import '../../CSS/variables.css';
+@import '../../CSS/animations.css';
 
 .field-details {
-  margin: 20px 50px;
+  margin: 20px 100px 0 100px;
 }
 
-.field-details h2, p {
+.field-details h2, h3, p {
   color: var(--almost-white);
 }
 
 .field-details-titles {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .field-details-titles h2 {
@@ -21,22 +22,36 @@
 
 .field-details-titles p {
   line-height: 1.8em;
+  margin-left: 20px;
+  font-weight: 600;
 }
 
 .field-title-header {
-  font-weight: 500;
+  font-weight: 300;
+  margin-right: 10px;
+}
+
+.earning-details-toggle-roi {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.earning-details-toggle-roi h3 {
+  font-size: 0.95em;
+  color: var(--offwhite);
+  margin-right: 5px;
 }
 
 .field-details-numbers {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
-  margin-right: var(--field-details-margin-right);
+  margin-top: 15px;
+  margin-bottom: 60px;
 }
 
 .field-overview {
   display: flex;
-  margin: 15px 20px;
   padding: 15px;
   flex-direction: column;
   align-items: center;
@@ -44,12 +59,52 @@
   border-radius: 10px;
   box-shadow: 0 0px 2px 0px var(--periwinkle);
   border-width: 1px;;
-  min-width: 150px;
-  min-height: 100px;
+  width: 160px;
+  height: 100px;
+}
+
+.field-overview:last-child {
+  margin-left: 40px;
 }
 
 .field-overview h2 {
+  text-align: center;
+}
+
+.field-overview p {
   font-size: 1.2em;
+  font-weight: bold;
+}
+
+.roi-pulse {
+  animation: pulse 300ms;
+}
+
+.field-details-combined-roi {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  margin-right: var(--field-details-margin-right);
+  margin-bottom: 15px;
+}
+
+.field-details-combined-roi h2 {
+  margin-bottom: 15px;
+}
+
+.combined-roi-earnings-chart {
+  position: relative;
+  height: 250px;
+  width: 500px;
+}
+
+.field-transactions {
+  margin: 40px 0 0 0;
+  padding-bottom: 50px;
+}
+
+.field-transactions h2 {
+  margin-left: 20px;
 }
 
 .field-transactions-table {

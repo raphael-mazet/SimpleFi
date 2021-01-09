@@ -1,26 +1,16 @@
 import React, {useState, useEffect, useRef} from 'react';
-import './DetailsChart.css';
+import './DetailsPieChart.css';
 import helpers from '../../helpers';
 const Chart = require('chart.js');
 
 export default function DetailsChart({data, type}) {
 
-  const [tableData] = useState(helpers.extractDetailsChartValues(data, type));
+  const [tableData, setTableData] = useState({data: [], fill:[], labels: [], other: []});
   const chartRef = useRef(null);
 
-  const tableCallbacks = 
-    {
-      label: {
-        farming: function(tooltipItem, data) {
-          return ` $ ${data.datasets[0].data[tooltipItem.index]} (${data.datasets[0].other[tooltipItem.index]})` ;
-        }
-      },
-      title: {
-        farming: function(tooltipItem, data) {
-          return data.datasets[0].labels[tooltipItem[0].index]
-        }
-      }
-    }
+    useEffect(() => {
+      setTableData(helpers.extractDetailsPieChartValues(data, type))
+    }, [data, type]);
 
   useEffect(() => {
     new Chart(chartRef.current, {
@@ -43,21 +33,23 @@ export default function DetailsChart({data, type}) {
           }
         },
         tooltips: {
+          yPadding: 10,
+          xPadding: 10,
+          titleSpacing: 100,
+          bodySpacing: 5,
           callbacks: {
             label: function(tooltipItem, data) {
               if (type === 'farming') {
-                return tableCallbacks.label.farming(tooltipItem, data);
+                return helpers.chartCallbacks.label.farming(tooltipItem, data);
               } else {
                 return Chart.defaults.doughnut.tooltips.callbacks.label(tooltipItem, data);
               }
             },
             title: function(tooltipItem, data) {
               if (type === 'farming') {
-                return tableCallbacks.title.farming(tooltipItem, data);
+                return helpers.chartCallbacks.title.farming(tooltipItem, data);
               }
-            },
-            labelTextColor: () => '#FF69B4',
-
+            }
           }
         },
         legend: {

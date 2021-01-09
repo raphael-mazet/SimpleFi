@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './FarmingFieldDetails.css';
-import DetailsChart from '../../components/DetailsChart/DetailsChart';
+import DetailsPieChart from '../../components/DetailsPieChart/DetailsPieChart';
 import DetailsTable from '../../components/DetailsTable/DetailsTable';
 import MiniToggle from '../../components/MiniToggle/MiniToggle';
 
@@ -61,7 +61,6 @@ export default function FarmingFieldDetails({name, userFields}) {
     <div className="field-details">
       <div className="field-details-titles">
         <h2 className="field-title">{name} (farming)</h2>
-        <p><span className='field-title-header'>Description</span>: lorem ipsum dolor sit amet consectetuer</p>
         <p><span className='field-title-header'>Current nominal APY</span>: {secondaryFarmingTokens ? mainAPY + ', ' + secondaryAPYs : mainAPY}</p>
         {/* @dev: assumes there is a single staking token */}
         <p><span className='field-title-header'>Staking token</span>: {currentField.seedTokens[0].name}</p>
@@ -86,7 +85,7 @@ export default function FarmingFieldDetails({name, userFields}) {
         <div className="farming-source-container">
             <h2>Source of ROI</h2>
           <div className="farming-source-chart">
-            <DetailsChart data={currentField.farmingROI} type='farming'/>
+            <DetailsPieChart data={currentField.farmingROI} type='farming'/>
           </div>
         </div>
 

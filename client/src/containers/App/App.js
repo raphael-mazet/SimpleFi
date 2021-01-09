@@ -10,6 +10,7 @@ import TokenDetails from '../TokenDetails/TokenDetails';
 import FarmingFieldDetails from '../FarmingFieldDetails/FarmingFieldDetails';
 import EarningFieldDetails from '../EarningFieldDetails/EarningFieldDetails';
 import LoadingModal from '../../components/LoadingModal/LoadingModal';
+import Footer from '../../components/Footer/Footer'
 // import { AppProvider } from './AppContext';
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
     } else {
       alert('Please install Metamask to use SimpleFi (https://metamask.io/)');
     }
+
     const getTokens = apis.getTokens();
     const getFields = apis.getFields();
     Promise.all([getTokens, getFields])
@@ -161,7 +163,7 @@ function App() {
 
   return (
     <div className="simplefi-app">
-      <Nav splash={splash} userAccount={userAccount}/>
+      <Nav splash={splash} userAccount={userAccount} history={history}/>
       {/* <AppProvider value={balanceContractsLoaded}> */}
       <LoadingModal splash={splash} loadingMessage={loadingMessage}/>
         <Switch>
@@ -169,9 +171,10 @@ function App() {
           <Route path='/dashboard' exact render={() => <MyAssets userTokens={userTokens} userFields={userFields} userTokenPrices={userTokenPrices} setSplash={setSplash} setCurrentDetail={setCurrentDetail} allLoadedFlag={allLoadedFlag}/>}/>
           <Route path='/token/:tokenName' exact render={() => <TokenDetails name={currentDetail} userTokens={userTokens} userTokenPrices={userTokenPrices} />}/>
           <Route path='/farming/:fieldName' exact render={() => <FarmingFieldDetails name={currentDetail} userFields={userFields} />}/>
-          <Route path='/earning/:fieldName' exact render={() => <EarningFieldDetails name={currentDetail} userFields={userFields} />}/>
+          <Route path='/earning/:fieldName' exact render={() => <EarningFieldDetails name={currentDetail} userFields={userFields} history={history}/>}/>
         </Switch>
       {/* </AppProvider> */}
+      <Footer/>
     </div>
   );
 }
