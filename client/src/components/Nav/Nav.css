@@ -23,6 +23,7 @@ nav {
   justify-self: flex-start;
   height: 45px;
   width: 165px;
+  cursor: pointer;
 }
 
 .nav-items {

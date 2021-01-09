@@ -163,7 +163,7 @@ function App() {
 
   return (
     <div className="simplefi-app">
-      <Nav splash={splash} userAccount={userAccount}/>
+      <Nav splash={splash} userAccount={userAccount} history={history}/>
       {/* <AppProvider value={balanceContractsLoaded}> */}
       <LoadingModal splash={splash} loadingMessage={loadingMessage}/>
         <Switch>

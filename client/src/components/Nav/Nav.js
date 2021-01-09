@@ -4,11 +4,12 @@ import Blockies from 'react-blockies';
 import InfoModal from '../../components/InfoModal/InfoModal';
 import simpleFiLogo from '../../assets/logos/simplefi-logotype.svg';
 
-export default function Nav ({splash, userAccount}) {
+export default function Nav ({splash, userAccount, history}) {
   const [infoModalContent, setInfoModalContent] = useState('');
   const aboutRef = useRef(null);
   const infoModalRef = useRef(null);
   const infoModalContentRef = useRef(null);
+  const logoRef = useRef(null);
 
   function handleClick(e) {
     if (!infoModalContentRef.current.contains(e.target)) {
@@ -21,6 +22,9 @@ export default function Nav ({splash, userAccount}) {
         infoModalRef.current.style.opacity = 0;
       }
     }
+    if (logoRef.current.contains(e.target)) {
+      history.push('/');
+    }
   }
 
   useEffect(() => {
@@ -30,7 +34,7 @@ export default function Nav ({splash, userAccount}) {
 
   return (
     <nav style={splash ? {"borderBottom":"1px solid  #BBB3E855"} : {}}>
-      <div className="nav-logo">
+      <div ref={logoRef} className="nav-logo">
         <img src={simpleFiLogo} alt="simpleFi logo" style={!splash ? {visibility:"hidden"} : {}}/>
       </div>
       <div className="nav-items">
