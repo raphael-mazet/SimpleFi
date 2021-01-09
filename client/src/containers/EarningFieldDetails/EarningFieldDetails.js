@@ -12,6 +12,7 @@ export default function EarningFieldDetails ({name, userFields}) {
   const [combinedfields, setCombinedFields] = useState({currentField: null, farmingFields: []});
   const [combinedROI, setCombinedROI] = useState({roi: 0, abs: 0});
   const [combinedFlag, setCombinedFlag] = useState(false);
+  const roiRef = useRef(null);
   const combinedGraph = useRef(null);
 
   function toggleCombinedROI(e) {
@@ -25,6 +26,9 @@ export default function EarningFieldDetails ({name, userFields}) {
       graphStyle.animation = 'shrinkUp 300ms ease-in-out forwards';
       setTimeout(() => graphStyle.display = 'none', 300);
     }
+
+    roiRef.current.className = 'roi-pulse';
+    setTimeout(() => roiRef.current.className = '', 300)
   }
 
   useEffect(() => {
@@ -53,7 +57,7 @@ export default function EarningFieldDetails ({name, userFields}) {
       <div className="field-details-numbers">
         <div className="field-overview field-roi">
           <h2>Total ROI</h2>
-          <p>{!combinedFlag ? (currentField.earningROI.allTimeROI * 100).toFixed(2) : (combinedROI.roi * 100).toFixed(2)}%</p>
+          <p ref={roiRef}>{!combinedFlag ? (currentField.earningROI.allTimeROI * 100).toFixed(2) : (combinedROI.roi * 100).toFixed(2)}%</p>
         </div>
 
         <div className="field-overview field-invested">
