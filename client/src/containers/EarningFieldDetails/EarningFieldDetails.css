@@ -77,7 +77,7 @@
 }
 
 .roi-pulse {
-  animation: roi-pulse 300ms;
+  animation: pulse 300ms;
 }
 
 .field-details-combined-roi {
@@ -111,17 +111,4 @@
   margin: 10px var(--details-page-margin-right) 0 20px;
   border-width: 1px;
   border-radius: 10px;
-}
-
-@keyframes roi-pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
-    border-radius: 50px;
-  }
-  70% {
-      box-shadow: 0 0 0 15px rgba(204,169,44, 0);
-  }
-  100% {
-      box-shadow: 0 0 0 0 rgba(204,169,44, 0);
-  }
 }

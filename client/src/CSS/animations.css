@@ -15,3 +15,19 @@
     transform: scaleY(0)
   }
 }
+
+@keyframes pulse {
+  0% {
+    background-color: #CCCCFF33;
+    box-shadow: 0 0 0 0 #CCCCFF66;
+    border-radius: 50px;
+  }
+  70% {
+    box-shadow: 0 0 40px 20px #CCCCFF00;
+    border-radius: 50px;
+  }
+  100% {
+    box-shadow: 0 0 0 0 #CCCCFF00;
+    border-radius: 50px;
+  }
+}
