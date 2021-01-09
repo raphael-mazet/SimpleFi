@@ -1,0 +1,24 @@
+@import '../../CSS/variables.css';
+
+.info-modal {
+  display: flex;
+  position: fixed;
+  top: 80px;
+  left: 40%;
+  overflow: auto;
+  background-color: var(--transp-offwhite);
+  color: var(--dark-grey-font);
+  flex-direction: column;
+  box-shadow: 5px 5px 10px 0px var(--periwinkle);
+  max-width: 400px;
+  height: 40%;
+  border-radius: 20px;
+}
+
+.info-modal p {
+  padding: 30px 50px 0 50px;
+  color: var(--darkest-grey-font);
+  font-size: 1.2em;
+  line-height: 2em;
+  white-space: pre-wrap;
+}

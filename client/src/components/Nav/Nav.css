@@ -31,7 +31,7 @@ nav {
   justify-content: flex-end;
 }
 
-.nav-items p {
+.nav-items p, .nav-items a {
   font-size: 15px;
   font-weight: normal;
   color: white;
@@ -43,7 +43,7 @@ nav {
   align-items: center;
 } 
 
-.nav-links p {
+.nav-links p, .nav-links a {
   margin-right: 30px;
 }
 
@@ -64,4 +64,11 @@ nav {
 .nav-address-button canvas {
   border-radius: 100%;
   box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.5);
+}
+
+.info-modal-container {
+  z-index: 1;
+  visibility: collapse;
+  opacity: 0;
+  transition: opacity ease-in 300ms, visibility linear 300ms;
 }

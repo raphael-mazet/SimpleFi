@@ -16,14 +16,14 @@ export default function LoadingModal({splash, loadingMessage}) {
 
   return (
     <div className="loading-modal" style={display}>
-      <div className="modal-content">
-        <div className="modal-text">
+      <div className="loading-modal-content">
+        <div className="loading-modal-text">
           <h2>{loadingMessage.headline}</h2>
           <div className="loading-actions">
             {loadingMessage.actions.map((action) => {
               let tick;
               if (action.slice(-2) === '✔️') {
-                tick = <span className="modal-tick">✔</span>
+                tick = <span className="loading-modal-tick">✔</span>
                 action = action.slice(0, -2);
               }
               return (<p key={action}>{action}{tick}</p>)

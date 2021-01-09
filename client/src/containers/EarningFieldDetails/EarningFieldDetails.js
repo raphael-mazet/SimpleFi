@@ -7,7 +7,7 @@ import helpers from '../../helpers';
 
 export default function EarningFieldDetails ({name, userFields}) {
   
-  const [currentField, setCurrentField] = useState(userFields.find(field => field.name === name));
+  const [currentField] = useState(userFields.find(field => field.name === name));
   const [farmingFields, setFarmingFields] = useState([]);
   const [combinedfields, setCombinedFields] = useState({currentField: null, farmingFields: []});
   const [combinedROI, setCombinedROI] = useState({roi: 0, abs: 0});

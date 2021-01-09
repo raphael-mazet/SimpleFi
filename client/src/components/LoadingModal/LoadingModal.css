@@ -2,36 +2,36 @@
 
 .loading-modal {
   display: flex;
-  background-color: rgba(0,0,0,0.5); /* Overlay effect: translucent background: black w/ partial opacity */
-  z-index: 1; /* Overlay effect: positioned over other containers */
-  height: 100%; /* Full height */
+  background-color: rgba(0,0,0,0.5);
+  z-index: 1;
+  height: 100%;
   width: 100%;
-  position: fixed; /* Fix position on the top-left corner*/
+  position: fixed;
   top: 0;
   left: 0;
-  overflow: auto; /* Enable scroll if needed */
-  padding-top: 160px; /* Location of the content container */
+  overflow: auto;
+  padding-top: 160px;
 }
-/* Modal content */
-.modal-content {
+
+.loading-modal-content {
   position: relative;
   background-color: var(--transp-offwhite);
   color: var(--dark-grey-font);
   display: flex;
   flex-direction: column;
   box-shadow: 5px 5px 10px 0px var(--periwinkle);
-  width: 70%; /* Width in proportion to its parent container*/
-  max-width: 600px; /* Max width where it stops expanding */
-  height: 40%; /* Height in proportion to its parent container */
-  margin: auto; /* Auto margin according to the element width */
-  border-radius: 20px; /* Optional. Rounds container corners */
+  width: 70%;
+  max-width: 600px;
+  height: 40%;
+  margin: auto;
+  border-radius: 20px;
 }
 
-.modal-text {
+.loading-modal-text {
   padding: 30px 0 0 50px;
 }
 
-.modal-content h2 {
+.loading-modal-content h2 {
   color: var(--darkest-grey-font);
   font-size: 1.2em;
   margin-bottom: 10px;
@@ -48,7 +48,7 @@
   line-height: 1.8em;
 }
 
-.loading-actions .modal-tick {
+.loading-actions .loading-modal-tick {
   color: var(--success-green);
 }
 
