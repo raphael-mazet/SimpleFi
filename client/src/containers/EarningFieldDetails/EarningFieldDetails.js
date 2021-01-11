@@ -41,7 +41,7 @@ export default function EarningFieldDetails ({name, userFields, history}) {
   }, [currentField]) //eslint-disable-line react-hooks/exhaustive-deps
 
   if (!name) {
-    history.push('/');
+    history.push('/dashboard');
     return (<></>)
   }
 

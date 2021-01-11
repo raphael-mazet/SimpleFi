@@ -5,7 +5,7 @@ import SummaryBox from '../../components/SummaryBox/SummaryBox';
 import helpers from '../../helpers/index';
 import { holdingHeaders, holdingCurrencyCells, farmingHeaders, farmingCurrencyCells, earningHeaders, earningCurrencyCells } from '../../data/summaryHeaders';
 
-export default function MyAssets ({userTokens, userFields, userTokenPrices, setCurrentDetail, allLoadedFlag}) {
+export default function MyAssets ({userTokens, userFields, userTokenPrices, setCurrentDetail, allLoadedFlag, setSplash}) {
   const [holdingHeadlines, setHoldingHeadlines] = useState({totalInvested: 0, totalUnclaimed: 0, totalValue: 0});
   const [farmingHeadlines, setFarmingHeadlines] = useState(['Loading', 'Loading']);
   const [earningHeadlines, setEarningHeadlines] = useState(['Loading', 'Loading']);
@@ -15,7 +15,7 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
   const [totalROI, setTotalROI] = useState({farmingROI: 0, earningROI: 0});
 
   useEffect(() => {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
   },[])
 
   // combine available and locked token balances and add prices from coinGecko
@@ -33,6 +33,8 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
       setFarmingValues(farmingFields);
       setEarningValues(earningFields);
       setTotalROI(totalROI);
+    } else {
+      setSplash(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [allLoadedFlag])
