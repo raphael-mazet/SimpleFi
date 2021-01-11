@@ -1,5 +1,5 @@
 import fetchRequest from '../fetchRequest';
-//TODO: set .env
+//TODO: add this requirement to Github documentation
 import { ETHERSCAN_API_KEY } from '../.apiEnv.js';
 
 const etherscanTokenTxEP = "https://api.etherscan.io/api?module=account&action=tokentx&address=";

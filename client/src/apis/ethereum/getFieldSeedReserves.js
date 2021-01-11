@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import provider from './ethProvider';
 import helpers from '../../helpers'
 
-//TODO: add cache here once fixed istead of parent function
+//CHECK: add cache here instead of parent function?
 async function getFieldSeedReserves (field, token, tokenContract, cache) {
 
   //Check in cache if reserves already fetched

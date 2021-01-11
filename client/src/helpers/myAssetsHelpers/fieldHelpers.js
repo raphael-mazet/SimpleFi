@@ -16,7 +16,7 @@ function extractSummaryFieldValues (userFields) {
 
   userFields.forEach(field => {
 
-    const { combinedBalance, stakedPercent } = combineFieldBalances(field);
+    const { stakedPercent } = combineFieldBalances(field);
     //CHECK: quid using investmentValue and allTimeROI when a field has both farming and earning returns
     const { name, cropTokens, isEarning, investmentValue, earningROI, farmingROI } = field;
 
@@ -78,50 +78,6 @@ function combineFieldBalances(field){
   };
 }
 
-//NOTE: old extractSummaryFieldValues function - not currently in use
-function fieldSeparator (userFields){
-  const farmingFields = [];
-  const earningFields = [];
-  let totalInvested = 0;
-  const formatter = new Intl.NumberFormat("en-US", {
-    style: 'percent',
-    minimumFractionDigits: 2
-  });
-
-  userFields.forEach(field => {
-
-    const { combinedBalance, stakedPercent } = combineFieldBalances(field);
-    const { name, userBalance, cropTokens, stakedBalance, isEarning, unstakedUserInvestmentValue } = field;
-
-    //TODO: currently not adding combined balance to farming- must check
-    //NOTE: on case by case if staking voids rewards on Curve in particular
-    if (cropTokens.length) {
-      let farming = '';
-      cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
-      farming = farming.slice(0, -2);
-
-      const APY = field.farmingAPY?.combinedAPY ? formatter.format(field.farmingAPY.combinedAPY) : formatter.format(field.farmingAPY);
-
-      farmingFields.push([name, userBalance.toFixed(2), farming, APY])
-    }
-
-    if (isEarning) {
-      const APY = formatter.format(field.earningAPY)
-      earningFields.push([name, combinedBalance, stakedPercent, APY])
-    }
-
-    if (unstakedUserInvestmentValue) {
-      totalInvested += unstakedUserInvestmentValue;
-    }
-    if (stakedBalance) {
-      stakedBalance.forEach(stakedBalance => totalInvested += stakedBalance.userInvestmentValue)
-    }
-  })
-
-  return {farmingFields, earningFields, totalInvested: Number(totalInvested.toFixed())}
-}
-
 export {
-  fieldSeparator,
   extractSummaryFieldValues
 }

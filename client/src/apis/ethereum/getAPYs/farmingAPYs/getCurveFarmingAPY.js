@@ -17,8 +17,7 @@ async function getCurveFarmingAPY(rewardRateAddress, field, userTokenPrices) {
   const rewardRateContract = new ethers.Contract(rewardRateAddress.address, rewardRateAddress.contractInterface.abi, provider);
   const rewardWeightContract = new ethers.Contract(rewardWeightAddress.address, rewardWeightAddress.contractInterface.abi, provider);
   
-  //TODO: add logic around timeperiod ending
-  // const duration = await contract.DURATION();
+  //TODO: add logic around timeperiod ending - contract.DURATION()
   
   const totalAnnualReward = await getTotalAnnualReward(rewardRateContract, curveDecimals);
   const fieldRewardPercent = await getFieldRewardPercent(rewardWeightContract, rewardRateAddress.address, curveDecimals);

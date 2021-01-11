@@ -33,7 +33,6 @@ async function getUserFarmingHistory(field, userTokenTransactions, userNormalTra
       switch (tx.receiptToken.protocol.name) {
         //CHECK: does this work properly with pure SNX staking?
         case 'Curve':
-          // tx.pricePerToken = await getOneCurveHistReceiptPrice(tx, trackedFields);
           const curvePriceAndDate = await getOneCurveHistReceiptPrice(tx, trackedFields);
           tx.pricePerToken = curvePriceAndDate.pricePerToken;
           tx.txDate = curvePriceAndDate.txDate;

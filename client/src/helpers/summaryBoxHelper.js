@@ -7,7 +7,6 @@ export default function formatHeadlines(tableName, headlines) {
   const formattedHeadlines = [];
   let perfClasses = [];
   if (tableName === 'holding') {
-    // {totalInvested: 0, totalUnclaimed: 0, totalValue: 0}
     const {totalValue, totalInvested, totalUnclaimed} = headlines;
     formattedHeadlines.push(`${formatter.format(totalInvested / totalValue)} invested`);
     formattedHeadlines.push(`${formatter.format(totalUnclaimed / totalValue)} unclaimed`);

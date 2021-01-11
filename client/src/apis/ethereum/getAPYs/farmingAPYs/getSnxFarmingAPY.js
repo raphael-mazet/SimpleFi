@@ -23,15 +23,11 @@ async function getSnxFarmingAPY(rewardRateAddress, field, userTokenPrices) {
   const secondsPerYear = 3.154e7;
   const contract = new ethers.Contract(address, contractInterface.abi, provider);
        
-  //TODO: add logic around timeperiod ending
-  // const duration = await contract.DURATION();
+  //TODO: add logic around timeperiod ending - contract.DURATION()
         
   //define annual reward
-  // const rewardRate = await getRewardRate(contract, field.name);
-  // const annualPayout = (rewardRate / 1e18) * 3.154e7;
   const rewardRate = await contract.rewardRate();
   rewardRateAndAPY[field.name].rewardRate = rewardRate;
-  // console.log(' ---> Number(ethers.utils.formatUnits(rewardRate, snxDecimals))', Number(ethers.utils.formatUnits(rewardRate, snxDecimals)));
   const annualPayout = Number(ethers.utils.formatUnits(rewardRate, snxDecimals)) * secondsPerYear;
         
   //define APY
