@@ -4,6 +4,7 @@ import './InfoModal.css';
 
 export default function InfoModal({content, contentRef}) {
   const [modalContent, setModalContent] = useState(infoModalContent(content));
+  
   useEffect(() => {
     setModalContent(infoModalContent(content))
   }, [content])

@@ -5,7 +5,6 @@ import SummaryTable from '../SummaryTable/SummaryTable';
 import helpers from '../../helpers';
 
 export default function SummaryBox({headlines, userValues, headers, tableName, currencyCells, setCurrentDetail, allLoaded}) {
-
   const [valueDisplay, setValueDisplay] = useState(false)
   const holdingTable = useRef(null);
   const farmingTable = useRef(null);
