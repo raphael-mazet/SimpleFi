@@ -1,19 +1,24 @@
 import React from 'react';
 import './OverviewCard.css';
 
-export default function OverviewCard ({title, amount, performance, numType}) {
-
+export default function OverviewCard ({title, amount, numType}) {
   let roiSign = '';
   let perfClass = '';
   if (numType === 'percent') {
-    if (amount > 0) {
-      roiSign = '+';
-      perfClass = '-green';
-    } else if (amount < 0) {
-      roiSign = '-';
-      perfClass = '-red';
+    perfClass = '-percent';
+    
+    if (Number(amount)) {
+      if (amount > 0) {
+        roiSign = '+';
+        perfClass = '-green';
+      } else if (amount < 0) {
+        roiSign = '-';
+        perfClass = '-red';
+      }
+      amount = roiSign + Math.abs(amount);
+    } else {
+      amount = '--'
     }
-    amount = roiSign + Math.abs(amount);
   }
   
   return (

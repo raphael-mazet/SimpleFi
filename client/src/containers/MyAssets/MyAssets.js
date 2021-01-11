@@ -42,8 +42,8 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
   return (
     <div className="myassets-summary">
       <div className="summary-overview-cards-container">
-          <OverviewCard title='Total assets' amount={Number(holdingHeadlines.totalValue.toFixed()).toLocaleString()} performance={{daily:'plus 2', annual:'plus 3'}}/>
-          <OverviewCard title='Total ROI' numType='percent' amount={(Number((totalROI.farmingROI + totalROI.earningROI) * 100).toFixed(2)).toLocaleString()} performance={{daily:'plus 2', annual:'plus 3'}}/>
+          <OverviewCard title='Total assets' amount={allLoadedFlag ? Number(holdingHeadlines.totalValue.toFixed()).toLocaleString() : '--'}/>
+          <OverviewCard title='Total ROI' numType='percent' amount={allLoadedFlag ? (Number((totalROI.farmingROI + totalROI.earningROI) * 100).toFixed(2)).toLocaleString() : '--'}/>
       </div>
 
       <div className="account-overview">
@@ -52,15 +52,15 @@ export default function MyAssets ({userTokens, userFields, userTokenPrices, setC
 
       <div className="summary-container-sup">
         <div className="summary-container summary-holding">
-          <SummaryBox headlines={holdingHeadlines} userValues={holdingValues.baseTokens} headers={holdingHeaders} tableName='holding' currencyCells={holdingCurrencyCells} setCurrentDetail={setCurrentDetail}/>
+          <SummaryBox headlines={holdingHeadlines} userValues={holdingValues.baseTokens} headers={holdingHeaders} tableName='holding' currencyCells={holdingCurrencyCells} setCurrentDetail={setCurrentDetail} allLoaded={allLoadedFlag}/>
         </div>
 
         <div className="summary-container summary-earning">
-        <SummaryBox headlines={earningHeadlines} userValues={earningValues} headers={earningHeaders} tableName='earning' currencyCells={earningCurrencyCells} setCurrentDetail={setCurrentDetail}/>  
+        <SummaryBox headlines={earningHeadlines} userValues={earningValues} headers={earningHeaders} tableName='earning' currencyCells={earningCurrencyCells} setCurrentDetail={setCurrentDetail} allLoaded={allLoadedFlag}/>  
         </div>
         
         <div className="summary-container summary-farming">
-          <SummaryBox headlines={farmingHeadlines} userValues={farmingValues} headers={farmingHeaders} tableName='farming' currencyCells={farmingCurrencyCells} setCurrentDetail={setCurrentDetail}/>
+          <SummaryBox headlines={farmingHeadlines} userValues={farmingValues} headers={farmingHeaders} tableName='farming' currencyCells={farmingCurrencyCells} setCurrentDetail={setCurrentDetail} allLoaded={allLoadedFlag}/>
         </div>
 
       </div>
