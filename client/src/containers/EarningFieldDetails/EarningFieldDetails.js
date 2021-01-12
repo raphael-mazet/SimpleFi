@@ -14,7 +14,7 @@ export default function EarningFieldDetails ({name, userFields, history}) {
   const [combinedFlag, setCombinedFlag] = useState(false);
   const [displayAbsROIValue, setDisplayAbsROIValue] = useState(false);
   const [displayHistInv, setDisplayHistInv] = useState(false);
-  const [ROIValue, setROIValue] = useState({title: 'Total ROI', value: '0%'});
+  const [ROIValue, setROIValue] = useState({title: 'ROI', value: '0%'});
   const [invValue, setInvValue] = useState({title: 'Current', value: '$0'})
   const roiRef = useRef(null);
   const combinedGraph = useRef(null);
@@ -31,8 +31,8 @@ export default function EarningFieldDetails ({name, userFields, history}) {
       setTimeout(() => graphStyle.display = 'none', 300);
     }
 
-    roiRef.current.className = 'roi-pulse';
-    setTimeout(() => roiRef.current.className = '', 300)
+    roiRef.current.className += ' roi-pulse';
+    setTimeout(() => roiRef.current.className = 'field-overview-value', 300)
   }
 
   function toggleDisplay(e, target) {
@@ -57,15 +57,15 @@ export default function EarningFieldDetails ({name, userFields, history}) {
     if (name) {
       if (displayAbsROIValue) {
         if (combinedFlag) {
-          setROIValue({title: 'Total return value', value: '$' + Number(combinedROI.abs.toFixed()).toLocaleString()})
+          setROIValue({title: 'return value', value: '$' + Number(combinedROI.abs.toFixed()).toLocaleString()})
         } else {
-          setROIValue({title: 'Total return value', value: '$' + Number(currentField.earningROI.absReturnValue.toFixed()).toLocaleString()})
+          setROIValue({title: 'return value', value: '$' + Number(currentField.earningROI.absReturnValue.toFixed()).toLocaleString()})
         }
       } else {
         if (combinedFlag) {
-          setROIValue({title: 'Total ROI', value: (combinedROI.roi * 100).toFixed(2) + '%'})
+          setROIValue({title: 'ROI', value: (combinedROI.roi * 100).toFixed(2) + '%'})
         } else {
-          setROIValue({title: 'Total ROI', value: (currentField.earningROI.allTimeROI * 100).toFixed(2) + '%'})
+          setROIValue({title: 'ROI', value: (currentField.earningROI.allTimeROI * 100).toFixed(2) + '%'})
         }
       }
     }
@@ -105,14 +105,14 @@ export default function EarningFieldDetails ({name, userFields, history}) {
 
       <div className="field-details-numbers">
         <div className="field-overview field-roi">
-          <h2>{ROIValue.title}</h2>
-          <p ref={roiRef}>{ROIValue.value}</p>
+          <h2 className="field-overview-header">Total <br/> {ROIValue.title}</h2>
+          <p ref={roiRef} className="field-overview-value">{ROIValue.value}</p>
           <MiniToggle before='%' after='$' handleChange={e => toggleDisplay(e, 'roi')} />
         </div>
 
         <div className="field-overview field-invested">
-          <h2>{invValue.title}  <br/> investment value</h2>
-          <p>{invValue.value}</p>
+          <h2 className="field-overview-header">{invValue.title}  <br/> investment value</h2>
+          <p className="field-overview-value">{invValue.value}</p>
           <MiniToggle before='curr.' after='hist.' handleChange={e => toggleDisplay(e, 'inv')} />
         </div>
       </div>
