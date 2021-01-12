@@ -10,7 +10,7 @@ import TokenDetails from '../TokenDetails/TokenDetails';
 import FarmingFieldDetails from '../FarmingFieldDetails/FarmingFieldDetails';
 import EarningFieldDetails from '../EarningFieldDetails/EarningFieldDetails';
 import LoadingModal from '../../components/LoadingModal/LoadingModal';
-import Footer from '../../components/Footer/Footer'
+import Footer from '../../components/Footer/Footer';
 
 function App() {
   const [trackedTokens, setTrackedTokens] = useState([]);
@@ -73,6 +73,7 @@ function App() {
       setRewoundFlag(false);
       setAllLoadedFlag(false);
       setChangedAddress(false);
+      setCurrentDetail('');
     }
   }, [changedAddress])
 
