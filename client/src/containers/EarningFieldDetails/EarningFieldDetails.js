@@ -3,6 +3,7 @@ import './EarningFieldDetails.css';
 import DetailsTable from '../../components/DetailsTable/DetailsTable';
 import DetailsBarChart from '../../components/DetailsBarChart/DetailsBarChart';
 import MaxiToggle from '../../components/MaxiToggle/MaxiToggle';
+import MiniToggle from '../../components/MiniToggle/MiniToggle';
 import helpers from '../../helpers';
 
 export default function EarningFieldDetails ({name, userFields, history}) {
@@ -11,6 +12,8 @@ export default function EarningFieldDetails ({name, userFields, history}) {
   const [combinedfields, setCombinedFields] = useState({currentField: null, farmingFields: []});
   const [combinedROI, setCombinedROI] = useState({roi: 0, abs: 0});
   const [combinedFlag, setCombinedFlag] = useState(false);
+  const [displayAbsROIValue, setDisplayAbsROIValue] = useState(false);
+  const [ROIValue, setROIValue] = useState({title: 'Total ROI', value: '0%'});
   const roiRef = useRef(null);
   const combinedGraph = useRef(null);
 
@@ -30,6 +33,14 @@ export default function EarningFieldDetails ({name, userFields, history}) {
     setTimeout(() => roiRef.current.className = '', 300)
   }
 
+  function toggleEarningROI(e) {
+    if (e.target.checked) {
+      setDisplayAbsROIValue(true);
+    } else {
+      setDisplayAbsROIValue(false);
+    }
+  }
+
   useEffect(() => {
     window.scrollTo(0, 0);
     if (name) {
@@ -39,6 +50,25 @@ export default function EarningFieldDetails ({name, userFields, history}) {
       setCombinedROI(helpers.calcCombinedROI({earningField: currentField, farmingFields: targetFarms}));
     }
   }, [currentField]) //eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (name) {
+      if (displayAbsROIValue) {
+        if (combinedFlag) {
+          setROIValue({title: 'Total return value', value: '$' + Number(combinedROI.abs.toFixed()).toLocaleString()})
+        } else {
+          setROIValue({title: 'Total return value', value: '$' + Number(currentField.earningROI.absReturnValue.toFixed()).toLocaleString()})
+        }
+      } else {
+        if (combinedFlag) {
+          setROIValue({title: 'Total ROI', value: (combinedROI.roi * 100).toFixed(2) + '%'})
+        } else {
+          setROIValue({title: 'Total ROI', value: (currentField.earningROI.allTimeROI * 100).toFixed(2) + '%'})
+        }
+      }
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [displayAbsROIValue, combinedFlag])
 
   if (!name) {
     history.push('/dashboard');
@@ -52,18 +82,19 @@ export default function EarningFieldDetails ({name, userFields, history}) {
         <p><span className='field-title-header'>Parent protocol:</span>{currentField.protocol.name}</p>
         <p><span className='field-title-header'>Current nominal APY:</span>{currentField.earningAPY ? (currentField.earningAPY*100).toFixed(2) : (currentField.farmingAPY*100).toFixed(2)}%</p>
         <p><span className='field-title-header'>Underlying tokens:</span>{currentField.seedTokens.reduce((acc, curr) => [...acc, curr.name], []).join(', ')}</p>
-        <p><span className='field-title-header'>Linked farming fields:</span>{farmingFields.reduce((acc, curr) => [...acc, curr.name], []).join(', ')}</p>
+        <p><span className='field-title-header' style={{display: !farmingFields.length && 'none'}}>Linked farming fields:</span>{farmingFields.reduce((acc, curr) => [...acc, curr.name], []).join(', ')}</p>
       </div>
 
-      <div className="earning-details-toggle-roi">
+      <div className="earning-details-toggle-roi" style={{display: !farmingFields.length && 'none'}}>
         <h3>Add farming ROI</h3>
         <MaxiToggle handleChange={toggleCombinedROI}/>
       </div>
 
       <div className="field-details-numbers">
         <div className="field-overview field-roi">
-          <h2>Total ROI</h2>
-          <p ref={roiRef}>{!combinedFlag ? (currentField.earningROI.allTimeROI * 100).toFixed(2) : (combinedROI.roi * 100).toFixed(2)}%</p>
+          <h2>{ROIValue.title}</h2>
+          <p ref={roiRef}>{ROIValue.value}</p>
+          <MiniToggle before='curr.' after='hist.' handleChange={toggleEarningROI} />
         </div>
 
         <div className="field-overview field-invested">
