@@ -40,6 +40,7 @@ export default function SummaryBox({headlines, userValues, headers, tableName, c
           <> 
             <h3 className={`headline-total-${tableName}`}>{`${userValues.length} ${tableName === 'holding' ? 'tokens' : 'investments'}`}</h3>
             {boxHeadlines.formattedHeadlines.map((headline, index) => (
+              //FIXME: headline should never come back with a NaN or require the includes/replace hack below
               <h3 key={`${tableName}-headline-${index}`} className={boxHeadlines.perfClasses[index] ? `headline-performance-${boxHeadlines.perfClasses[index]}` : "headline"}>{!headline.includes('NaN') ? headline : headline.replace('NaN', '0')}</h3>
             ))}
           </>

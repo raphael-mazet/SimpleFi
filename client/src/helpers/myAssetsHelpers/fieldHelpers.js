@@ -19,7 +19,7 @@ function extractSummaryFieldValues (userFields) {
     const { stakedPercent } = combineFieldBalances(field);
     //CHECK: quid using investmentValue and allTimeROI when a field has both farming and earning returns
     const { name, cropTokens, isEarning, investmentValue, earningROI, farmingROI } = field;
-
+    
     if (cropTokens.length) {
       let farming = '';
       cropTokens && cropTokens.forEach(token => farming += `${token.name}, `);
@@ -47,8 +47,14 @@ function extractSummaryFieldValues (userFields) {
       earningFields.push([name, invested, stakedPercent, ROI, APY]);
     }
   })
-  totalROI.farmingROI = totalROI.farmingROI / totalInvested.farmingInv;
-  totalROI.earningROI = totalROI.earningROI / totalInvested.earningInv;
+
+  if (totalROI.farmingROI) {
+    totalROI.farmingROI = totalROI.farmingROI / totalInvested.farmingInv;
+  }
+
+  if (totalROI.earningROI) {
+    totalROI.earningROI = totalROI.earningROI / totalInvested.earningInv;
+  }
 
   return {farmingFields, earningFields, totalInvested, totalROI}
 }
