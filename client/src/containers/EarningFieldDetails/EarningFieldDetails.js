@@ -13,7 +13,9 @@ export default function EarningFieldDetails ({name, userFields, history}) {
   const [combinedROI, setCombinedROI] = useState({roi: 0, abs: 0});
   const [combinedFlag, setCombinedFlag] = useState(false);
   const [displayAbsROIValue, setDisplayAbsROIValue] = useState(false);
+  const [displayHistInv, setDisplayHistInv] = useState(false);
   const [ROIValue, setROIValue] = useState({title: 'Total ROI', value: '0%'});
+  const [invValue, setInvValue] = useState({title: 'Current', value: '$0'})
   const roiRef = useRef(null);
   const combinedGraph = useRef(null);
 
@@ -33,11 +35,11 @@ export default function EarningFieldDetails ({name, userFields, history}) {
     setTimeout(() => roiRef.current.className = '', 300)
   }
 
-  function toggleEarningROI(e) {
+  function toggleDisplay(e, target) {
     if (e.target.checked) {
-      setDisplayAbsROIValue(true);
+      target === 'roi' ? setDisplayAbsROIValue(true) : setDisplayHistInv(true);
     } else {
-      setDisplayAbsROIValue(false);
+      target === 'roi' ? setDisplayAbsROIValue(false) : setDisplayHistInv(false);
     }
   }
 
@@ -70,6 +72,17 @@ export default function EarningFieldDetails ({name, userFields, history}) {
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displayAbsROIValue, combinedFlag])
 
+  useEffect(() => {
+    if (name) {
+      if (displayHistInv) {
+        setInvValue({title: 'Average historic', value: '$' + Number(currentField.earningROI.histInvestmentValue.toFixed()).toLocaleString()})
+      } else {
+        setInvValue({title: 'Current', value: '$' + Number(currentField.investmentValue.toFixed()).toLocaleString()})
+      }
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [displayHistInv])
+
   if (!name) {
     history.push('/dashboard');
     return (<></>)
@@ -94,12 +107,13 @@ export default function EarningFieldDetails ({name, userFields, history}) {
         <div className="field-overview field-roi">
           <h2>{ROIValue.title}</h2>
           <p ref={roiRef}>{ROIValue.value}</p>
-          <MiniToggle before='curr.' after='hist.' handleChange={toggleEarningROI} />
+          <MiniToggle before='%' after='$' handleChange={e => toggleDisplay(e, 'roi')} />
         </div>
 
         <div className="field-overview field-invested">
-          <h2>Investment value</h2>
-          <p>${Number(currentField.investmentValue.toFixed()).toLocaleString()}</p>
+          <h2>{invValue.title}  <br/> investment value</h2>
+          <p>{invValue.value}</p>
+          <MiniToggle before='curr.' after='hist.' handleChange={e => toggleDisplay(e, 'inv')} />
         </div>
       </div>
 
