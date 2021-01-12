@@ -19,9 +19,6 @@ import helpers from '../../../../helpers';
  *  }
  */
 async function getUserLiquidityHistory(trackedFields, field, receiptToken, userReceiptTokenTxs, userAccount) {
-
-  // const receiptToken = trackedTokens.find(trackedToken => trackedToken.tokenId === field.receiptToken);
-  // const userReceiptTokenTxs = userTokenTransactions.filter(tx => tx.contractAddress === receiptToken.address.toLowerCase());
   
   const whitelist = helpers.createWhitelist(trackedFields, field);
   let liquidityHistory;

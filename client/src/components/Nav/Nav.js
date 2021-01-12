@@ -40,6 +40,7 @@ export default function Nav ({splash, userAccount, history}) {
       <div className="nav-items">
         <div className="nav-links">
           <p ref={aboutRef} >About</p>
+          <p>😊</p>
           <a href="https://github.com/raphael-mazet/SimpleFi" target="_blank" rel="noreferrer">Github</a>
         </div>
           <div className="nav-address-button" style={!splash ? {visibility:'hidden'} : {}}>

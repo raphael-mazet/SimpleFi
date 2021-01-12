@@ -59,19 +59,19 @@
   border-radius: 10px;
   box-shadow: 0 0px 2px 0px var(--periwinkle);
   border-width: 1px;;
-  width: 160px;
-  height: 100px;
+  width: 170px;
+  height: 140px;
 }
 
 .field-overview:last-child {
   margin-left: 40px;
 }
 
-.field-overview h2 {
+.field-overview-header {
   text-align: center;
 }
 
-.field-overview p {
+.field-overview-value {
   font-size: 1.2em;
   font-weight: bold;
 }

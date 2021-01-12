@@ -15,7 +15,9 @@ async function getUnclaimedRewards(userAccount, trackedFields) {
         const unclaimedRewardContract = new ethers.Contract(targetAddress.address, targetAddress.contractInterface.abi, provider);
         let unclaimedBalance = await unclaimedRewardContract[cropToken.unclaimedBalanceMethod](userAccount);
         unclaimedBalance = Number(ethers.utils.formatUnits(unclaimedBalance, targetAddress.contractInterface.decimals));
-        unclaimedCropBalances.push({field, tokenId, unclaimedBalance});
+        if (unclaimedBalance) {
+          unclaimedCropBalances.push({field, tokenId, unclaimedBalance});
+        }
       } catch (err) {
         console.error('Unclaimed rewards error', err);
       }

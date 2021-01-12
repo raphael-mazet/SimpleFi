@@ -39,7 +39,6 @@ async function getROIs(userAccount, userFields, trackedFields, userTokenTransact
         field.userTxHistory = userLiquidityHistory;
         //@dev: {allTimeROI, absReturnValue, histInvestmentValue}
         field.earningROI = helpers.calcEarningROI(currInvestmentValue, userLiquidityHistory);
-        // field.allTimeROI = helpers.calcEarningROI(currInvestmentValue, userLiquidityHistory);
       }
     }
 

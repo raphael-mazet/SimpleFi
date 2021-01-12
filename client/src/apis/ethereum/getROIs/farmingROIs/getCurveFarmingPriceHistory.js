@@ -63,5 +63,3 @@ export {
   getOneCurveHistReceiptPrice,
   getCurveHistReceiptPrices
 }
-
-// export default getCurveHistStakingPrice;

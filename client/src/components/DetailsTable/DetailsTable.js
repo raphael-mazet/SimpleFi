@@ -28,7 +28,6 @@ export default function DetailsTable({txHistory, name}) {
   }
 
   //TODO: add CSS hover-over explanations with ? icon
-  //TODO: add (un)staking field for display / hover
   return (
     <div className="field-details-tx-table">
       <div className="details-tx-table-headers">

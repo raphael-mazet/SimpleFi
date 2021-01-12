@@ -8,7 +8,7 @@ import {
   amendModal
 } from './appHelpers'
 import extractSummaryHoldingValues from './myAssetsHelpers/tokenHelpers';
-import { fieldSeparator, extractSummaryFieldValues } from './myAssetsHelpers/fieldHelpers';
+import { extractSummaryFieldValues } from './myAssetsHelpers/fieldHelpers';
 import toggleDropdown from './myAssetsHelpers/dropdownHelper';
 import {
   findFieldAddressType,
@@ -40,7 +40,6 @@ export default {
   addFieldInvestmentValues,
   amendModal,
   extractSummaryHoldingValues,
-  fieldSeparator,
   extractSummaryFieldValues,
   toggleDropdown,
   findFieldAddressType,

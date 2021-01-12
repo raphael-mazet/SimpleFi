@@ -17,6 +17,14 @@
   font-weight: 500;
 }
 
+.container-headline-data-loading {
+  display: flex;
+  flex: 4;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+}
+
 .container-headline-data {
   display: flex;
   flex: 4;
@@ -25,7 +33,7 @@
   position: relative;
 }
 
-.container-headline-data h3 {
+.container-headline-data h3, .container-headline-data-loading h3 {
   color: var(--almost-white);
   padding-right: 35px;
   font-size: 1.2em;

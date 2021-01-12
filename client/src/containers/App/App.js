@@ -10,8 +10,7 @@ import TokenDetails from '../TokenDetails/TokenDetails';
 import FarmingFieldDetails from '../FarmingFieldDetails/FarmingFieldDetails';
 import EarningFieldDetails from '../EarningFieldDetails/EarningFieldDetails';
 import LoadingModal from '../../components/LoadingModal/LoadingModal';
-import Footer from '../../components/Footer/Footer'
-// import { AppProvider } from './AppContext';
+import Footer from '../../components/Footer/Footer';
 
 function App() {
   const [trackedTokens, setTrackedTokens] = useState([]);
@@ -63,7 +62,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    //TODO fix no rewind on refresh of same address - persist metamask account
     if (changedAddress) {
       setUserTokens([]);
       setUserFields([]);
@@ -75,6 +73,7 @@ function App() {
       setRewoundFlag(false);
       setAllLoadedFlag(false);
       setChangedAddress(false);
+      setCurrentDetail('');
     }
   }, [changedAddress])
 
@@ -164,7 +163,6 @@ function App() {
   return (
     <div className="simplefi-app">
       <Nav splash={splash} userAccount={userAccount} history={history}/>
-      {/* <AppProvider value={balanceContractsLoaded}> */}
       <LoadingModal splash={splash} loadingMessage={loadingMessage}/>
         <Switch>
           <Route path='/' exact render={() => <Welcome setUserAccount={setUserAccount} userAccount={userAccount} setSplash={setSplash}/>}/>
@@ -173,7 +171,6 @@ function App() {
           <Route path='/farming/:fieldName' exact render={() => <FarmingFieldDetails name={currentDetail} userFields={userFields} />}/>
           <Route path='/earning/:fieldName' exact render={() => <EarningFieldDetails name={currentDetail} userFields={userFields} history={history}/>}/>
         </Switch>
-      {/* </AppProvider> */}
       <Footer/>
     </div>
   );
