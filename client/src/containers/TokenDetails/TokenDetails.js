@@ -3,7 +3,7 @@ import './TokenDetails.css';
 import DetailsPieChart from '../../components/DetailsPieChart/DetailsPieChart';
 import helpers from '../../helpers';
 
-export default function TokenDetails({name, userTokens, userTokenPrices}) {
+export default function TokenDetails({name, userTokens, userTokenPrices, history}) {
 
   const [currentToken] = useState(userTokens.find(field => field.name === name));
   const [totalBalance, setTotalBalance] = useState(0);
@@ -11,11 +11,18 @@ export default function TokenDetails({name, userTokens, userTokenPrices}) {
   
   useEffect(() => {
     window.scrollTo(0, 0);
-    const totalTokenBalance = helpers.extractTotalTokenBalance(currentToken);
-    setTotalBalance(totalTokenBalance);
-    setTotalValue(totalTokenBalance * userTokenPrices[name].usd);
+    if (name) {
+      const totalTokenBalance = helpers.extractTotalTokenBalance(currentToken);
+      setTotalBalance(totalTokenBalance);
+      setTotalValue(totalTokenBalance * userTokenPrices[name].usd);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps  
   }, [currentToken]);
+
+  if (!name) {
+    history.push('/dashboard');
+    return (<></>)
+  }
 
   return(
     <div className="token-details">
