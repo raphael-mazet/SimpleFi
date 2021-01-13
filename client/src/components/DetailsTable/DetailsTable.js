@@ -12,18 +12,18 @@ export default function DetailsTable({txHistory, name}) {
     const cellValues = [...tempValues];
     let balMod = '';
 
-    cellValues[2] = (cellValues[2] * cellValues[4]).toFixed(2);
+    cellValues[2] = Number((cellValues[2] * cellValues[4]).toFixed(2)).toLocaleString();
     if (tempValues[3] === 'plus') {
       balance += tempValues[2];
-      balMod = `➚ ${tempValues[2].toFixed()}`;
+      balMod = `➚ ${Number(tempValues[2].toFixed()).toLocaleString()}`;
     } else if (tempValues[3] === 'minus') {
       balance -= tempValues[2];
       balMod = `➘ ${tempValues[2].toFixed()}`;
     } else {
       balMod = '↔';
     }
-    cellValues[3] = balance.toFixed(2) + ` (${balMod})`;
-    cellValues[4] = (cellValues[4] * balance).toFixed(2);
+    cellValues[3] = Number(balance.toFixed(2)).toLocaleString() + ` (${balMod})`;
+    cellValues[4] = Number((cellValues[4] * balance).toFixed(2)).toLocaleString();
     return cellValues;
   }
 

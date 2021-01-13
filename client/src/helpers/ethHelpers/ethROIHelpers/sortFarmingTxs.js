@@ -8,6 +8,9 @@ function sortFarmingTxs(field, userTokenTransactions, userNormalTransactions) {
   });
 
   const sortedTxs = userTokenTransactions.reduce((acc, tx) => {
+
+    const receiptToken = field.seedTokens[0];
+
     //identify rewards claimed
     if (cropTokenAddresses[tx.contractAddress]) {
       
@@ -26,7 +29,7 @@ function sortFarmingTxs(field, userTokenTransactions, userNormalTransactions) {
         //@dev: assumes all crop tokens are base tokens in DB
         const priceApi = cropToken.priceApi;
         const rewardAmount = tx.value / Number(`1e${cropToken.contractInterface.decimals}`);
-        return [...acc, {tx, cropToken, priceApi, rewardAmount}]
+        return [...acc, {tx, cropToken, priceApi, rewardAmount, receiptToken}]
       } else {
         return acc;
       }
@@ -34,7 +37,7 @@ function sortFarmingTxs(field, userTokenTransactions, userNormalTransactions) {
       //@dev: assumes only one seed token per staking/farming field
     } else if (tx.contractAddress === field.seedTokens[0].address.toLowerCase()) {
       //identify staking tx
-      const receiptToken = field.seedTokens[0];
+      // const receiptToken = field.seedTokens[0]; <======================================================
         //@dev: assumes the correct deposit method was used
         if (tx.to === rewardDepositContract.address.toLowerCase()) {
           const stakingAmount = tx.value / Number(`1e${receiptToken.contractInterface.decimals}`);

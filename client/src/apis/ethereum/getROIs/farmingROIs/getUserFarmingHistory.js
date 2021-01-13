@@ -17,11 +17,21 @@ import helpers from '../../../../helpers';
 async function getUserFarmingHistory(field, userTokenTransactions, userNormalTransactions, trackedFields, userAccount) {
   const timeFormatter = new Intl.DateTimeFormat('en-GB');
 
-  //@dev: farmingTxs = [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value}]
+  //@dev: farmingTxs = [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value}] <==================
+  //@dev: farmingTxs = [{tx, receiptToken, [cropToken,] [priceApi,] [reward | staking | unstaking]Value}]
   const farmingTxs = helpers.sortFarmingTxs(field, userTokenTransactions, userNormalTransactions);
 
   for (let tx of farmingTxs) {
-    //add historical prices of reward claims
+    /* add historical prices of reward claims...and <=======================================
+       also add the hist price of receipt token. This is necessary to render 
+       the hist. investment value in the farming field details tx table
+    */
+
+    if (!tx.cropToken) {
+      // console.log(' ---> field.seedTokens[0]', field.seedTokens[0].protocol.name);
+      // console.log(' ---> tx.receiptToken.protocol.name === field.seedTokens[0].protocol.name', tx.receiptToken.protocol.name === field.seedTokens[0].protocol.name);
+    }
+
     if (tx.cropToken) {
       const geckoDateFormat = timeFormatter.format(new Date(Number(tx.tx.timeStamp) * 1000)).replace(/\//gi, '-');
       const histTokenPrice = await getHistoricalPrice (tx.priceApi, geckoDateFormat);
@@ -29,28 +39,41 @@ async function getUserFarmingHistory(field, userTokenTransactions, userNormalTra
       tx.pricePerToken = histTokenPrice;
     }
     //add historical prices of (un)staking transactions based on field issuing the receipt token used as this farming field's seed
-    else {
-      switch (tx.receiptToken.protocol.name) {
+    // else {
+      // switch (tx.receiptToken.protocol.name) {
+        // console.log(' ---> field.name', field.name);
+        // console.log(' ---> field.seedTokens[0].protocol.name', field.seedTokens[0].protocol.name);
+
         //CHECK: does this work properly with pure SNX staking?
+      switch (field.seedTokens[0].protocol.name) {
         case 'Curve':
           const curvePriceAndDate = await getOneCurveHistReceiptPrice(tx, trackedFields);
-          tx.pricePerToken = curvePriceAndDate.pricePerToken;
-          tx.txDate = curvePriceAndDate.txDate;
+
+          if (tx.cropToken) {
+            tx.pricePerReceiptToken = curvePriceAndDate.pricePerToken;
+          } else {
+            tx.pricePerToken = curvePriceAndDate.pricePerToken;
+            tx.txDate = curvePriceAndDate.txDate;
+          }
           break;
           
           case 'Uniswap':
-            tx.pricePerToken = await getOneUniswapHistReceiptPrice(tx, userAccount);
+            // tx.pricePerToken = await getOneUniswapHistReceiptPrice(tx, userAccount); <================ wtf
             const uniswapPriceAndDate = await getOneUniswapHistReceiptPrice(tx, userAccount);
-            tx.pricePerToken = uniswapPriceAndDate.histPricePerToken;
-            tx.txDate = uniswapPriceAndDate.txDate;
+            if (tx.cropToken) {
+              tx.pricePerReceiptToken = uniswapPriceAndDate.histPricePerToken;
+            } else {
+              tx.pricePerToken = uniswapPriceAndDate.histPricePerToken;
+              tx.txDate = uniswapPriceAndDate.txDate;
+            }
             break;
     
         default: 
       }
       
-    }
+    // }
   }
-
+  console.log(' ---> farmingTxs', farmingTxs);
   //@dev: [{tx, [crop | receipt]Token, [priceApi,] [reward | staking | unstaking]Value, pricePerToken, txDate}]
   return farmingTxs;
 }
