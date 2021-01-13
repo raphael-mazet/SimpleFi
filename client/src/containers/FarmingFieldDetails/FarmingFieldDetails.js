@@ -6,25 +6,30 @@ import MiniToggle from '../../components/MiniToggle/MiniToggle';
 
 //TODO: identify joint components with EarningFieldDetails container
 
-export default function FarmingFieldDetails({name, userFields}) {
+export default function FarmingFieldDetails({name, userFields, history}) {
 
   const [currentField] = useState(userFields.find(field => field.name === name));
   const [underlyingTokens, setUnderlyingTokens] = useState([]);
   const [mainAPY, setMainAPY] = useState(0);
   const [secondaryFarmingTokens, setSecondaryFarmingTokens] = useState(null);
   const [secondaryAPYs, setSecondaryAPYs] = useState(null);
-  const [lockedValue, setLockedValue] = useState({title: 'Current', value: Number(currentField.investmentValue.toFixed()).toLocaleString()});
-  const [ROIValue, setROIValue] = useState({title: 'Total ROI', value: `${(currentField.farmingROI.allTimeROI * 100).toFixed(2)}%`});
+  const [lockedValue, setLockedValue] = useState({title: 'Current', value: '$0'});
+  const [ROIValue, setROIValue] = useState({title: 'Total ROI', value: '0%'});
 
   //@dev: assumes there is a single seed/staking token
   useEffect(() => {
     window.scrollTo(0, 0);
-    setUnderlyingTokens(userFields.find(userField => userField.receiptToken === currentField.seedTokens[0].tokenId).seedTokens);
-    setMainAPY(currentField.farmingAPY.primaryAPY ? `${(currentField.farmingAPY.primaryAPY.APY * 100).toFixed(2)}% (${currentField.farmingAPY.primaryAPY.name})` : `${(currentField.farmingAPY * 100).toFixed(2)}% (${currentField.cropTokens[0].name})`);
-    const tempSecondaryFarmingTokens = currentField.farmingAPY.secondaryAPYs ? currentField.farmingAPY.secondaryAPYs : null;
-    if (tempSecondaryFarmingTokens) {
-      setSecondaryFarmingTokens(tempSecondaryFarmingTokens);
-      setSecondaryAPYs(tempSecondaryFarmingTokens.reduce((acc, curr) => `${acc} ${(curr.cropAPY * 100).toFixed(2)}% (${curr.cropToken.name}), `, '').slice(0, -2))
+    if (name) {
+      setUnderlyingTokens(userFields.find(userField => userField.receiptToken === currentField.seedTokens[0].tokenId).seedTokens);
+      setMainAPY(currentField.farmingAPY.primaryAPY ? `${(currentField.farmingAPY.primaryAPY.APY * 100).toFixed(2)}% (${currentField.farmingAPY.primaryAPY.name})` : `${(currentField.farmingAPY * 100).toFixed(2)}% (${currentField.cropTokens[0].name})`);
+      const tempSecondaryFarmingTokens = currentField.farmingAPY.secondaryAPYs ? currentField.farmingAPY.secondaryAPYs : null;
+      if (tempSecondaryFarmingTokens) {
+        setSecondaryFarmingTokens(tempSecondaryFarmingTokens);
+        setSecondaryAPYs(tempSecondaryFarmingTokens.reduce((acc, curr) => `${acc} ${(curr.cropAPY * 100).toFixed(2)}% (${curr.cropToken.name}), `, '').slice(0, -2))
+      }
+
+      setLockedValue({title: 'Current', value: Number(currentField.investmentValue.toFixed()).toLocaleString()});
+      setROIValue({title: 'Total ROI', value: `${(currentField.farmingROI.allTimeROI * 100).toFixed(2)}%`})
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentField]);
@@ -55,6 +60,11 @@ export default function FarmingFieldDetails({name, userFields}) {
         value: `${(currentField.farmingROI.allTimeROI * 100).toFixed(2)}%`
       }))
     }
+  }
+
+  if (!name) {
+    history.push('/dashboard');
+    return (<></>)
   }
 
   return (
