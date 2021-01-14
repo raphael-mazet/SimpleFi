@@ -3,19 +3,20 @@ import { getOneCurvePoolRawData } from '../../protocolQueries';
 
 /**
  * 
- * @param {Object} tx - currently analysed user ERC20 transaction fetched from Etherscan
+ * @param {Object} token - the target token for which the historical price is required
+ * @param {Timestamp} timestamp - historical date on which the hist. price is sought
  * @param {Array} trackedFields - all SimpleFi tracked fields
  * @dev - this getter fetches the full history of daily balances and supplies from the Curve API
  *        
  * @return {Object} - returns a historical price per token and a formatted txDate (important for display in field details tx table)
  */
-async function getOneCurveHistReceiptPrice(tx, trackedFields) {
+
+async function getOneCurveHistReceiptPrice(token, timestamp, trackedFields) {
   //@dev: assumes that Curve staking/farming fields only have one seed token
-  //TEST: field.seedTokens[0] and tx.receiptToken should be the same
-  const targetEarnField = trackedFields.find(trackedField => trackedField.receiptToken === tx.receiptToken.tokenId)
+  const targetEarnField = trackedFields.find(trackedField => trackedField.receiptToken === token.tokenId);
   const historicalCurveStats = await getOneCurvePoolRawData(targetEarnField.name);
   const timeFormatter = new Intl.DateTimeFormat('en-GB');
-  const txDate = new Date(Number(tx.tx.timeStamp) * 1000);
+  const txDate = new Date(Number(timestamp) * 1000);
   const compDate = timeFormatter.format(txDate);
   const historicalStat = historicalCurveStats.find(day => compDate === timeFormatter.format(new Date(Number(day.timestamp) * 1000)));
   const geckoDateformat = compDate.replace(/\//gi, '-');
@@ -29,11 +30,11 @@ async function getOneCurveHistReceiptPrice(tx, trackedFields) {
     fieldHistReserveValue += histSeedValue * decimaledReserve;
   }
 
-  const pricePerToken = fieldHistReserveValue / (historicalStat.supply / Number(`1e${tx.receiptToken.tokenContract.decimals}`));
+  const pricePerToken = fieldHistReserveValue / (historicalStat.supply / Number(`1e${token.tokenContract.decimals}`));
   return {pricePerToken, txDate};
 }
 
-
+//NOTE: this function is not currently in use
 async function getCurveHistReceiptPrices (field, receiptToken, userReceiptTokenTxs) {
   const historicalCurveStats = await getOneCurvePoolRawData(field.name);
   const timeFormatter = new Intl.DateTimeFormat('en-GB');
