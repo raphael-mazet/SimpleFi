@@ -1,7 +1,5 @@
 import fetchRequest from '../fetchRequest';
-
-const baseUrl = 'http://localhost:3020';
-const fieldEP = '/fields';
+import {baseUrl, fieldEP} from './simpleFiEPs';
 
 function  getFields () {
   return fetchRequest(baseUrl + fieldEP);

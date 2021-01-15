@@ -1,5 +1,11 @@
-import { getTokens, getUserFieldTokens } from './simpleFiDb/tokens';
-import { getFields } from './simpleFiDb/fields';
+// import { getTokens, getUserFieldTokens } from './simpleFi/tokens';
+// import { getFields } from './simpleFi/fields';
+import {
+  getTokens,
+  getUserFieldTokens,
+  getFields,
+  getUserTransactions
+} from './simpleFi'
 import getTokenPrices from './coinGecko/getTokenPrices';
 import {
   getUserBalance,
@@ -8,8 +14,6 @@ import {
   createBalanceContracts,
   rewinder,
   getAPYs,
-  getUserTokenTransactions,
-  getUserNormalTransactions,
   getROIs,
   uniswapQueries
 } from './ethereum/index';
@@ -19,6 +23,7 @@ export default {
   getTokens,
   getUserFieldTokens,
   getFields,
+  getUserTransactions,
   getTokenPrices,
   createBalanceContracts,
   getUserBalance,
@@ -26,8 +31,6 @@ export default {
   getUnclaimedRewards,
   rewinder,
   getAPYs,
-  getUserTokenTransactions,
-  getUserNormalTransactions,
   getROIs,
   uniswapQueries
 }

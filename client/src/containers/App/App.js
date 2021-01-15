@@ -84,12 +84,11 @@ function App() {
       setLoadingMessage(() => helpers.amendModal('balances'));
       const getTokenBalances = apis.getAllUserBalances(userAccount[0], trackedTokens);
       const getFieldBalances = apis.getAllUserBalances(userAccount[0], trackedFields);
-      const userTxPromise = apis.getUserTokenTransactions(userAccount[0]);
-      const userNormalPromise = apis.getUserNormalTransactions(userAccount[0]);
+      const userTxPromise = apis.getUserTransactions(userAccount[0]);
       const unclaimedRewardsPromise = apis.getUnclaimedRewards(userAccount[0], trackedFields, trackedTokens);
 
-      Promise.all([getTokenBalances, getFieldBalances, userTxPromise, userNormalPromise, unclaimedRewardsPromise])
-        .then(([tokensWithBalance, fieldsWithBalance, tokenTxArr, normalTxArr, unclaimedArr]) => {
+      Promise.all([getTokenBalances, getFieldBalances, userTxPromise, unclaimedRewardsPromise])
+        .then(([tokensWithBalance, fieldsWithBalance, userTxData, unclaimedArr]) => {
           fieldsWithBalance = helpers.populateFieldTokensFromCache(fieldsWithBalance, trackedTokens);
           setLoadingMessage(prev => helpers.amendModal('Fetching primary token and field balances', prev));
           setLoadingMessage(prev => helpers.amendModal('Fetching historic token transactions', prev));
@@ -97,8 +96,8 @@ function App() {
           setTimeout(() => {
             setUserTokens(tokensWithBalance);
             setUserFields(fieldsWithBalance);
-            setUserTokenTransactions(tokenTxArr.result);
-            setUserNormalTransactions(normalTxArr.result);
+            setUserTokenTransactions(userTxData.userTokenTransactions.result);
+            setUserNormalTransactions(userTxData.userNormalTransactions.result);
             setUnclaimedRewards(unclaimedArr);
             if (!fieldsWithBalance.length) setRewoundFlag(true);
           }, 200)

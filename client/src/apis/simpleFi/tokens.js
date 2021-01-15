@@ -1,8 +1,5 @@
 import fetchRequest from '../fetchRequest';
-
-const baseUrl = 'http://localhost:3020';
-const tokensEP = '/tokens';
-const fieldTokensEP = '/userfieldtokens'
+import {baseUrl, tokensEP, fieldTokensEP} from './simpleFiEPs';
 
 function  getTokens () {
   return fetchRequest(baseUrl + tokensEP);

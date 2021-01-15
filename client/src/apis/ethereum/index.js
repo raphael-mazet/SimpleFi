@@ -5,7 +5,6 @@ import getTotalFieldSupply from './getTotalFieldSupply';
 import getFieldSeedReserves from './getFieldSeedReserves';
 import rewinder from './rewinder';
 import getAPYs from './getAPYs/getAPYs';
-import {getUserTokenTransactions, getUserNormalTransactions} from './getUserTransactions';
 import getROIs from './getROIs/getROIs';
 import {
   uniswapQueries,
@@ -23,8 +22,6 @@ export {
   getFieldSeedReserves,
   rewinder,
   getAPYs,
-  getUserTokenTransactions,
-  getUserNormalTransactions,
   getROIs,
   uniswapQueries,
   getOneCurvePoolRawData,
