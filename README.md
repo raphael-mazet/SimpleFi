@@ -1,3 +1,5 @@
+-- Deprecated monorepo --
+
 # SimpleFi
 <p align="center">
   <br/>
