@@ -7,7 +7,7 @@ const path = require('path')
 require('dotenv').config()
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3020;
 
 const corsConfig = {
   origin: 'http://localhost:3000',
@@ -21,5 +21,4 @@ app.use(router);
 
 app.listen(port, () => {
   console.log(`Solo server listening on localhost:${port} 🎉`)
-  console.log(' ---> the path', path.resolve(__dirname, './prisma/.env'));
 });
