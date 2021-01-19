@@ -39,7 +39,7 @@ function App() {
 
   //Get tracked tokens and fields from SimpleFi db and attach contracts
   useEffect(() => {
-    if (window.ethereum) { 
+    if (window.ethereum && window.ethereum.isMetaMask) { 
       window.ethereum.autoRefreshOnNetworkChange = false;
       window.ethereum.on('accountsChanged', function (accounts) {
         if(splash) history.push('/dashboard');
@@ -47,7 +47,7 @@ function App() {
         setUserAccount(accounts);
       });
     } else {
-      alert('Please install Metamask to use SimpleFi (https://metamask.io/)');
+      alert('Please install MetaMask to use SimpleFi (https://metamask.io/)');
     }
 
     const getTokens = apis.getTokens();
